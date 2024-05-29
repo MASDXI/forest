@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity 0.8.14;
 
+///@title Trie Data Structure.
+///@author Sirawit Techavanitch (sirawit_tec@live4.utcc.ac.th)
+
 contract TrieDB {
     // @todo specification
     // - MUST be abstract contract/class for easy implement with existing tools.
