@@ -5,8 +5,6 @@ pragma solidity 0.8.25;
 ///@author Sirawit Techavanitch (sirawit_tec@live4.utcc.ac.th)
 
 library ExtendedUnspentTransactionOutput {
-    bytes32 constant RESERVE_ROOT = bytes32(0);
-
     struct Transaction {
         uint256 value;
         bool spent;
@@ -43,6 +41,7 @@ library ExtendedUnspentTransactionOutput {
         bytes calldata data
     ) private {
         require(txOutput.value > 0, "zero val");
+        require(!_transactionExist(utxo, txOutput.account, id), "exist");
         utxo.transactions[txOutput.account][id] = Transaction(
             txOutput.value,
             false,
