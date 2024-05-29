@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.8.14;
+pragma solidity 0.8.25;
 
-///@title Trie Data Structure.
+///@title Trie Model Legacy.
 ///@author Sirawit Techavanitch (sirawit_tec@live4.utcc.ac.th)
 
 contract TrieDB {
