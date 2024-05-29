@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity >=0.5.0 <0.8.0;
 
-/// @title
-/// @author 
+/// @title Abstract Enhanced Traceability ERC20 Token.
+/// @author Sirawit Techavanitch (sirawit_tec@live4.utcc.ac.th)
 
 import "../libraries/TrieDB.sol";
 import "@openzeppelin/contracts/tokens/ERC20/IERC20.sol";
