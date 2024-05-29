@@ -4,7 +4,11 @@
 *.fls
 *.log
 *.synctex.gz
+
+# Modules
 node_modules
+
+# Environment
 .env
 
 # Hardhat files
