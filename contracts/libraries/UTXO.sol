@@ -25,6 +25,12 @@ library ExtendedUnspentTransactionOutput {
         mapping(address => uint256) size;
         mapping(address => mapping(bytes32 => Transaction)) transactions;
     }
+    
+    error TransactionAlreadySpent();
+    error TransactionZeroValue();
+    error TransactionNotExist();
+    error TransactionExist();
+    // error TransactionUnauthorized();
 
     function _transactionExist(
         eUTXO storage utxo,
@@ -40,8 +46,12 @@ library ExtendedUnspentTransactionOutput {
         bytes32 id,
         bytes calldata data
     ) private {
-        require(txOutput.value > 0, "zero val");
-        require(!_transactionExist(utxo, txOutput.account, id), "exist");
+        if (txOutput.value == 0) {
+            revert TransactionZeroValue();
+        }
+        if (_transactionExist(utxo, txOutput.account, id)) {
+            revert TransactionExist();
+        }
         utxo.transactions[txOutput.account][id] = Transaction(
             txOutput.value,
             false,
@@ -55,11 +65,14 @@ library ExtendedUnspentTransactionOutput {
         TransactionInput calldata txInput,
         address account
     ) private {
-        require(
-            _transactionExist(utxo, account, txInput.outpoint),
-            "tx not exist"
-        );
+        if (!_transactionExist(utxo, account, txInput.outpoint)) {
+            revert TransactionNotExist();
+        }
+        if (!transactionSpent(utxo, account, txInput.outpoint)) {
+            revert TransactionAlreadySpent();
+        }
         // require proof that owner of the input.
+        // TransactionUnauthorized
         utxo.transactions[account][txInput.outpoint].spent = true;
         utxo.size[account]--;
     }
@@ -69,6 +82,9 @@ library ExtendedUnspentTransactionOutput {
         address account,
         bytes32 id
     ) private {
+        if (!_transactionExist(utxo, account, txInput.outpoint)) {
+            revert TransactionNotExist();
+        }
         delete utxo.transactions[account][id];
         utxo.size[account]--;
     }
