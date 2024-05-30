@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity 0.8.25;
 
-///@title Unspent Transaction Output Model.
+///@title Extended Unspent Transaction Output Model.
 ///@author Sirawit Techavanitch (sirawit_tec@live4.utcc.ac.th)
 
 library ExtendedUnspentTransactionOutput {
