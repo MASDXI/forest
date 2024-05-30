@@ -25,7 +25,7 @@ library ExtendedUnspentTransactionOutput {
         mapping(address => uint256) size;
         mapping(address => mapping(bytes32 => Transaction)) transactions;
     }
-    
+
     error TransactionAlreadySpent();
     error TransactionZeroValue();
     error TransactionNotExist();
@@ -57,7 +57,9 @@ library ExtendedUnspentTransactionOutput {
             false,
             data
         );
-        utxo.size[txOutput.account]++;
+        unchecked {
+            utxo.size[txOutput.account]++;
+        }
     }
 
     function _spendTransaction(
@@ -74,7 +76,9 @@ library ExtendedUnspentTransactionOutput {
         // require proof that owner of the input.
         // TransactionUnauthorized
         utxo.transactions[account][txInput.outpoint].spent = true;
-        utxo.size[account]--;
+        unchecked {
+            utxo.size[account]--;
+        }
     }
 
     function _consumeTransaction(
@@ -86,7 +90,9 @@ library ExtendedUnspentTransactionOutput {
             revert TransactionNotExist();
         }
         delete utxo.transactions[account][id];
-        utxo.size[account]--;
+        unchecked {
+            utxo.size[account]--;
+        }
     }
 
     function transaction(
