@@ -1,5 +1,5 @@
-// SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.8.25;
+// SPDX-License-Identifier: GPL-3.0
+pragma solidity >=0.8.0 <0.9.0;
 
 ///@title Trie Model Legacy.
 ///@author Sirawit Techavanitch (sirawit_tec@live4.utcc.ac.th)

@@ -1,5 +1,5 @@
-// SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.8.25;
+// SPDX-License-Identifier: GPL-3.0
+pragma solidity >=0.8.0 <0.9.0;
 
 ///@title Extended Unspent Transaction Output Model.
 ///@author Sirawit Techavanitch (sirawit_tec@live4.utcc.ac.th)
@@ -7,8 +7,8 @@ pragma solidity 0.8.25;
 library ExtendedUnspentTransactionOutput {
     struct Transaction {
         uint256 value;
+        bytes32 extraData;
         bool spent;
-        bytes extraData;
     }
 
     struct TransactionInput {
@@ -33,96 +33,105 @@ library ExtendedUnspentTransactionOutput {
     // error TransactionUnauthorized();
 
     function _transactionExist(
-        eUTXO storage utxo,
+        eUTXO storage self,
         address account,
         bytes32 id
     ) private view returns (bool) {
-        return utxo.transactions[account][id].value > 0;
+        return self.transactions[account][id].value > 0;
     }
 
-    function _createTransaction(
-        eUTXO storage utxo,
+    function createTransaction(
+        eUTXO storage self,
         TransactionOutput calldata txOutput,
         bytes32 id,
-        bytes calldata data
-    ) private {
+        bytes32 data
+    ) internal {
         if (txOutput.value == 0) {
             revert TransactionZeroValue();
         }
-        if (_transactionExist(utxo, txOutput.account, id)) {
+        if (_transactionExist(self, txOutput.account, id)) {
             revert TransactionExist();
         }
-        utxo.transactions[txOutput.account][id] = Transaction(
+        self.transactions[txOutput.account][id] = Transaction(
             txOutput.value,
-            false,
-            data
+            data,
+            false
         );
         unchecked {
-            utxo.size[txOutput.account]++;
+            self.size[txOutput.account]++;
         }
     }
 
-    function _spendTransaction(
-        eUTXO storage utxo,
+    function spendTransaction(
+        eUTXO storage self,
         TransactionInput calldata txInput,
         address account
-    ) private {
-        if (!_transactionExist(utxo, account, txInput.outpoint)) {
+    ) internal {
+        if (!_transactionExist(self, account, txInput.outpoint)) {
             revert TransactionNotExist();
         }
-        if (!transactionSpent(utxo, account, txInput.outpoint)) {
+        if (!transactionSpent(self, account, txInput.outpoint)) {
             revert TransactionAlreadySpent();
         }
         // require proof that owner of the input.
         // TransactionUnauthorized
-        utxo.transactions[account][txInput.outpoint].spent = true;
+        self.transactions[account][txInput.outpoint].spent = true;
         unchecked {
-            utxo.size[account]--;
+            self.size[account]--;
         }
     }
 
-    function _consumeTransaction(
-        eUTXO storage utxo,
+    function consumeTransaction(
+        eUTXO storage self,
+        TransactionInput calldata txInput,
         address account,
         bytes32 id
-    ) private {
-        if (!_transactionExist(utxo, account, txInput.outpoint)) {
+    ) internal {
+        if (!_transactionExist(self, account, txInput.outpoint)) {
             revert TransactionNotExist();
         }
-        delete utxo.transactions[account][id];
+        delete self.transactions[account][id];
         unchecked {
-            utxo.size[account]--;
+            self.size[account]--;
         }
     }
 
     function transaction(
-        eUTXO storage utxo,
+        eUTXO storage self,
         address account,
         bytes32 id
     ) internal view returns (Transaction memory) {
-        return utxo.transactions[account][id];
+        return self.transactions[account][id];
+    }
+
+    function transactionValue(
+        eUTXO storage self,
+        address account,
+        bytes32 id
+    ) internal view returns (uint256) {
+        return self.transactions[account][id].value;
     }
 
     function transactionExtraData(
-        eUTXO storage utxo,
+        eUTXO storage self,
         address account,
         bytes32 id
-    ) internal view returns (bytes memory) {
-        return utxo.transactions[account][id].extraData;
+    ) internal view returns (bytes32) {
+        return self.transactions[account][id].extraData;
     }
 
     function transactionSpent(
-        eUTXO storage utxo,
+        eUTXO storage self,
         address account,
         bytes32 id
     ) internal view returns (bool) {
-        return utxo.transactions[account][id].spent;
+        return self.transactions[account][id].spent;
     }
 
     function size(
-        eUTXO storage utxo,
+        eUTXO storage self,
         address account
     ) internal view returns (uint256) {
-        return utxo.size[account];
+        return self.size[account];
     }
 }

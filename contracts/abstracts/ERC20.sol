@@ -1,5 +1,5 @@
 // // SPDX-License-Identifier: UNLICENSED
-// pragma solidity >=0.5.0 <0.8.0;
+// pragma solidity >=0.8.0 <0.9.0;
 
 // /// @title Abstract Enhanced Traceability ERC20 Token.
 // /// @author Sirawit Techavanitch (sirawit_tec@live4.utcc.ac.th)
