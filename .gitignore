@@ -3,7 +3,7 @@
 *.fdb_latexmk
 *.fls
 *.log
-*.synctex.gz
+*.synctex*
 
 # Modules
 node_modules
