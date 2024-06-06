@@ -20,8 +20,8 @@ However, technology itself provides an advantage and eliminates the problem idea
 
 //Opinion: AI and Deep learning recognize and analysis the pattern but it's would be nice if the data structure also provide efficient and fast to response to the incident.
 
-
 ## Methodology
+
 // TODO
 
 ## Related Works
@@ -32,13 +32,13 @@ However, technology itself provides an advantage and eliminates the problem idea
 
 ## Conclusion and Evaluation
 
-| Features                                               | ERC20 | UTXO | eUTXO | Trie |
-| ------------------------------------------------------ | ----- | ---- | ----- | ---- |
-| suspends the sender                                    | ✓     | ✓    | ✓     | ✓    |
-| suspends the recipient                                 | ✓     | ✓    | ✓     | ✓    |
-| suspends certain amount token                          | ✗     | ✓    | ✓     | ✓    |
-| suspends specifics token                               | ✗     | ✓    | ✓     | ✓    |
-| suspends specifics token that relevant to the incident | ✗     | ✗    | ✓     | ✓    |
-| suspends specifics token that relevant to the incident | ✗     | ✗    | ✓     | ✓    |
+| Features                                                  | ERC20 | UTXO | eUTXO | Trie |
+| --------------------------------------------------------- | ----- | ---- | ----- | ---- |
+| suspends the sender.                                      | ✓     | ✓    | ✓     | ✓    |
+| suspends the recipient.                                   | ✓     | ✓    | ✓     | ✓    |
+| freeze certain amount token.                              | ✗     | ✓    | ✓     | ✓    |
+| suspends specifics tokenId.                               | ✗     | ✓    | ✓     | ✓    |
+| suspends specifics tokenId that relevant to the incident. | ✗     | ✗    | ✓     | ✓    |
+| keep tracking child.                                      | ✗     | ✗    | ✗     | ✓    |
 
 ## Reference
