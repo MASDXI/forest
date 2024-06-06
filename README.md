@@ -1,7 +1,7 @@
 ---
 title: Smart Contract Implementation for Enhanced Traceability in Central Bank Digital Currency Systems
 description: An implementation of advanced data structure over token smart contract.
-author: Sirawit Techavanitch (sirawitt42@gmail.com)
+author: Sirawit Techavanitch (sirawit_tec@live4.utcc.ac.th)
 status: Draft
 ---
 
