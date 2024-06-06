@@ -8,17 +8,19 @@ status: Draft
 # Smart Contract Implementation for Enhanced Traceability in Central Bank Digital Currency Systems
 
 ## Abstract
-// TODO  
-keyword: Blockchain, Central Bank Digital Currencies, Cryptocurrencies, Distributed Ledger Technology, Smart Contract, Stable Coin  
 
+// TODO  
+keyword: Blockchain, Central Bank Digital Currencies, Cryptocurrencies, Distributed Ledger Technology, Smart Contract, Stable Coin
 
 ## Introduction
+
 // TODO
 
 ## Related Works
+
 // TODO
 
-## 
+##
 
 ## Conclusion and Evaluation
 

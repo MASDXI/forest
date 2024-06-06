@@ -1,12 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.25;
 
-contract MockTrieCBDC {
+import "../abstracts/Suspend.sol";
+
+contract MockTrieCBDC is Suspend {
     mapping(address => bool) private _suspends;
 
     modifier checkSuspender(address from, address to) {
-        require(!_suspends[from], "");
-        require(!_suspends[to], "");
+        require(!isSuspend(from);, "");
+        require(!isSuspend(to), "");
         _;
     }
 
