@@ -4,6 +4,12 @@
   "main": "index.js",
   "repository": "https://github.com/MASDXI/TrieMoney.git",
   "license": "MIT",
+  "scripts": {
+    "clean": "npx hardhat clean",
+    "compile": "npx hardhat compile",
+    "coverage": "npx hardhat coverage",
+    "test": "npx hardhat clean && npx hardhat test"
+  },
   "dependencies": {
     "hardhat": "^2.22.4"
   },
