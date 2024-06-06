@@ -14,6 +14,14 @@ keyword: Blockchain, Central Bank Digital Currencies, Cryptocurrencies, Distribu
 
 ## Introduction
 
+In the present-day Central Bank Digital Currencies concept aims to utilize the advantage point of Blockchain Technology or Distributed Ledger Technology that provides immutable, transparency, and security and the smart contract that plays a key feature in creating programmable money.
+
+However, technology itself provides an advantage and eliminates the problem ideally but it does not seem to be practical to be done in real world and not in an efficient way to responsible for the financial crime or incidents that occur in the open network of economic.
+
+//Opinion: AI and Deep learning recognize and analysis the pattern but it's would be nice if the data structure also provide efficient and fast to response to the incident.
+
+
+## Methodology
 // TODO
 
 ## Related Works
@@ -24,12 +32,13 @@ keyword: Blockchain, Central Bank Digital Currencies, Cryptocurrencies, Distribu
 
 ## Conclusion and Evaluation
 
-| Features                     | ERC20 | UTXO | eUTXO | Trie |
-| ---------------------------- | ----- | ---- | ----- | ---- |
-| suspends sender              | ✓     | ✓    | ✓     | ✓    |
-| suspends recipient           | ✓     | ✓    | ✓     | ✓    |
-| suspends token               | ✗     | ✓    | ✓     | ✓    |
-| suspends token that relevant | ✗     | ✗    | ✓     | ✓    |
-| suspends token that relevant | ✗     | ✗    | ✓     | ✓    |
+| Features                                               | ERC20 | UTXO | eUTXO | Trie |
+| ------------------------------------------------------ | ----- | ---- | ----- | ---- |
+| suspends the sender                                    | ✓     | ✓    | ✓     | ✓    |
+| suspends the recipient                                 | ✓     | ✓    | ✓     | ✓    |
+| suspends certain amount token                          | ✗     | ✓    | ✓     | ✓    |
+| suspends specifics token                               | ✗     | ✓    | ✓     | ✓    |
+| suspends specifics token that relevant to the incident | ✗     | ✗    | ✓     | ✓    |
+| suspends specifics token that relevant to the incident | ✗     | ✗    | ✓     | ✓    |
 
 ## Reference
