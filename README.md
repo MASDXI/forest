@@ -5,5 +5,29 @@ author: Sirawit Techavanitch (sirawitt42@gmail.com)
 status: Draft
 ---
 
-# TrieMoney
-Smart Contract Implementation for Enhanced Traceability in  Central Bank Digital Currency Systems
+# Smart Contract Implementation for Enhanced Traceability in Central Bank Digital Currency Systems
+
+## Abstract
+// TODO  
+keyword: Blockchain, Central Bank Digital Currencies, Cryptocurrencies, Distributed Ledger Technology, Smart Contract, Stable Coin  
+
+
+## Introduction
+// TODO
+
+## Related Works
+// TODO
+
+## 
+
+## Conclusion and Evaluation
+
+| Features                     | ERC20 | UTXO | eUTXO | Trie |
+| ---------------------------- | ----- | ---- | ----- | ---- |
+| suspends sender              | ✓     | ✓    | ✓     | ✓    |
+| suspends recipient           | ✓     | ✓    | ✓     | ✓    |
+| suspends token               | ✗     | ✓    | ✓     | ✓    |
+| suspends token that relevant | ✗     | ✗    | ✓     | ✓    |
+| suspends token that relevant | ✗     | ✗    | ✓     | ✓    |
+
+## Reference
