@@ -8,8 +8,12 @@ abstract contract eUTXO is IUTXOERC20 {
     using ExtendedUnspentTransactionOutput for ExtendedUnspentTransactionOutput.eUTXO;
 
     // @TODO ERC20 storage.
+    // name
+    // symbol
+    // decimal
     // allowances
-    // balances
+    mapping(address => uint256) private _balances;
+    // totalSupply
 
     ExtendedUnspentTransactionOutput.eUTXO private _eUTXO;
 
@@ -17,13 +21,25 @@ abstract contract eUTXO is IUTXOERC20 {
 
     function _mint(address to, uint256 value) internal virtual {
         // @TODO increase balance
-        // _eUTXO.createTransaction(txOutput, tokenId, bytes32(0));
+        bytes32 tokenId = bytes32(0);
+        _eUTXO.createTransaction(
+            ExtendedUnspentTransactionOutput.TransactionOutput(value, to),
+            tokenId,
+            address(0),
+            bytes32(0)
+        );
         emit Transfer(address(0), to, value);
     }
 
     function _mint(address to, uint256 value, bytes32 data) internal virtual {
         // @TODO increase balance
-        // _eUTXO.createTransaction(txOutput, tokenId, data);
+        bytes32 tokenId = bytes32(0);
+        _eUTXO.createTransaction(
+            ExtendedUnspentTransactionOutput.TransactionOutput(value, to),
+            tokenId,
+            address(0),
+            data
+        );
         emit Transfer(address(0), to, value);
     }
 
@@ -33,30 +49,27 @@ abstract contract eUTXO is IUTXOERC20 {
         uint256 value
     ) internal virtual {
         // @TODO decrese balance.
-        // if (value ==  _eUTXO.transactionValue(to, tokenId)) {
-        //     decrease balance
-        //     _eUTXO.consumeTransaction(txInput, to, value);
-        // } else {
-        //     _eUTXO.spendTransaction(txInput, address(0), value);
-        //     _eUTXO.createTransaction(txOutput, tokenId, transactionExtraData(to, tokenId));
-        // }
+        if (value == _eUTXO.transactionValue(to, bytes32(tokenId))) {
+            //     decrease balance
+            //     _eUTXO.consumeTransaction(txInput, to, value);
+        } else {
+            //     _eUTXO.spendTransaction(txInput, to, value);
+            bytes32 newTokenId = bytes32(0);
+            _eUTXO.createTransaction(
+                ExtendedUnspentTransactionOutput.TransactionOutput(
+                    value,
+                    address(to)
+                ),
+                newTokenId,
+                msg.sender,
+                _eUTXO.transactionExtraData(to, bytes32(tokenId))
+            );
+        }
         emit Transfer(to, address(0), value);
     }
 
     function approve(
         address spender,
-        uint256 value
-    ) public virtual override returns (bool) {
-        address owner = msg.sender;
-        // @TODO
-        // approve(spender, tokenId, value);
-        emit Approval(owner, spender, value);
-        return true;
-    }
-
-    function approve(
-        address spender,
-        uint256 tokenId,
         uint256 value
     ) public virtual override returns (bool) {
         address owner = msg.sender;
@@ -118,12 +131,7 @@ abstract contract eUTXO is IUTXOERC20 {
         // return ;
     }
 
-    function allowance(
-        address owner,
-        address spender,
-        uint256 tokenId
-    ) public view virtual returns (uint256) {
-        // @TODO
-        // return ;
+    function balanceOf(address account) public view returns (uint256) {
+        return _balances[account];
     }
 }
