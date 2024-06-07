@@ -3,32 +3,21 @@ pragma solidity >=0.8.0 <0.9.0;
 
 import "../libraries/UTXO.sol";
 import "../interfaces/IUTXOERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
-abstract contract UTXOToken is IUTXOERC20 {
+abstract contract UTXOToken is ERC20, IUTXOERC20 {
     using UnspentTransactionOutput for UnspentTransactionOutput.UTXO;
-
-    mapping(address => uint256) private _balances;
-    mapping(address account => mapping(address spender => uint256))
-        private _allowances;
-
-    uint256 private _totalSupply;
-
-    string private _name;
-    string private _symbol;
 
     UnspentTransactionOutput.UTXO private _UTXO;
 
-    constructor(string memory name_, string memory symbol_) {
-        _name = name_;
-        _symbol = symbol_;
-    }
+    constructor(
+        string memory name_,
+        string memory symbol_
+    ) ERC20(name_, symbol_) {}
 
-    // @TODO update _balances function
-
-    function _mint(address to, uint256 value) internal virtual {
-        // @TODO increase balance
+    function _mintUTXO(address account, uint256 value) internal {
         _UTXO.createTransaction(
-            UnspentTransactionOutput.TransactionOutput(value, to),
+            UnspentTransactionOutput.TransactionOutput(value, account),
             bytes32(0),
             UnspentTransactionOutput.calculateTransactionHash(
                 address(0),
@@ -36,42 +25,30 @@ abstract contract UTXOToken is IUTXOERC20 {
             ),
             address(0)
         );
-        emit Transfer(address(0), to, value);
+        _mint(account, value);
     }
 
-    function _burn(
-        address to,
+    function _burnUTXO(
+        address account,
         bytes32 tokenId,
         uint256 value,
         bytes memory signature
-    ) internal virtual {
-        // @TODO decrese balance.
+    ) internal {
         if (value == _UTXO.transactionValue(tokenId)) {
-            //     _UTXO.consumeTransaction(txInput, to, value);
+                _UTXO.consumeTransaction(tokenId, account);
         } else {
-            // _UTXO.spendTransaction(txInput, to, value);
+            // _UTXO.spendTransaction(txInput, account, value);
             _UTXO.createTransaction(
                 UnspentTransactionOutput.TransactionOutput(value, address(0)),
                 tokenId,
                 UnspentTransactionOutput.calculateTransactionHash(
-                    to,
-                    _UTXO.transactionCount(to)
+                    account,
+                    _UTXO.transactionCount(account)
                 ),
-                to
+                account
             );
         }
-        emit Transfer(to, address(0), value);
-    }
-
-    function approve(
-        address spender,
-        uint256 value
-    ) public virtual override returns (bool) {
-        address owner = msg.sender;
-        // @TODO
-        // _approve(owner, spender, value);
-        emit Approval(owner, spender, value);
-        return true;
+        _burn(account, value);
     }
 
     function transfer(
@@ -90,7 +67,7 @@ abstract contract UTXOToken is IUTXOERC20 {
         address from = msg.sender;
         // @TODO
         // _transfer(from, to, tokenId, value);
-        emit Transfer(from, to, value);
+        _transfer(from, to, value);
         return true;
     }
 
@@ -111,34 +88,7 @@ abstract contract UTXOToken is IUTXOERC20 {
     ) public virtual override returns (bool) {
         // @TODO
         // _transfer(from, to, tokenId, value);
-        emit Transfer(from, to, value);
+        _transfer(from, to, value);
         return true;
-    }
-
-    function allowance(
-        address owner,
-        address spender
-    ) public view virtual returns (uint256) {
-        return _allowances[owner][spender];
-    }
-
-    function name() public view override returns (string memory) {
-        return _name;
-    }
-
-    function symbol() public view override returns (string memory) {
-        return _symbol;
-    }
-
-    function decimals() public view virtual override returns (uint8) {
-        return 18;
-    }
-
-    function balanceOf(address account) public view returns (uint256) {
-        return _balances[account];
-    }
-
-    function totalSupply() public view virtual override returns (uint256) {
-        return _totalSupply;
     }
 }

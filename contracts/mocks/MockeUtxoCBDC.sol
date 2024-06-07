@@ -21,6 +21,13 @@ contract MockeUtxoCBDC is eUTXOToken, FreezeBalance, Suspend, SuspendToken {
         _;
     }
 
+    modifier checkSuspendedRoot(bytes32 tokenId) {
+        if (isTokenSuspend(_transaction(tokenId).extraData)) {
+            revert TokenSuspended();
+        }
+        _;
+    }
+
     function transfer(
         address to,
         bytes32 tokenId,
@@ -31,6 +38,7 @@ contract MockeUtxoCBDC is eUTXOToken, FreezeBalance, Suspend, SuspendToken {
         override
         checkFrozenBalance(msg.sender, balanceOf(msg.sender), value)
         checkSuspender(msg.sender, to)
+        checkSuspendedRoot(tokenId)
         checkSuspendedToken(tokenId)
         returns (bool)
     {
@@ -48,6 +56,7 @@ contract MockeUtxoCBDC is eUTXOToken, FreezeBalance, Suspend, SuspendToken {
         override
         checkFrozenBalance(msg.sender, balanceOf(msg.sender), value)
         checkSuspender(msg.sender, to)
+        checkSuspendedRoot(tokenId)
         checkSuspendedToken(tokenId)
         returns (bool)
     {

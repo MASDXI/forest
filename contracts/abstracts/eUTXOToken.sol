@@ -3,47 +3,35 @@ pragma solidity >=0.8.0 <0.9.0;
 
 import "../libraries/eUTXO.sol";
 import "../interfaces/IUTXOERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
-abstract contract eUTXOToken is IUTXOERC20 {
+abstract contract eUTXOToken is ERC20, IUTXOERC20 {
     using ExtendedUnspentTransactionOutput for ExtendedUnspentTransactionOutput.eUTXO;
-
-    mapping(address => uint256) private _balances;
-    mapping(address account => mapping(address spender => uint256))
-        private _allowances;
-
-    uint256 private _totalSupply;
-
-    string private _name;
-    string private _symbol;
 
     ExtendedUnspentTransactionOutput.eUTXO private _eUTXO;
 
-    constructor(string memory name_, string memory symbol_) {
-        _name = name_;
-        _symbol = symbol_;
+    constructor(
+        string memory name_,
+        string memory symbol_
+    ) ERC20(name_, symbol_) {}
+
+    function _transaction(
+        bytes32 tokenId
+    )
+        internal
+        view
+        returns (ExtendedUnspentTransactionOutput.Transaction memory)
+    {
+        return _eUTXO.transaction(tokenId);
     }
 
-    // @TODO update _balances function
-
-    function _mint(address to, uint256 value) internal virtual {
-        // @TODO increase balance
-        _eUTXO.createTransaction(
-            ExtendedUnspentTransactionOutput.TransactionOutput(value, to),
-            bytes32(0),
-            ExtendedUnspentTransactionOutput.calculateTransactionHash(
-                address(0),
-                _eUTXO.transactionCount(address(0))
-            ),
-            address(0),
-            bytes32(0)
-        );
-        emit Transfer(address(0), to, value);
+    function _minteUTXO(address account, uint256 value) internal {
+        _minteUTXO(account, value, bytes32(0));
     }
 
-    function _mint(address to, uint256 value, bytes32 data) internal virtual {
-        // @TODO increase balance
+    function _minteUTXO(address account, uint256 value, bytes32 data) internal {
         _eUTXO.createTransaction(
-            ExtendedUnspentTransactionOutput.TransactionOutput(value, to),
+            ExtendedUnspentTransactionOutput.TransactionOutput(value, account),
             bytes32(0),
             ExtendedUnspentTransactionOutput.calculateTransactionHash(
                 address(0),
@@ -52,47 +40,34 @@ abstract contract eUTXOToken is IUTXOERC20 {
             address(0),
             data
         );
-        emit Transfer(address(0), to, value);
+        _mint(account, value);
     }
 
-    function _burn(
-        address to,
+    function _burneUTXO(
+        address account,
         bytes32 tokenId,
         uint256 value,
         bytes memory signature
-    ) internal virtual {
-        // @TODO decrese balance.
+    ) internal {
         if (value == _eUTXO.transactionValue(tokenId)) {
-            //     decrease balance
-            //     _eUTXO.consumeTransaction(txInput, to, value);
+            _eUTXO.consumeTransaction(tokenId, account);
         } else {
-            //     _eUTXO.spendTransaction(txInput, to, value);
+            // _eUTXO.spendTransaction(txInput, to);
             _eUTXO.createTransaction(
                 ExtendedUnspentTransactionOutput.TransactionOutput(
                     value,
-                    address(to)
+                    address(account)
                 ),
                 tokenId,
                 ExtendedUnspentTransactionOutput.calculateTransactionHash(
-                    to,
-                    _eUTXO.transactionCount(to)
+                    account,
+                    _eUTXO.transactionCount(account)
                 ),
-                to,
+                account,
                 _eUTXO.transactionExtraData(tokenId)
             );
         }
-        emit Transfer(to, address(0), value);
-    }
-
-    function approve(
-        address spender,
-        uint256 value
-    ) public virtual override returns (bool) {
-        address owner = msg.sender;
-        // @TODO
-        // _approve(owner, spender, value);
-        emit Approval(owner, spender, value);
-        return true;
+        _burn(account, value);
     }
 
     function transfer(
@@ -111,7 +86,7 @@ abstract contract eUTXOToken is IUTXOERC20 {
         address from = msg.sender;
         // @TODO
         // _transfer(from, to, tokenId, value);
-        emit Transfer(from, to, value);
+        _transfer(from, to, value);
         return true;
     }
 
@@ -132,34 +107,7 @@ abstract contract eUTXOToken is IUTXOERC20 {
     ) public virtual override returns (bool) {
         // @TODO
         // _transfer(from, to, tokenId, value);
-        emit Transfer(from, to, value);
+        _transfer(from, to, value);
         return true;
-    }
-
-    function allowance(
-        address owner,
-        address spender
-    ) public view virtual returns (uint256) {
-        return _allowances[owner][spender];
-    }
-
-    function name() public view override returns (string memory) {
-        return _name;
-    }
-
-    function symbol() public view override returns (string memory) {
-        return _symbol;
-    }
-
-    function decimals() public view virtual override returns (uint8) {
-        return 18;
-    }
-
-    function balanceOf(address account) public view override returns (uint256) {
-        return _balances[account];
-    }
-
-    function totalSupply() public view virtual override returns (uint256) {
-        return _totalSupply;
     }
 }

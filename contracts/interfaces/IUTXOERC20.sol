@@ -1,10 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0 <0.9.0;
 
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
-
-interface IUTXOERC20 is IERC20, IERC20Metadata {
+interface IUTXOERC20 {
     error ERC20TransferNotSupported();
     error ERC20TransferFromNotSupported();
 
@@ -14,6 +11,7 @@ interface IUTXOERC20 is IERC20, IERC20Metadata {
         uint256 value,
         bytes memory signature
     ) external returns (bool);
+
     function transferFrom(
         address from,
         address to,

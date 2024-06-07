@@ -1,18 +1,18 @@
 // // SPDX-License-Identifier: MIT
-// pragma solidity >=0.8.0 <0.9.0;
+pragma solidity >=0.8.0 <0.9.0;
 
-// import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-// import "../abstracts/extensions/FreezeBalance.sol";
-// import "../abstracts/extensions/Suspend.sol";
-// import "../abstracts/extensions/SuspendToken.sol";
+import "../abstracts/TrieToken.sol";
+import "../abstracts/extensions/FreezeBalance.sol";
+import "../abstracts/extensions/Suspend.sol";
+import "../abstracts/extensions/SuspendToken.sol";
 
-// contract MockTireCBDC is TrieToken, FreezeBalance, Suspend, SuspendToken {
+contract MockTireCBDC is TrieToken, FreezeBalance, Suspend, SuspendToken {
 //     mapping(address => bool) private _suspends;
 
-//     constructor(
-//         string memory name_,
-//         string memory symbol_
-//     ) TrieToken(name_, symbol_) {}
+    constructor(
+        string memory name_,
+        string memory symbol_
+    ) TrieToken(name_, symbol_) {}
 
 //     modifier checkSuspender(address from, address to) {
 //         if (isSuspend(from) || isSuspend(to)) {
@@ -35,4 +35,4 @@
 //     ) public override checkSuspender(msg.sender, to) returns (bool) {
 //         return super.transferFrom(from, to, value);
 //     }
-// }
+}

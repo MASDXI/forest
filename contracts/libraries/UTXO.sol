@@ -74,10 +74,9 @@ library UnspentTransactionOutput {
             txOutput.account,
             false
         );
-        unchecked {
-            self.nonces[creator]++;
-            self.size[txOutput.account]++;
-        }
+        self.nonces[creator]++;
+        self.size[txOutput.account]++;
+
         emit TransactionCreated(id, creator);
     }
 
@@ -96,25 +95,22 @@ library UnspentTransactionOutput {
             revert TransactionUnauthorized();
         }
         self.transactions[txInput.outpoint].spent = true;
-        unchecked {
-            self.size[account]--;
-        }
+        self.size[account]--;
+
         emit TransactionSpent(txInput.outpoint, account);
     }
 
     function consumeTransaction(
         UTXO storage self,
-        TransactionInput memory txInput,
-        address account,
-        bytes32 id
+        bytes32 id,
+        address account
     ) internal {
-        if (!_transactionExist(self, txInput.outpoint)) {
+        if (!_transactionExist(self, id)) {
             revert TransactionNotExist();
         }
-        delete self.transactions[id];
-        unchecked {
-            self.size[account]--;
-        }
+        self.transactions[id].spent = true;
+        self.size[account]--;
+
         emit TransactionConsumed(id);
     }
 

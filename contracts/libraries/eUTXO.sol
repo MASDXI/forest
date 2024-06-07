@@ -78,7 +78,6 @@ library ExtendedUnspentTransactionOutput {
             txOutput.account,
             false
         );
-
         self.nonces[creator]++;
         self.size[txOutput.account]++;
 
@@ -107,15 +106,13 @@ library ExtendedUnspentTransactionOutput {
 
     function consumeTransaction(
         eUTXO storage self,
-        TransactionInput memory txInput,
-        address account,
-        bytes32 id
+        bytes32 id,
+        address account
     ) internal {
-        if (!_transactionExist(self, account, txInput.outpoint)) {
+        if (!_transactionExist(self, account, id)) {
             revert TransactionNotExist();
         }
-        delete self.transactions[id];
-
+        self.transactions[id].spent = true;
         self.size[account]--;
 
         emit TransactionConsumed(id);
