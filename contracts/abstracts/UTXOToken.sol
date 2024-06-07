@@ -15,6 +15,12 @@ abstract contract UTXOToken is ERC20, IUTXOERC20 {
         string memory symbol_
     ) ERC20(name_, symbol_) {}
 
+    function _transaction(
+        bytes32 tokenId
+    ) internal view returns (UnspentTransactionOutput.Transaction memory) {
+        return _UTXO.transaction(tokenId);
+    }
+
     function _mintUTXO(address account, uint256 value) internal {
         _UTXO.createTransaction(
             UnspentTransactionOutput.TransactionOutput(value, account),
@@ -35,7 +41,7 @@ abstract contract UTXOToken is ERC20, IUTXOERC20 {
         bytes memory signature
     ) internal {
         if (value == _UTXO.transactionValue(tokenId)) {
-                _UTXO.consumeTransaction(tokenId, account);
+            _UTXO.consumeTransaction(tokenId, account);
         } else {
             // _UTXO.spendTransaction(txInput, account, value);
             _UTXO.createTransaction(
