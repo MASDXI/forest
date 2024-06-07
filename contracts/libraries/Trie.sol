@@ -78,7 +78,7 @@ library Trie {
 
     function createTransaction(
         Trie storage self,
-        Node calldata node,
+        Node memory node,
         address account,
         bytes32 id
     ) internal {
@@ -90,7 +90,7 @@ library Trie {
 
     function spendTransaction(
         Trie storage self,
-        Transaction calldata transaction,
+        Transaction memory transaction,
         address account,
         bytes32 id
     ) internal {
