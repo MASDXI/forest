@@ -1,18 +1,18 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0 <0.9.0;
 
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "../abstracts/eUTXOToken.sol";
 import "../abstracts/extensions/FreezeBalance.sol";
 import "../abstracts/extensions/Suspend.sol";
-// import "../abstracts/extensions/SuspendToken.sol"; // ERC20 not has tokenId
+import "../abstracts/extensions/SuspendToken.sol";
 
-contract MockERC20CBDC is ERC20, FreezeBalance, Suspend {
+contract MockeUtxoCBDC is eUTXOToken, FreezeBalance, Suspend, SuspendToken {
     mapping(address => bool) private _suspends;
 
     constructor(
         string memory name_,
         string memory symbol_
-    ) ERC20(name_, symbol_) {}
+    ) eUTXOToken(name_, symbol_) {}
 
     modifier checkSuspender(address from, address to) {
         if (isSuspend(from) || isSuspend(to)) {
@@ -23,28 +23,34 @@ contract MockERC20CBDC is ERC20, FreezeBalance, Suspend {
 
     function transfer(
         address to,
-        uint256 value
+        bytes32 tokenId,
+        uint256 value,
+        bytes memory signature
     )
         public
         override
         checkFrozenBalance(msg.sender, balanceOf(msg.sender), value)
         checkSuspender(msg.sender, to)
+        checkSuspendedToken(tokenId)
         returns (bool)
     {
-        return super.transfer(to, value);
+        return super.transfer(to, tokenId, value, signature);
     }
 
     function transferFrom(
         address from,
         address to,
-        uint256 value
+        bytes32 tokenId,
+        uint256 value,
+        bytes memory signature
     )
         public
         override
         checkFrozenBalance(msg.sender, balanceOf(msg.sender), value)
         checkSuspender(msg.sender, to)
+        checkSuspendedToken(tokenId)
         returns (bool)
     {
-        return super.transferFrom(from, to, value);
+        return super.transfer(to, tokenId, value, signature);
     }
 }

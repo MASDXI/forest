@@ -78,10 +78,10 @@ library ExtendedUnspentTransactionOutput {
             txOutput.account,
             false
         );
-        unchecked {
-            self.nonces[creator]++;
-            self.size[txOutput.account]++;
-        }
+
+        self.nonces[creator]++;
+        self.size[txOutput.account]++;
+
         emit TransactionCreated(id, creator);
     }
 
@@ -93,16 +93,15 @@ library ExtendedUnspentTransactionOutput {
         if (!_transactionExist(self, account, txInput.outpoint)) {
             revert TransactionNotExist();
         }
-        if (!transactionSpent(self, account, txInput.outpoint)) {
+        if (!transactionSpent(self, txInput.outpoint)) {
             revert TransactionAlreadySpent();
         }
         if (ECDSA.recover(txInput.outpoint, txInput.signature) == address(0)) {
             revert TransactionUnauthorized();
         }
         self.transactions[txInput.outpoint].spent = true;
-        unchecked {
-            self.size[account]--;
-        }
+        self.size[account]--;
+
         emit TransactionSpent(txInput.outpoint, account);
     }
 
@@ -116,15 +115,14 @@ library ExtendedUnspentTransactionOutput {
             revert TransactionNotExist();
         }
         delete self.transactions[id];
-        unchecked {
-            self.size[account]--;
-        }
+
+        self.size[account]--;
+
         emit TransactionConsumed(id);
     }
 
     function transaction(
         eUTXO storage self,
-        address account,
         bytes32 id
     ) internal view returns (Transaction memory) {
         return self.transactions[id];
@@ -132,7 +130,6 @@ library ExtendedUnspentTransactionOutput {
 
     function transactionValue(
         eUTXO storage self,
-        address account,
         bytes32 id
     ) internal view returns (uint256) {
         return self.transactions[id].value;
@@ -140,7 +137,6 @@ library ExtendedUnspentTransactionOutput {
 
     function transactionInput(
         eUTXO storage self,
-        address account,
         bytes32 id
     ) internal view returns (bytes32) {
         return self.transactions[id].input;
@@ -148,7 +144,6 @@ library ExtendedUnspentTransactionOutput {
 
     function transactionExtraData(
         eUTXO storage self,
-        address account,
         bytes32 id
     ) internal view returns (bytes32) {
         return self.transactions[id].extraData;
@@ -156,7 +151,6 @@ library ExtendedUnspentTransactionOutput {
 
     function transactionSpent(
         eUTXO storage self,
-        address account,
         bytes32 id
     ) internal view returns (bool) {
         return self.transactions[id].spent;
@@ -164,7 +158,6 @@ library ExtendedUnspentTransactionOutput {
 
     function transactionOwner(
         eUTXO storage self,
-        address account,
         bytes32 id
     ) internal view returns (address) {
         return self.transactions[id].owner;
@@ -177,7 +170,7 @@ library ExtendedUnspentTransactionOutput {
         return self.size[account];
     }
 
-    function nonce(
+    function transactionCount(
         eUTXO storage self,
         address account
     ) internal view returns (uint256) {

@@ -41,4 +41,12 @@ However, technology itself provides an advantage and eliminates the problem idea
 | suspends specifics tokenId that relevant to the incident. | ✗     | ✗    | ✓     | ✓    |
 | keep tracking child.                                      | ✗     | ✗    | ✗     | ✓    |
 
+
+- For `ERC20` provide events and keep tracking each `Transfer` ,  
+but the problem is the `ERC20` model can't separate `clean money` from `dirty money`  
+- For `UTXO` and `eUTXO` facing challenge to combine multiple `UnspentTransaction` and spent as one,  
+in case user want to spend value that greater that selected `UnspentTransaction`.  
+possible solution prepare and batching as an array.
+- For `Trie` 
+
 ## Reference

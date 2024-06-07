@@ -6,20 +6,31 @@ pragma solidity >=0.8.0 <0.9.0;
 abstract contract Suspend {
     mapping(address => bool) private _suspends;
 
+    error AddressSuspended();
+    error AddressNotSuspended();
+
+    event Suspended(address indexed account, bool indexed auth);
+
     function _updateSuspend(address account, bool auth) private {
         _suspends[account] = auth;
     }
 
     function suspend(address account) public {
-        require(!_suspends[account]);
+        if (_suspends[account]) {
+            revert AddressSuspended();
+        }
         _updateSuspend(account, true);
-        // emit
+
+        emit Suspended(account, true);
     }
 
     function unsuspend(address account) public {
-        require(_suspends[account]);
+        if (!_suspends[account]) {
+            revert AddressNotSuspended();
+        }
         _updateSuspend(account, false);
-        // emit
+
+        emit Suspended(account, false);
     }
 
     function isSuspend(address account) public view returns (bool) {

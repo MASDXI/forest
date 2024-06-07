@@ -89,7 +89,7 @@ library UnspentTransactionOutput {
         if (!_transactionExist(self, txInput.outpoint)) {
             revert TransactionNotExist();
         }
-        if (!transactionSpent(self, account, txInput.outpoint)) {
+        if (!transactionSpent(self, txInput.outpoint)) {
             revert TransactionAlreadySpent();
         }
         if (ECDSA.recover(txInput.outpoint, txInput.signature) == address(0)) {
@@ -120,7 +120,6 @@ library UnspentTransactionOutput {
 
     function transaction(
         UTXO storage self,
-        address account,
         bytes32 id
     ) internal view returns (Transaction memory) {
         return self.transactions[id];
@@ -128,7 +127,6 @@ library UnspentTransactionOutput {
 
     function transactionInput(
         UTXO storage self,
-        address account,
         bytes32 id
     ) internal view returns (bytes32) {
         return self.transactions[id].input;
@@ -136,7 +134,6 @@ library UnspentTransactionOutput {
 
     function transactionValue(
         UTXO storage self,
-        address account,
         bytes32 id
     ) internal view returns (uint256) {
         return self.transactions[id].value;
@@ -144,7 +141,6 @@ library UnspentTransactionOutput {
 
     function transactionSpent(
         UTXO storage self,
-        address account,
         bytes32 id
     ) internal view returns (bool) {
         return self.transactions[id].spent;
@@ -152,7 +148,6 @@ library UnspentTransactionOutput {
 
     function transactionOwner(
         UTXO storage self,
-        address account,
         bytes32 id
     ) internal view returns (address) {
         return self.transactions[id].owner;
@@ -165,7 +160,7 @@ library UnspentTransactionOutput {
         return self.size[account];
     }
 
-    function nonce(
+    function transactionCount(
         UTXO storage self,
         address account
     ) internal view returns (uint256) {

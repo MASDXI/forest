@@ -4,19 +4,31 @@ pragma solidity >=0.8.0 <0.9.0;
 /// @notice not implementing access control.
 
 abstract contract FreezeBalance {
-    mapping(address => uint256) private _freezeBalance;
+    mapping(address => uint256) private _frozenBalance;
 
-    function _updatefreezeBalance(address account, uint256 amount) private {
-        _freezeBalance[account] = amount;
+    error BalanceFreezed(uint256 balance, uint256 frozenBalance);
+
+    event Freezedbalance(address indexed account, uint256 value);
+
+    modifier checkFrozenBalance(
+        address account,
+        uint256 balance,
+        uint256 value
+    ) {
+        uint256 frozenBalance = _frozenBalance[account];
+        if (balance - value <= frozenBalance) {
+            revert BalanceFreezed(balance, frozenBalance);
+        }
+        _;
     }
 
     /// @notice clear freeze balance by passing amout '0'.
-    function freezeBalance(address account, uint256 amount) public {
-        _updatefreezeBalance(account, amount);
-        // emit
+    function setFrozenBalance(address account, uint256 amount) public {
+        _frozenBalance[account] = amount;
+        emit Freezedbalance(account, amount);
     }
 
-    function freezeBalance(address account) public view returns (uint256) {
-        return _freezeBalance[account];
+    function getFrozenBalance(address account) public view returns (uint256) {
+        return _frozenBalance[account];
     }
 }
