@@ -69,7 +69,7 @@ abstract contract UTXOToken is IUTXOERC20 {
     ) public virtual override returns (bool) {
         address owner = msg.sender;
         // @TODO
-        // approve(spender, tokenId, value);
+        // _approve(owner, spender, value);
         emit Approval(owner, spender, value);
         return true;
     }
@@ -89,6 +89,7 @@ abstract contract UTXOToken is IUTXOERC20 {
     ) public virtual override returns (bool) {
         address from = msg.sender;
         // @TODO
+        // _transfer(from, to, tokenId, value);
         emit Transfer(from, to, value);
         return true;
     }
@@ -109,6 +110,7 @@ abstract contract UTXOToken is IUTXOERC20 {
         bytes memory signature
     ) public virtual override returns (bool) {
         // @TODO
+        // _transfer(from, to, tokenId, value);
         emit Transfer(from, to, value);
         return true;
     }
@@ -117,8 +119,7 @@ abstract contract UTXOToken is IUTXOERC20 {
         address owner,
         address spender
     ) public view virtual returns (uint256) {
-        // @TODO
-        // return ;
+        return _allowances[owner][spender];
     }
 
     function name() public view override returns (string memory) {
