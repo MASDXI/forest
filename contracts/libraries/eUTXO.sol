@@ -48,13 +48,11 @@ library ExtendedUnspentTransactionOutput {
     }
 
     function calculateTransactionHash(
-        eUTXO storage self,
         address creator,
         uint256 nonce
-    ) internal view returns (bytes32 transactionHash) {
-        uint256 chaindId = block.chainid;
-        // @TODO
-        return transactionHash;
+    ) internal view returns (bytes32) {
+        uint256 chainId = block.chainid;
+        return keccak256(abi.encode(chainId, creator, nonce));
     }
 
     function createTransaction(
@@ -93,7 +91,7 @@ library ExtendedUnspentTransactionOutput {
         if (!transactionSpent(self, account, txInput.outpoint)) {
             revert TransactionAlreadySpent();
         }
-        if (ECDSA.recover(txInput.outpoint, txInput.signature) != account) {
+        if (ECDSA.recover(txInput.outpoint, txInput.signature) == address(0)) {
             revert TransactionUnauthorized();
         }
         self.transactions[account][txInput.outpoint].spent = true;

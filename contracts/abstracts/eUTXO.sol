@@ -21,10 +21,12 @@ abstract contract eUTXO is IUTXOERC20 {
 
     function _mint(address to, uint256 value) internal virtual {
         // @TODO increase balance
-        bytes32 tokenId = bytes32(0);
         _eUTXO.createTransaction(
             ExtendedUnspentTransactionOutput.TransactionOutput(value, to),
-            tokenId,
+            ExtendedUnspentTransactionOutput.calculateTransactionHash(
+                address(0),
+                _eUTXO.nonces[address(0)]
+            ),
             address(0),
             bytes32(0)
         );
@@ -33,23 +35,28 @@ abstract contract eUTXO is IUTXOERC20 {
 
     function _mint(address to, uint256 value, bytes32 data) internal virtual {
         // @TODO increase balance
-        bytes32 tokenId = bytes32(0);
         _eUTXO.createTransaction(
             ExtendedUnspentTransactionOutput.TransactionOutput(value, to),
-            tokenId,
+            ExtendedUnspentTransactionOutput.calculateTransactionHash(
+                address(0),
+                _eUTXO.nonces[address(0)]
+            ),
             address(0),
             data
         );
+        unchecked {
+            _balances[to] += value;
+        }
         emit Transfer(address(0), to, value);
     }
 
     function _burn(
         address to,
-        uint256 tokenId,
+        bytes32 tokenId,
         uint256 value
     ) internal virtual {
         // @TODO decrese balance.
-        if (value == _eUTXO.transactionValue(to, bytes32(tokenId))) {
+        if (value == _eUTXO.transactionValue(to, tokenId)) {
             //     decrease balance
             //     _eUTXO.consumeTransaction(txInput, to, value);
         } else {
@@ -62,8 +69,11 @@ abstract contract eUTXO is IUTXOERC20 {
                 ),
                 newTokenId,
                 msg.sender,
-                _eUTXO.transactionExtraData(to, bytes32(tokenId))
+                _eUTXO.transactionExtraData(to, tokenId)
             );
+        }
+        unchecked {
+            _balances[to] -= value;
         }
         emit Transfer(to, address(0), value);
     }
@@ -83,20 +93,18 @@ abstract contract eUTXO is IUTXOERC20 {
         address to,
         uint256 value
     ) public virtual override returns (bool) {
-        address from = msg.sender;
-        // @TODO
-        // transfer(tokenId, to, value);
-        emit Transfer(from, to, value);
-        return true;
+        revert ERC20TransferNotSupported();
     }
 
     function transfer(
         address to,
-        uint256 tokenId,
-        uint256 value
+        bytes32 tokenId,
+        uint256 value,
+        bytes memory signature
     ) public virtual override returns (bool) {
         address from = msg.sender;
         // @TODO
+        // _transfer(tokenId, to, value);
         emit Transfer(from, to, value);
         return true;
     }
@@ -106,17 +114,15 @@ abstract contract eUTXO is IUTXOERC20 {
         address to,
         uint256 value
     ) public virtual override returns (bool) {
-        // @TODO
-        // transfer(tokenId, to, value);
-        emit Transfer(from, to, value);
-        return true;
+        revert ERC20TransferFromNotSupported();
     }
 
     function transferFrom(
         address from,
         address to,
-        uint256 tokenId,
-        uint256 value
+        bytes32 tokenId,
+        uint256 value,
+        bytes memory signature
     ) public virtual override returns (bool) {
         // @TODO
         emit Transfer(from, to, value);

@@ -21,32 +21,42 @@ abstract contract UTXO is IUTXOERC20 {
 
     function _mint(address to, uint256 value) internal virtual {
         // @TODO increase balance
-        bytes32 tokenId = bytes32(0);
+        uint256 nonce = _UTXO.nonces[address(0)];
         _UTXO.createTransaction(
             UnspentTransactionOutput.TransactionOutput(value, to),
-            tokenId,
+            UnspentTransactionOutput.calculateTransactionHash(
+                address(0),
+                nonce
+            ),
             address(0)
         );
+        unchecked {
+            _balances[to] += value;
+        }
         emit Transfer(address(0), to, value);
     }
 
     function _burn(
         address to,
-        uint256 tokenId,
+        bytes32 tokenId,
         uint256 value
     ) internal virtual {
         // @TODO decrese balance.
         if (value == _UTXO.transactionValue(to, bytes32(tokenId))) {
-            //     decrease balance
             //     _UTXO.consumeTransaction(txInput, to, value);
         } else {
             // _UTXO.spendTransaction(txInput, to, value);
-            bytes32 newTokenId = bytes32(0);
             _UTXO.createTransaction(
                 UnspentTransactionOutput.TransactionOutput(value, address(0)),
-                newTokenId,
+                UnspentTransactionOutput.calculateTransactionHash(
+                    to,
+                    _UTXO.nonces[to]
+                ),
                 msg.sender
             );
+        }
+        unchecked {
+            _balances[to] -= value;
         }
         emit Transfer(to, address(0), value);
     }
@@ -66,17 +76,14 @@ abstract contract UTXO is IUTXOERC20 {
         address to,
         uint256 value
     ) public virtual override returns (bool) {
-        address from = msg.sender;
-        // @TODO
-        // transfer(tokenId, to, value);
-        emit Transfer(from, to, value);
-        return true;
+        revert ERC20TransferNotSupported();
     }
 
     function transfer(
         address to,
-        uint256 tokenId,
-        uint256 value
+        bytes32 tokenId,
+        uint256 value,
+        bytes memory signature
     ) public virtual override returns (bool) {
         address from = msg.sender;
         // @TODO
@@ -89,17 +96,15 @@ abstract contract UTXO is IUTXOERC20 {
         address to,
         uint256 value
     ) public virtual override returns (bool) {
-        // @TODO
-        // transfer(tokenId, to, value);
-        emit Transfer(from, to, value);
-        return true;
+       revert ERC20TransferFromNotSupported();
     }
 
     function transferFrom(
         address from,
         address to,
-        uint256 tokenId,
-        uint256 value
+        bytes32 tokenId,
+        uint256 value,
+        bytes memory signature
     ) public virtual override returns (bool) {
         // @TODO
         emit Transfer(from, to, value);

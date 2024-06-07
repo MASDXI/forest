@@ -3,7 +3,7 @@ pragma solidity >=0.8.0 <0.9.0;
 
 /// @notice not implementing access control.
 
-abstract contract FreezeToken {
+abstract contract FreezeBalance {
     mapping(address => uint256) private _freezeBalance;
 
     function _updatefreezeBalance(address account, uint256 amount) private {
