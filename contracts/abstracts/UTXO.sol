@@ -6,40 +6,40 @@ import "../interfaces/IUTXOERC20.sol";
 
 abstract contract UTXO is IUTXOERC20 {
     using UnspentTransactionOutput for UnspentTransactionOutput.UTXO;
-
-    // @TODO ERC20 storage.
-    // name
-    // symbol
-    // decimal
-    // allowances
+    
     mapping(address => uint256) private _balances;
-    // totalSupply
+    mapping(address account => mapping(address spender => uint256)) private _allowances;
+
+    uint256 private _totalSupply;
+
+    string private _name;
+    string private _symbol;
 
     UnspentTransactionOutput.UTXO private _UTXO;
 
     constructor(string memory name_, string memory symbol_) {}
 
+    // @TODO update _balances function
+
     function _mint(address to, uint256 value) internal virtual {
         // @TODO increase balance
-        uint256 nonce = _UTXO.nonces[address(0)];
         _UTXO.createTransaction(
             UnspentTransactionOutput.TransactionOutput(value, to),
+            bytes32(0),
             UnspentTransactionOutput.calculateTransactionHash(
                 address(0),
-                nonce
+                _UTXO.nonce(address(0))
             ),
             address(0)
         );
-        unchecked {
-            _balances[to] += value;
-        }
         emit Transfer(address(0), to, value);
     }
 
     function _burn(
         address to,
         bytes32 tokenId,
-        uint256 value
+        uint256 value,
+        bytes memory signature
     ) internal virtual {
         // @TODO decrese balance.
         if (value == _UTXO.transactionValue(to, bytes32(tokenId))) {
@@ -48,15 +48,13 @@ abstract contract UTXO is IUTXOERC20 {
             // _UTXO.spendTransaction(txInput, to, value);
             _UTXO.createTransaction(
                 UnspentTransactionOutput.TransactionOutput(value, address(0)),
+                tokenId,
                 UnspentTransactionOutput.calculateTransactionHash(
                     to,
-                    _UTXO.nonces[to]
+                    _UTXO.nonce(to)
                 ),
-                msg.sender
+                to
             );
-        }
-        unchecked {
-            _balances[to] -= value;
         }
         emit Transfer(to, address(0), value);
     }
@@ -96,7 +94,7 @@ abstract contract UTXO is IUTXOERC20 {
         address to,
         uint256 value
     ) public virtual override returns (bool) {
-       revert ERC20TransferFromNotSupported();
+        revert ERC20TransferFromNotSupported();
     }
 
     function transferFrom(
@@ -117,6 +115,18 @@ abstract contract UTXO is IUTXOERC20 {
     ) public view virtual returns (uint256) {
         // @TODO
         // return ;
+    }
+
+    function name() public view override returns (string memory) {
+        return _name;
+    }
+
+    function symbol() public view override returns (string memory) {
+        return _symbol;
+    }
+
+    function decimals() public view virtual override returns (uint8) {
+        return 18;
     }
 
     function balanceOf(address account) public view returns (uint256) {

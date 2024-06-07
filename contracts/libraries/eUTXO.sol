@@ -8,8 +8,10 @@ import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 
 library ExtendedUnspentTransactionOutput {
     struct Transaction {
+        bytes32 input;
         uint256 value;
         bytes32 extraData;
+        address owner;
         bool spent;
     }
 
@@ -26,7 +28,7 @@ library ExtendedUnspentTransactionOutput {
     struct eUTXO {
         mapping(address => uint256) size;
         mapping(address => uint256) nonces;
-        mapping(address => mapping(bytes32 => Transaction)) transactions;
+        mapping(bytes32 => Transaction) transactions;
     }
 
     event TransactionCreated(bytes32 indexed id, address indexed creator);
@@ -44,7 +46,7 @@ library ExtendedUnspentTransactionOutput {
         address account,
         bytes32 id
     ) private view returns (bool) {
-        return self.transactions[account][id].value > 0;
+        return self.transactions[id].value > 0;
     }
 
     function calculateTransactionHash(
@@ -58,6 +60,7 @@ library ExtendedUnspentTransactionOutput {
     function createTransaction(
         eUTXO storage self,
         TransactionOutput memory txOutput,
+        bytes32 input,
         bytes32 id,
         address creator,
         bytes32 data
@@ -68,9 +71,11 @@ library ExtendedUnspentTransactionOutput {
         if (_transactionExist(self, txOutput.account, id)) {
             revert TransactionExist();
         }
-        self.transactions[txOutput.account][id] = Transaction(
+        self.transactions[id] = Transaction(
+            input,
             txOutput.value,
             data,
+            txOutput.account,
             false
         );
         unchecked {
@@ -94,7 +99,7 @@ library ExtendedUnspentTransactionOutput {
         if (ECDSA.recover(txInput.outpoint, txInput.signature) == address(0)) {
             revert TransactionUnauthorized();
         }
-        self.transactions[account][txInput.outpoint].spent = true;
+        self.transactions[txInput.outpoint].spent = true;
         unchecked {
             self.size[account]--;
         }
@@ -110,7 +115,7 @@ library ExtendedUnspentTransactionOutput {
         if (!_transactionExist(self, account, txInput.outpoint)) {
             revert TransactionNotExist();
         }
-        delete self.transactions[account][id];
+        delete self.transactions[id];
         unchecked {
             self.size[account]--;
         }
@@ -122,7 +127,7 @@ library ExtendedUnspentTransactionOutput {
         address account,
         bytes32 id
     ) internal view returns (Transaction memory) {
-        return self.transactions[account][id];
+        return self.transactions[id];
     }
 
     function transactionValue(
@@ -130,7 +135,15 @@ library ExtendedUnspentTransactionOutput {
         address account,
         bytes32 id
     ) internal view returns (uint256) {
-        return self.transactions[account][id].value;
+        return self.transactions[id].value;
+    }
+
+    function transactionInput(
+        eUTXO storage self,
+        address account,
+        bytes32 id
+    ) internal view returns (bytes32) {
+        return self.transactions[id].input;
     }
 
     function transactionExtraData(
@@ -138,7 +151,7 @@ library ExtendedUnspentTransactionOutput {
         address account,
         bytes32 id
     ) internal view returns (bytes32) {
-        return self.transactions[account][id].extraData;
+        return self.transactions[id].extraData;
     }
 
     function transactionSpent(
@@ -146,7 +159,15 @@ library ExtendedUnspentTransactionOutput {
         address account,
         bytes32 id
     ) internal view returns (bool) {
-        return self.transactions[account][id].spent;
+        return self.transactions[id].spent;
+    }
+
+    function transactionOwner(
+        eUTXO storage self,
+        address account,
+        bytes32 id
+    ) internal view returns (address) {
+        return self.transactions[id].owner;
     }
 
     function size(
@@ -154,5 +175,12 @@ library ExtendedUnspentTransactionOutput {
         address account
     ) internal view returns (uint256) {
         return self.size[account];
+    }
+
+    function nonce(
+        eUTXO storage self,
+        address account
+    ) internal view returns (uint256) {
+        return self.nonces[account];
     }
 }
