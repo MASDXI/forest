@@ -1,12 +1,12 @@
 // // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0 <0.9.0;
 
-import "../abstracts/TrieToken.sol";
+import "../abstracts/ForestToken.sol";
 import "../abstracts/extensions/FreezeBalance.sol";
 import "../abstracts/extensions/Suspend.sol";
 import "../abstracts/extensions/SuspendToken.sol";
 
-contract MockTireCBDC is TrieToken, FreezeBalance, Suspend, SuspendToken {
+contract MockTireCBDC is ForestToken, FreezeBalance, Suspend, SuspendToken {
 //     mapping(address => bool) private _suspends;
 
     constructor(

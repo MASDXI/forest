@@ -1,13 +1,15 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.8.0 <0.9.0;
 
-///@title Trie Model.
+///@title Forest Model.
 ///@author Sirawit Techavanitch (sirawit_tec@live4.utcc.ac.th)
 
-library Trie {
+library Forest {
     struct Node {
         bytes32 root;
+        bytes32 parent;
         bool status;
+        // store left leaf.
         Transaction[] transactions;
     }
 
@@ -16,9 +18,10 @@ library Trie {
         bytes32 extraData;
     }
 
-    struct Trie {
+    struct Tree {
         mapping(address => uint256) size;
-        mapping(address => mapping(bytes32 => Node)) nodes;
+        mapping(address => uint256) nonces;
+        mapping(address => mapping(bytes32 => Node)) tree;
     }
 
     error NodeInactive();
@@ -27,57 +30,57 @@ library Trie {
     error NodeExist();
 
     function _nodeExist(
-        Trie storage self,
+        Tree storage self,
         address account,
         bytes32 id
     ) private view returns (bool) {
-        return self.nodes[account][id].transactions.length > 0;
+        return self.tree[account][id].transactions.length > 0;
     }
 
     function node(
-        Trie storage self,
+        Tree storage self,
         address account,
         bytes32 id
     ) internal view returns (Node memory) {
-        return self.nodes[account][id];
+        return self.tree[account][id];
     }
 
     function nodeRoot(
-        Trie storage self,
+        Tree storage self,
         address account,
         bytes32 id
     ) internal view returns (bytes32) {
-        return self.nodes[account][id].root;
+        return self.tree[account][id].root;
     }
 
     function nodeStatus(
-        Trie storage self,
+        Tree storage self,
         address account,
         bytes32 id
     ) internal view returns (bool) {
-        return self.nodes[account][id].status;
+        return self.tree[account][id].status;
     }
 
     function transactionExtraData(
-        Trie storage self,
+        Tree storage self,
         address account,
         bytes32 id,
         uint256 index
     ) internal view returns (bytes32) {
-        return self.nodes[account][id].transactions[index].extraData;
+        return self.tree[account][id].transactions[index].extraData;
     }
 
     function transactionValue(
-        Trie storage self,
+        Tree storage self,
         address account,
         bytes32 id,
         uint256 index
     ) internal view returns (uint256) {
-        return self.nodes[account][id].transactions[index].value;
+        return self.tree[account][id].transactions[index].value;
     }
 
     function createTransaction(
-        Trie storage self,
+        Tree storage self,
         Node memory node,
         address account,
         bytes32 id
@@ -85,11 +88,11 @@ library Trie {
         if (_nodeExist(self, account, id)) {
             revert NodeExist();
         }
-        self.nodes[account][id] = node;
+        self.tree[account][id] = node;
     }
 
     function spendTransaction(
-        Trie storage self,
+        Tree storage self,
         Transaction memory transaction,
         address account,
         bytes32 id
@@ -97,11 +100,18 @@ library Trie {
         if (!_nodeExist(self, account, id)) {
             revert NodeNotExist();
         }
-        self.nodes[account][id].transactions.push(transaction);
+        self.tree[account][id].transactions.push(transaction);
+    }
+
+    function transactionCount(
+        Tree storage self,
+        address account
+    ) internal view returns (uint256) {
+        return self.nonces[account];
     }
 
     function size(
-        Trie storage self,
+        Tree storage self,
         address account
     ) internal view returns (uint256) {
         return self.size[account];

@@ -4,7 +4,6 @@ pragma solidity >=0.8.0 <0.9.0;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "../abstracts/extensions/FreezeBalance.sol";
 import "../abstracts/extensions/Suspend.sol";
-// import "../abstracts/extensions/SuspendToken.sol"; // ERC20 not has tokenId
 
 contract MockERC20CBDC is ERC20, FreezeBalance, Suspend {
     mapping(address => bool) private _suspends;

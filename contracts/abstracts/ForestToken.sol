@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.8.0 <0.9.0;
 
-// import "../libraries/Trie.sol";
-import "../interfaces/ITrieERC20.sol";
+// import "../libraries/Forest.sol";
+import "../interfaces/IForestERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 // @TODO
-abstract contract TrieToken is ERC20, ITrieERC20 {
-    // using Trie for Trie.Trie;
+abstract contract ForestToken is ERC20, IForestERC20 {
+    // using Forest for Forest.Tree;
 
     constructor(
         string memory name_,
