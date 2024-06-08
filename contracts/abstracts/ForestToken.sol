@@ -8,6 +8,8 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 abstract contract ForestToken is ERC20, IForestERC20 {
     // using Forest for Forest.Tree;
 
+    // Forest.Tree private _trees;
+
     constructor(
         string memory name_,
         string memory symbol_

@@ -21,21 +21,14 @@ describe("eUTXO CBDC", function () {
   }
 
   describe("Transfers", function () {
-    it("Should transfer the funds to the owner", async function () {
+    it("Should mint the funds to the owner", async function () {
       const { token, owner } = await loadFixture(deployTokenFixture);
       const address = await owner.getAddress();
       await token.mint(address, 1000n);
       expect(await token.balanceOf(address)).to.equal(1000n);
     });
 
-    it("Should transfer the funds to the owner", async function () {
-      const { token, owner } = await loadFixture(deployTokenFixture);
-      const address = await owner.getAddress();
-      await token.mint(address, 1000n);
-      expect(await token.balanceOf(address)).to.equal(1000n);
-    });
-
-    it("Should transfer the funds to the owner", async function () {
+    it("Should transfer the funds from the account to other account", async function () {
       const { token, owner, otherAccount } = await loadFixture(
         deployTokenFixture
       );
