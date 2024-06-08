@@ -5,6 +5,10 @@ author: Sirawit Techavanitch (sirawit_tec@live4.utcc.ac.th)
 status: Draft
 ---
 
+<h1 align="center">
+<img src="./docs/assets/Horizontal-Reforestation-through-replanting-in-mixed-forest.png" width="450"/>
+</h1>
+
 # Smart Contract Implementation for Enhanced Traceability in Central Bank Digital Currency Systems
 
 ## Abstract
@@ -25,6 +29,7 @@ However, technology itself provides an advantage and eliminates the problem idea
 ## Methodology
 
 // TODO
+Introduce implementation call `Forest`
 
 ## Related Works
 
