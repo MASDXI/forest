@@ -7,8 +7,6 @@ import "../abstracts/extensions/Suspend.sol";
 import "../abstracts/extensions/SuspendToken.sol";
 
 contract MockUtxoCBDC is UTXOToken, FreezeBalance, Suspend, SuspendToken {
-    mapping(address => bool) private _suspends;
-
     constructor(
         string memory name_,
         string memory symbol_

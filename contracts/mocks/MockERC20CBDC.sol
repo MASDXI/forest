@@ -6,8 +6,6 @@ import "../abstracts/extensions/FreezeBalance.sol";
 import "../abstracts/extensions/Suspend.sol";
 
 contract MockERC20CBDC is ERC20, FreezeBalance, Suspend {
-    mapping(address => bool) private _suspends;
-
     constructor(
         string memory name_,
         string memory symbol_

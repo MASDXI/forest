@@ -28,23 +28,27 @@ abstract contract UTXOToken is ERC20, IUTXOERC20 {
         uint256 value,
         bytes memory signature
     ) internal virtual {
+        uint256 txvalue = _UTXO.transactionValue(tokenId);
+        if (txvalue < value) {
+            revert UTXOERC20TransferOverTransactionValue(txvalue, value);
+        }
+        uint256 change = txvalue - value;
         _update(from, to, value);
         _UTXO.spendTransaction(
-            UnspentTransactionOutput.TransactionInput(
+            UnspentTransactionOutput.TransactionInput(tokenId, signature),
+            from
+        );
+        if (change > 0) {
+            _UTXO.createTransaction(
+                UnspentTransactionOutput.TransactionOutput(value, to),
                 tokenId,
-                signature
-            ),
-            from
-        );
-        _UTXO.createTransaction(
-            UnspentTransactionOutput.TransactionOutput(value, to),
-            tokenId,
-            UnspentTransactionOutput.calculateTransactionHash(
-                from,
-                _UTXO.transactionCount(from)
-            ),
-            from
-        );
+                UnspentTransactionOutput.calculateTransactionHash(
+                    from,
+                    _UTXO.transactionCount(from)
+                ),
+                from
+            );
+        }
     }
 
     function _mintUTXO(address account, uint256 value) internal {

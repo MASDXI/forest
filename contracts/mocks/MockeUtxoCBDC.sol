@@ -7,8 +7,6 @@ import "../abstracts/extensions/Suspend.sol";
 import "../abstracts/extensions/SuspendToken.sol";
 
 contract MockeUtxoCBDC is eUTXOToken, FreezeBalance, Suspend, SuspendToken {
-    mapping(address => bool) private _suspends;
-
     /// @custom:event for keep tracking token from root.
     event Transfer(address indexed from, address indexed to, bytes32 indexed root, uint256 value);
 

@@ -7,32 +7,38 @@ import "../abstracts/extensions/Suspend.sol";
 import "../abstracts/extensions/SuspendToken.sol";
 
 contract MockTireCBDC is ForestToken, FreezeBalance, Suspend, SuspendToken {
-//     mapping(address => bool) private _suspends;
-
     constructor(
         string memory name_,
         string memory symbol_
-    ) TrieToken(name_, symbol_) {}
+    ) ForestToken(name_, symbol_) {}
 
-//     modifier checkSuspender(address from, address to) {
-//         if (isSuspend(from) || isSuspend(to)) {
-//             revert AddressSuspended();
-//         }
-//         _;
-//     }
+    modifier checkSuspender(address from, address to) {
+        if (isSuspend(from) || isSuspend(to)) {
+            revert AddressSuspended();
+        }
+        _;
+    }
 
-//     function transfer(
-//         address to,
-//         uint256 value
-//     ) public override checkSuspender(msg.sender, to) returns (bool) {
-//         return super.transfer(to, value);
-//     }
+    modifier checkSuspendedRoot(bytes32 tokenId) {
+        // @TODO change from extraData to root or parent.
+        // if (isTokenSuspend(_transaction(tokenId).extraData)) {
+        //     revert TokenSuspended();
+        // }
+        _;
+    }
 
-//     function transferFrom(
-//         address from,
-//         address to,
-//         uint256 value
-//     ) public override checkSuspender(msg.sender, to) returns (bool) {
-//         return super.transferFrom(from, to, value);
-//     }
+    //     function transfer(
+    //         address to,
+    //         uint256 value
+    //     ) public override checkSuspender(msg.sender, to) returns (bool) {
+    //         return super.transfer(to, value);
+    //     }
+
+    //     function transferFrom(
+    //         address from,
+    //         address to,
+    //         uint256 value
+    //     ) public override checkSuspender(msg.sender, to) returns (bool) {
+    //         return super.transferFrom(from, to, value);
+    //     }
 }
