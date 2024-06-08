@@ -28,38 +28,25 @@ contract MockeUtxoCBDC is eUTXOToken, FreezeBalance, Suspend, SuspendToken {
         _;
     }
 
-    function transfer(
-        address to,
-        bytes32 tokenId,
-        uint256 value,
-        bytes memory signature
-    )
-        public
-        override
-        checkFrozenBalance(msg.sender, balanceOf(msg.sender), value)
-        checkSuspender(msg.sender, to)
-        checkSuspendedRoot(tokenId)
-        checkSuspendedToken(tokenId)
-        returns (bool)
-    {
-        return super.transfer(to, tokenId, value, signature);
-    }
-
-    function transferFrom(
+    function _transfer(
         address from,
         address to,
         bytes32 tokenId,
         uint256 value,
         bytes memory signature
     )
-        public
+        internal
+        virtual
         override
         checkFrozenBalance(msg.sender, balanceOf(msg.sender), value)
         checkSuspender(msg.sender, to)
         checkSuspendedRoot(tokenId)
         checkSuspendedToken(tokenId)
-        returns (bool)
     {
-        return super.transfer(to, tokenId, value, signature);
+        super._transfer(from, to, tokenId, value, signature);
+    }
+
+    function mint(address account, uint256 value, bytes32 extraData) public {
+        _minteUTXO(account, value, extraData);
     }
 }

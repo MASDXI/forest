@@ -31,11 +31,8 @@ abstract contract eUTXOToken is ERC20, IUTXOERC20 {
         bytes32 tokenId,
         uint256 value,
         bytes memory signature
-    ) internal {
-        uint256 fromBalance = balanceOf(from);
-        if (fromBalance < value) {
-            revert ERC20InsufficientBalance(from, fromBalance, value);
-        }
+    ) internal virtual {
+        _update(from, to, value);
         _eUTXO.spendTransaction(
             ExtendedUnspentTransactionOutput.TransactionInput(
                 tokenId,
@@ -53,7 +50,6 @@ abstract contract eUTXOToken is ERC20, IUTXOERC20 {
             from,
             _eUTXO.transactionExtraData(tokenId)
         );
-        _transfer(from, to, value);
     }
 
     function _minteUTXO(address account, uint256 value) internal {

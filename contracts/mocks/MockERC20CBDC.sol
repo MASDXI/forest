@@ -47,4 +47,8 @@ contract MockERC20CBDC is ERC20, FreezeBalance, Suspend {
     {
         return super.transferFrom(from, to, value);
     }
+
+    function mint(address account, uint256 value) public {
+        _mint(account, value);
+    }
 }

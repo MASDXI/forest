@@ -5,8 +5,12 @@ pragma solidity >=0.8.0 <0.9.0;
 ///@author Sirawit Techavanitch (sirawit_tec@live4.utcc.ac.th)
 
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
+import "@openzeppelin/contracts/utils/cryptography/MessageHashUtils.sol";
 
 library ExtendedUnspentTransactionOutput {
+    using ECDSA for bytes32;
+    using MessageHashUtils for bytes32;
+
     struct Transaction {
         bytes32 input;
         uint256 value;
@@ -92,10 +96,15 @@ library ExtendedUnspentTransactionOutput {
         if (!_transactionExist(self, account, txInput.outpoint)) {
             revert TransactionNotExist();
         }
-        if (!transactionSpent(self, txInput.outpoint)) {
+        if (transactionSpent(self, txInput.outpoint)) {
             revert TransactionAlreadySpent();
         }
-        if (ECDSA.recover(txInput.outpoint, txInput.signature) == address(0)) {
+
+        if (
+            keccak256(abi.encodePacked(txInput.outpoint))
+                .toEthSignedMessageHash()
+                .recover(txInput.signature) == address(0)
+        ) {
             revert TransactionUnauthorized();
         }
         self.transactions[txInput.outpoint].spent = true;

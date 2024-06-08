@@ -16,7 +16,7 @@ abstract contract FreezeBalance {
         uint256 value
     ) {
         uint256 frozenBalance = _frozenBalance[account];
-        if (balance - value <= frozenBalance) {
+        if (frozenBalance > balance - value) {
             revert BalanceFreezed(balance, frozenBalance);
         }
         _;
