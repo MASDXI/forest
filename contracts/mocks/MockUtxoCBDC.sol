@@ -2,19 +2,19 @@
 pragma solidity >=0.8.0 <0.9.0;
 
 import "../abstracts/UTXOToken.sol";
+import "../abstracts/extensions/FreezeAddress.sol";
 import "../abstracts/extensions/FreezeBalance.sol";
-import "../abstracts/extensions/Suspend.sol";
-import "../abstracts/extensions/SuspendToken.sol";
+import "../abstracts/extensions/FreezeToken.sol";
 
-contract MockUtxoCBDC is UTXOToken, FreezeBalance, Suspend, SuspendToken {
+contract MockUtxoCBDC is UTXOToken, FreezeAddress, FreezeBalance, FreezeToken {
     constructor(
         string memory name_,
         string memory symbol_
     ) UTXOToken(name_, symbol_) {}
 
-    modifier checkSuspender(address from, address to) {
-        if (isSuspend(from) || isSuspend(to)) {
-            revert AddressSuspended();
+    modifier checkFrozenAddress(address from, address to) {
+        if (isFrozen(from) || isFrozen(to)) {
+            revert AddressFrozen();
         }
         _;
     }
@@ -30,8 +30,8 @@ contract MockUtxoCBDC is UTXOToken, FreezeBalance, Suspend, SuspendToken {
         virtual
         override
         checkFrozenBalance(msg.sender, balanceOf(msg.sender), value)
-        checkSuspender(msg.sender, to)
-        checkSuspendedToken(tokenId)
+        checkFrozenAddress(msg.sender, to)
+        checkFrozenToken(tokenId)
     {
         super._transfer(from, to, tokenId, value, signature);
     }

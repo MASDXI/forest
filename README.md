@@ -14,28 +14,27 @@ status: Draft
 ## Abstract
 
 // TODO  
-keyword: Anti Money Laundering, Blockchain, Counter Financial Terrorism, Central Bank Digital Currencies, Smart Contract
+keyword: Anti-Money Laundering, Blockchain, Counter Financial Terrorism, Central Bank Digital Currencies, Smart Contract
 
 ## Introduction
 
 In the present-day Central Bank Digital Currencies concept aims to utilize the advantage point of Blockchain Technology or Distributed Ledger Technology that provides immutable, transparency, and security and the smart contract that plays a key feature in creating programmable money.
 
-However, technology itself provides an advantage and eliminates the problem ideally but it does not seem to be practical to be done in real world and not in an efficient way to responsible for the financial crime or incidents that occur in the open network of economic.
+However, technology itself provides an advantage and eliminates the problem ideally but it does not seem to be practical to be done in real world and not in an efficient way to responsible for the financial crime or incidents that occur in the open network of economic.  
 
-//Opinion: AI and Deep learning recognize and analysis the pattern but it's would be nice if the data structure also provide efficient and fast to response to the incident.
+## Related Works
 
-//Opinion: Merkle Tree not suitable for the payment due to it's need to maintain the root hash and generate proof every time.
+//Opinion: AI and Deep learning recognize and analysis the pattern but it's would be nice if the data structure also provide efficient and fast to response to the incident.  
+`ERC20` fungible token intent to be currencies like but the data structure is account-based model is hard to separate money when it's mix on total balance.  
+`ERC721` not suitable due to metadata are not store onchain it's can be modified to support but it's not intent to be exchangeable.  
+`ERC1155` metadata problem same as `ERC721`, however `ERC1155` can utilize tokenId as root it's can frozen the balance for each account but it end up with you  can separate the money when it's store in the balance.  
+`ERC3643` have characteristic same as `ERC20`  
+`Merkle Tree` not suitable for the payment due to it's need to maintain the root hash and generate proof every time.  
 
 ## Methodology
 
 // TODO
-Introduce implementation call `Forest`
-
-## Related Works
-
-// TODO
-
-##
+Introduce implementation call `Forest`  
 
 ## Conclusion and Evaluation
 
@@ -54,6 +53,17 @@ Introduce implementation call `Forest`
 - For `UTXO` and `eUTXO` facing challenge to combine multiple `UnspentTransaction` and spent as one,  
   in case user want to spend value that greater that selected `UnspentTransaction`.  
   possible solution prepare and batching as an array.
-- For `Forest` use unbalance tree as a data structure
+- For `Forest` use unbalance tree as a data structure.
+
+## Glossary of Terms
+
+**AML** Anti-Money Laundering  
+**CBDC** Central Bank Digital Currency  
+**CFT** Counter Financial Terrorism  
+**DLT** Distributed Ledger Technology  
+**eUTXO** Extended Transaction Output  
+**RWA** Real World Asset Tokenization  
+**KYC** Know Your Customer  
+**UTXO** Unspent Transaction Output  
 
 ## Reference

@@ -2,18 +2,18 @@
 pragma solidity >=0.8.0 <0.9.0;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "../abstracts/extensions/FreezeAddress.sol";
 import "../abstracts/extensions/FreezeBalance.sol";
-import "../abstracts/extensions/Suspend.sol";
 
-contract MockERC20CBDC is ERC20, FreezeBalance, Suspend {
+contract MockERC20CBDC is ERC20, FreezeAddress, FreezeBalance {
     constructor(
         string memory name_,
         string memory symbol_
     ) ERC20(name_, symbol_) {}
 
-    modifier checkSuspender(address from, address to) {
-        if (isSuspend(from) || isSuspend(to)) {
-            revert AddressSuspended();
+    modifier checkFrozenAddress(address from, address to) {
+        if (isFrozen(from) || isFrozen(to)) {
+            revert AddressFrozen();
         }
         _;
     }
@@ -25,7 +25,7 @@ contract MockERC20CBDC is ERC20, FreezeBalance, Suspend {
         public
         override
         checkFrozenBalance(msg.sender, balanceOf(msg.sender), value)
-        checkSuspender(msg.sender, to)
+        checkFrozenAddress(msg.sender, to)
         returns (bool)
     {
         return super.transfer(to, value);
@@ -39,7 +39,7 @@ contract MockERC20CBDC is ERC20, FreezeBalance, Suspend {
         public
         override
         checkFrozenBalance(msg.sender, balanceOf(msg.sender), value)
-        checkSuspender(msg.sender, to)
+        checkFrozenAddress(msg.sender, to)
         returns (bool)
     {
         return super.transferFrom(from, to, value);

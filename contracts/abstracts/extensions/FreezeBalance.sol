@@ -6,9 +6,9 @@ pragma solidity >=0.8.0 <0.9.0;
 abstract contract FreezeBalance {
     mapping(address => uint256) private _frozenBalance;
 
-    error BalanceFreezed(uint256 balance, uint256 frozenBalance);
+    error BalanceFrozen(uint256 balance, uint256 frozenBalance);
 
-    event Freezedbalance(address indexed account, uint256 value);
+    event FrozenBalance(address indexed account, uint256 value);
 
     modifier checkFrozenBalance(
         address account,
@@ -17,15 +17,15 @@ abstract contract FreezeBalance {
     ) {
         uint256 frozenBalance = _frozenBalance[account];
         if (frozenBalance > balance - value) {
-            revert BalanceFreezed(balance, frozenBalance);
+            revert BalanceFrozen(balance, frozenBalance);
         }
         _;
     }
 
     /// @notice clear freeze balance by passing amout '0'.
-    function setFrozenBalance(address account, uint256 amount) public {
+    function setFreezeBalance(address account, uint256 amount) public {
         _frozenBalance[account] = amount;
-        emit Freezedbalance(account, amount);
+        emit FrozenBalance(account, amount);
     }
 
     function getFrozenBalance(address account) public view returns (uint256) {
