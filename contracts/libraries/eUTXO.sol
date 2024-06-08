@@ -35,7 +35,7 @@ library ExtendedUnspentTransactionOutput {
         mapping(bytes32 => Transaction) transactions;
     }
 
-    event TransactionCreated(bytes32 indexed id, address indexed creator);
+    event TransactionCreated(bytes32 indexed id, address indexed creator, address indexed owner);
     event TransactionConsumed(bytes32 indexed id);
     event TransactionSpent(bytes32 indexed id, address indexed spender);
 
@@ -85,7 +85,7 @@ library ExtendedUnspentTransactionOutput {
         self.nonces[creator]++;
         self.size[txOutput.account]++;
 
-        emit TransactionCreated(id, creator);
+        emit TransactionCreated(id, creator, txOutput.account);
     }
 
     function spendTransaction(
@@ -169,17 +169,17 @@ library ExtendedUnspentTransactionOutput {
         return self.transactions[id].owner;
     }
 
-    function size(
-        eUTXO storage self,
-        address account
-    ) internal view returns (uint256) {
-        return self.size[account];
-    }
-
     function transactionCount(
         eUTXO storage self,
         address account
     ) internal view returns (uint256) {
         return self.nonces[account];
+    }
+
+    function size(
+        eUTXO storage self,
+        address account
+    ) internal view returns (uint256) {
+        return self.size[account];
     }
 }
