@@ -1,7 +1,7 @@
 ---
 title: Smart Contract Implementation for Enhanced Traceability in Central Bank Digital Currency Systems
 description: An implementation of advanced data structure over token smart contract.
-author: Sirawit Techavanitch (sirawit_tec@live4.utcc.ac.th)
+author: Sirawit Techavanitch (sirawit_tec@utcc.ac.th)
 status: Draft
 ---
 
@@ -14,7 +14,7 @@ status: Draft
 ## Abstract
 
 // TODO  
-keyword: Anti-Money Laundering, Blockchain, Counter Financial Terrorism, Central Bank Digital Currencies, Smart Contract
+**Keyword: Anti-Money Laundering, Blockchain, Counter Financial Terrorism, Central Bank Digital Currencies, Smart Contract**
 
 ## Introduction
 
@@ -49,14 +49,15 @@ Introduce implementation call `Forest`
 | suspends specifics tokenId.                               | ✗     | ✓    | ✓     | ✓      |
 | suspends specifics tokenId that relevant to the incident. | ✗     | ✗    | ✓     | ✓      |
 | keep tracking child.                                      | ✗     | ✗    | ✗     | ✓      |
+| smart contract.                                      | ✗     | ✗    | ✗     | ✓      |
 
 - For `ERC20` provide events and keep tracking each `Transfer` ,  
   but the problem is the `ERC20` model can't separate `clean money` from `dirty money`,  
-  due to the`ERC20` not have `tokenId` to keep tracking each token when it's move.
+  due to the`ERC20` not have `tokenId` to keep tracking each token when it's move.  
 - For `UTXO` and `eUTXO` facing challenge to combine multiple `UnspentTransaction` and spent as one,  
   in case user want to spend value that greater that selected `UnspentTransaction`.  
-  possible solution prepare and batching as an array.
-- For `Forest` use unbalance tree as a data structure.
+  possible solution prepare and batching as an array.  
+- For `Forest` use unbalance tree as a data structure.  
 
 ## Glossary of Terms
 
