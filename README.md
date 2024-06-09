@@ -24,12 +24,15 @@ However, technology itself provides an advantage and eliminates the problem idea
 
 ## Related Works
 
-//Opinion: AI and Deep learning recognize and analysis the pattern but it's would be nice if the data structure also provide efficient and fast to response to the incident.  
+// Opinion: AI and Deep learning recognize and analysis the pattern but it's would be nice if the data structure also provide efficient and fast to response to the incident.    
 `ERC20` fungible token intent to be currencies like but the data structure is account-based model is hard to separate money when it's mix on total balance.  
 `ERC721` not suitable due to metadata are not store onchain it's can be modified to support but it's not intent to be exchangeable.  
 `ERC1155` metadata problem same as `ERC721`, however `ERC1155` can utilize tokenId as root it's can frozen the balance for each account but it end up with you  can separate the money when it's store in the balance.  
 `ERC3643` have characteristic same as `ERC20`  
 `Merkle Tree` not suitable for the payment due to it's need to maintain the root hash and generate proof every time.  
+`UTXO` maintain amount of money or group of money in each individual transaction but it's not sum balance total balance.  
+// transaction reference from input transaction. B2G -> revise this   
+`euTXO` extended version of `UTXO`, purpose of `eUTXO` is to adding/carrying additional data as extraData or payload in the transaction.  
 
 ## Methodology
 
@@ -58,12 +61,15 @@ Introduce implementation call `Forest`
 ## Glossary of Terms
 
 **AML** Anti-Money Laundering  
+**B2G** Back to Genesis  
 **CBDC** Central Bank Digital Currency  
 **CFT** Counter Financial Terrorism  
+**C2C** Customer to Customer
 **DLT** Distributed Ledger Technology  
 **eUTXO** Extended Transaction Output  
-**RWA** Real World Asset Tokenization  
 **KYC** Know Your Customer  
+**P2P** Peer to Peer  
+**RWA** Real World Asset Tokenization  
 **UTXO** Unspent Transaction Output  
 
 ## Reference
