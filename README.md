@@ -32,7 +32,7 @@ However, technology itself provides an advantage and eliminates the problem idea
 `Merkle Tree` not suitable for the payment due to it's need to maintain the root hash and generate proof every time.  
 `UTXO` maintain amount of money or group of money in each individual transaction but it's not sum balance total balance.  
 // transaction reference from input transaction. B2G -> revise this   
-`euTXO` extended version of `UTXO`, purpose of `eUTXO` is to adding/carrying additional data as extraData or payload in the transaction.  
+`eUTXO` extended version of `UTXO`, purpose of `eUTXO` is to adding/carrying additional data as extraData or payload in the transaction.  
 
 ## Methodology
 

@@ -27,6 +27,7 @@
     "chai": "^4.2.0",
     "ethers": "^6.4.0",
     "hardhat-gas-reporter": "^1.0.8",
+    "hardhat-ignore-warnings": "^0.2.11",
     "solidity-coverage": "^0.8.0",
     "typechain": "^8.3.0"
   }

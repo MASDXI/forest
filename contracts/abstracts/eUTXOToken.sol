@@ -114,6 +114,7 @@ abstract contract eUTXOToken is ERC20, IUTXOERC20 {
         _burn(account, value);
     }
 
+    // solc-ignore-next-line unused-param
     function transfer(
         address to,
         uint256 value
@@ -131,6 +132,7 @@ abstract contract eUTXOToken is ERC20, IUTXOERC20 {
         return true;
     }
 
+    // solc-ignore-next-line unused-param
     function transferFrom(
         address from,
         address to,

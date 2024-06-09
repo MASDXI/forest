@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.8.0 <0.9.0;
 
-// import "../libraries/Forest.sol";
+import "../libraries/Forest.sol";
 import "../interfaces/IForestERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-// @TODO
+
 abstract contract ForestToken is ERC20, IForestERC20 {
     // using Forest for Forest.Tree;
 

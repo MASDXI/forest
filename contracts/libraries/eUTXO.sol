@@ -47,7 +47,6 @@ library ExtendedUnspentTransactionOutput {
 
     function _transactionExist(
         eUTXO storage self,
-        address account,
         bytes32 id
     ) private view returns (bool) {
         return self.transactions[id].value > 0;
@@ -72,7 +71,7 @@ library ExtendedUnspentTransactionOutput {
         if (txOutput.value == 0) {
             revert TransactionZeroValue();
         }
-        if (_transactionExist(self, txOutput.account, id)) {
+        if (_transactionExist(self, id)) {
             revert TransactionExist();
         }
         self.transactions[id] = Transaction(
@@ -93,7 +92,7 @@ library ExtendedUnspentTransactionOutput {
         TransactionInput memory txInput,
         address account
     ) internal {
-        if (!_transactionExist(self, account, txInput.outpoint)) {
+        if (!_transactionExist(self, txInput.outpoint)) {
             revert TransactionNotExist();
         }
         if (transactionSpent(self, txInput.outpoint)) {
@@ -118,7 +117,7 @@ library ExtendedUnspentTransactionOutput {
         bytes32 id,
         address account
     ) internal {
-        if (!_transactionExist(self, account, id)) {
+        if (!_transactionExist(self, id)) {
             revert TransactionNotExist();
         }
         self.transactions[id].spent = true;

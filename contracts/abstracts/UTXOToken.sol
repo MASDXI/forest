@@ -103,6 +103,7 @@ abstract contract UTXOToken is ERC20, IUTXOERC20 {
         return true;
     }
 
+    // solc-ignore-next-line unused-param
     function transferFrom(
         address from,
         address to,
