@@ -4,6 +4,7 @@
 *.fls
 *.log
 *.synctex*
+*.pdf
 
 # Modules
 node_modules

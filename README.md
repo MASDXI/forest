@@ -35,19 +35,18 @@ In the present-day Central Bank Digital Currency concept aims to utilize the adv
 ## Methodology
 
 // TODO
-Introduce implementation call `Forest`  
+Introduce implementation call `Forest` used the way to modified the state to keep tracking subtree avoid to creating transaction output for change back the to spender like in `UTXO`.
 
 ## Conclusion and Evaluation
 
-| Features                                                  | ERC20 | UTXO | eUTXO | Forest |
-| --------------------------------------------------------- | ----- | ---- | ----- | ------ |
-| suspends the sender.                                      | ✓     | ✓    | ✓     | ✓      |
-| suspends the recipient.                                   | ✓     | ✓    | ✓     | ✓      |
-| freeze certain amount token.                              | ✗     | ✓    | ✓     | ✓      |
-| suspends specifics tokenId.                               | ✗     | ✓    | ✓     | ✓      |
-| suspends specifics tokenId that relevant to the incident. | ✗     | ✗    | ✓     | ✓      |
-| keep tracking child.                                      | ✗     | ✗    | ✗     | ✓      |
-| smart contract.                                           | ✗     | ✗    | ✗     | ✓      |
+| Features                                | ERC20 | UTXO | eUTXO | Forest |
+| --------------------------------------- | ----- | ---- | ----- | ------ |
+| freeze the sender account.              | ✓     | ✓    | ✓     | ✓      |
+| freeze the recipient account.           | ✓     | ✓    | ✓     | ✓      |
+| freeze certain amount token.            | ✗     | ✓    | ✓     | ✓      |
+| freeze specifics tokenId.               | ✗     | ✓    | ✓     | ✓      |
+| freeze token that relevant to the root. | ✗     | ✗    | ✓     | ✓      |
+| keep tracking child/subtree.            | ✗     | ✗    | ✗     | ✓      |
 
 - For `ERC20` provide events and keep tracking each `Transfer` ,  
   but the problem is the `ERC20` model can't separate `clean money` from `dirty money`,  
@@ -67,8 +66,6 @@ Introduce implementation call `Forest`
 **DLT** Distributed Ledger Technology  
 **eUTXO** Extended Transaction Output  
 **KYC** Know Your Customer  
-**P2P** Peer to Peer  
-**RWA** Real World Asset Tokenization  
-**UTXO** Unspent Transaction Output  
+**UTXO** Unspent Transaction Output
 
 ## Reference
