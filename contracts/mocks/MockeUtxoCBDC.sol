@@ -32,8 +32,8 @@ contract MockeUtxoCBDC is
         _;
     }
 
-    modifier checkSuspendedRoot(bytes32 tokenId) {
-        if (isTokenSuspend(_transaction(tokenId).extraData)) {
+    modifier checkFrozenRoot(bytes32 tokenId) {
+        if (isTokenFrozen(_transaction(tokenId).extraData)) {
             revert TokenFrozen();
         }
         _;
@@ -51,7 +51,7 @@ contract MockeUtxoCBDC is
         override
         checkFrozenBalance(msg.sender, balanceOf(msg.sender), value)
         checkFrozenAddress(msg.sender, to)
-        checkSuspendedRoot(tokenId)
+        checkFrozenRoot(tokenId)
         checkFrozenToken(tokenId)
     {
         /// @notice ERC20 Transfer also emit.

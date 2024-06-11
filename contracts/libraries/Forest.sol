@@ -8,33 +8,60 @@ library Forest {
     struct Node {
         bytes32 root;
         bytes32 parent;
-        bytes32 right;
-        uint256[] transactions; // store left leaf.
+        uint256 value;
+    }
+
+    struct TransactionInput {
+        bytes32 outpoint;
+        uint256 value;
+    }
+
+    struct TransactionOutput {
+        uint256 value;
+        address account;
     }
 
     struct Tree {
         mapping(address => uint256) size;
         mapping(address => uint256) nonces;
+        mapping(bytes32 => address) transactions;
         mapping(address => mapping(bytes32 => Node)) trees;
     }
 
-    event NodeCreated();
-    event NodeConsumed();
-    event NodeSpent();
+    event TransactionCreated(
+        bytes32 indexed id,
+        address indexed creator,
+        address indexed owner
+    );
+    event TransactionConsumed(bytes32 indexed id);
+    event TransactionSpent(
+        bytes32 indexed id,
+        address indexed spender,
+        uint256 value
+    );
 
-    error NodeZeroValue();
-    error NodeNotExist();
-    error NodeExist();
+    error TransactionZeroValue();
+    error TransactionNotExist();
+    error TransactionExist();
+    error TransactionInsufficient(uint256 value, uint256 spend);
 
-    function _nodeExist(
+    function _transactionExist(
         Tree storage self,
         address account,
         bytes32 id
     ) private view returns (bool) {
-        return self.trees[account][id].transactions.length > 0;
+        return self.trees[account][id].value > 0;
     }
 
-    function node(
+    function calculateTransactionHash(
+        address creator,
+        uint256 nonce
+    ) internal view returns (bytes32) {
+        uint256 chainId = block.chainid;
+        return keccak256(abi.encode(chainId, creator, nonce));
+    }
+
+    function transaction(
         Tree storage self,
         address account,
         bytes32 id
@@ -42,7 +69,7 @@ library Forest {
         return self.trees[account][id];
     }
 
-    function nodeRoot(
+    function transactionRoot(
         Tree storage self,
         address account,
         bytes32 id
@@ -50,37 +77,66 @@ library Forest {
         return self.trees[account][id].root;
     }
 
-    function nodeValue(
+    function transactionValue(
         Tree storage self,
         address account,
-        bytes32 id,
-        uint256 index
+        bytes32 id
     ) internal view returns (uint256) {
-        return self.trees[account][id].transactions[index];
+        return self.trees[account][id].value;
     }
 
-    // function createTransaction(
-    //     Tree storage self,
-    //     Node memory node,
-    //     address account,
-    //     bytes32 id
-    // ) internal {
-    //     if (_nodeExist(self, account, id)) {
-    //         revert NodeExist();
-    //     }
-    //     self.trees[account][id] = node;
-    // }
+    function createTransaction(
+        Tree storage self,
+        TransactionOutput memory txOutput,
+        bytes32 root,
+        bytes32 parent,
+        bytes32 id,
+        address creator
+    ) internal {
+        if (txOutput.value == 0) {
+            revert TransactionZeroValue();
+        }
+        if (_transactionExist(self, txOutput.account, id)) {
+            revert TransactionExist();
+        }
+        self.trees[txOutput.account][id] = Node(root, parent, txOutput.value);
+        self.transactions[id] = txOutput.account;
+        self.nonces[creator]++;
+        self.size[txOutput.account]++;
 
-    // function spendTransaction(
-    //     Tree storage self,
-    //     address account,
-    //     bytes32 id
-    // ) internal {
-    //     if (!_nodeExist(self, account, id)) {
-    //         revert NodeNotExist();
-    //     }
-    //     self.trees[account][id].transactions.push(transaction);
-    // }
+        emit TransactionCreated(id, creator, txOutput.account);
+    }
+
+    function spendTransaction(
+        Tree storage self,
+        TransactionInput memory txInput,
+        address account
+    ) internal {
+        if (!_transactionExist(self, account, txInput.outpoint)) {
+            revert TransactionNotExist();
+        }
+        uint256 value = self.trees[account][txInput.outpoint].value;
+        if (value < txInput.value) {
+            revert TransactionInsufficient(value, txInput.value);
+        }
+        self.trees[account][txInput.outpoint].value -= txInput.value;
+        self.nonces[account]++;
+
+        emit TransactionSpent(txInput.outpoint, account, txInput.value);
+    }
+
+    function consumeTransaction(
+        Tree storage self,
+        bytes32 id,
+        address account
+    ) internal {
+        if (!_transactionExist(self, account, id)) {
+            revert TransactionNotExist();
+        }
+        self.size[account]--;
+
+        emit TransactionConsumed(id);
+    }
 
     function transactionCount(
         Tree storage self,

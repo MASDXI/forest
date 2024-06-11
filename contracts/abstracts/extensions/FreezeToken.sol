@@ -37,7 +37,7 @@ abstract contract FreezeToken {
         _updateSuspendToken(tokenId, false);
     }
 
-    function isTokenSuspend(bytes32 tokenId) public view returns (bool) {
+    function isTokenFrozen(bytes32 tokenId) public view returns (bool) {
         return _frozenToken[tokenId];
     }
 }

@@ -1,6 +1,7 @@
 // // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0 <0.9.0;
 
+import "../libraries/Forest.sol";
 import "../abstracts/ForestToken.sol";
 import "../abstracts/extensions/FreezeAddress.sol";
 import "../abstracts/extensions/FreezeBalance.sol";
@@ -12,6 +13,7 @@ contract MockTireCBDC is
     FreezeBalance,
     FreezeToken
 {
+
     constructor(
         string memory name_,
         string memory symbol_
@@ -24,26 +26,30 @@ contract MockTireCBDC is
         _;
     }
 
-    modifier checkSuspendedRoot(bytes32 tokenId) {
-        // @TODO change from extraData to root or parent.
-        // if (isTokenSuspend(_transaction(tokenId).extraData)) {
-        //     revert TokenFrozen();
-        // }
+    modifier checkFrozenRootOrParent(address account, bytes32 tokenId) {
+        Forest.Node memory node = _transaction(account, tokenId);
+        if (isTokenFrozen(node.root) || isTokenFrozen(node.parent)) {
+            revert TokenFrozen();
+        }
         _;
     }
 
-    //     function transfer(
-    //         address to,
-    //         uint256 value
-    //     ) public override checkFrozenAddress(msg.sender, to) returns (bool) {
-    //         return super.transfer(to, value);
-    //     }
-
-    //     function transferFrom(
-    //         address from,
-    //         address to,
-    //         uint256 value
-    //     ) public override checkFrozenAddress(msg.sender, to) returns (bool) {
-    //         return super.transferFrom(from, to, value);
-    //     }
+    function _transfer(
+        address from,
+        address to,
+        bytes32 tokenId,
+        uint256 value
+    )
+        internal
+        virtual
+        override
+        checkFrozenBalance(msg.sender, balanceOf(msg.sender), value)
+        checkFrozenAddress(msg.sender, to)
+        checkFrozenRootOrParent(msg.sender, tokenId)
+        checkFrozenToken(tokenId)
+    {
+        /// @notice ERC20 Transfer also emit.
+        super._transfer(from, to, tokenId, value);
+        // emit Transfer(from, to, _transaction(tokenId).extraData, value);
+    }
 }

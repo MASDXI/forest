@@ -9,10 +9,13 @@ module.exports = {
     enabled: true
   },
   warnings: {
-    'contracts/abstracts/UTXOToken.sol': {
+    'contracts/abstracts/eUTXOToken.sol': {
       'unused-param': 'off'
     },
-    'contracts/abstracts/eUTXOToken.sol': {
+    'contracts/abstracts/ForestToken.sol': {
+      'unused-param': 'off'
+    },
+    'contracts/abstracts/UTXOToken.sol': {
       'unused-param': 'off'
     }
   }

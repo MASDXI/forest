@@ -4,7 +4,10 @@ pragma solidity >=0.8.0 <0.9.0;
 interface IUTXOERC20 {
     error ERC20TransferNotSupported();
     error ERC20TransferFromNotSupported();
-    error UTXOERC20TransferOverTransactionValue(uint256 transactionValue, uint256 spendingValue);
+    error UTXOERC20TransferOverTransactionValue(
+        uint256 transactionValue,
+        uint256 spendingValue
+    );
 
     function transfer(
         address to,
