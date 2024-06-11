@@ -27,6 +27,7 @@ In the present-day Central Bank Digital Currency concept aims to utilize the adv
 - `ERC721` not suitable due to metadata are not store onchain it's can be modified to support but it's not intent to be exchangeable.  
 - `ERC1155` metadata problem same as `ERC721`, however `ERC1155` can utilize tokenId as root it's can frozen the balance for each account but it end up with you  can separate the money when it's store in the balance.  
 - `ERC3643` have characteristic same as `ERC20`  
+- `ERC1400` have characteristic base on from `ERC20`
 - `Merkle Tree` not suitable for the payment due to it's need to maintain the root hash and generate proof every time.  
 - `UTXO` maintain amount of money or group of money in each individual transaction but it's not sum balance total balance.  
 // transaction reference from input transaction. B2G -> revise this   
