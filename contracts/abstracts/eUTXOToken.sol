@@ -70,11 +70,11 @@ abstract contract eUTXOToken is ERC20, IUTXOERC20 {
         }
     }
 
-    function _minteUTXO(address account, uint256 value) internal {
-        _minteUTXO(account, value, bytes32(0));
+    function _mintTransaction(address account, uint256 value) internal {
+        _mintTransaction(account, value, bytes32(0));
     }
 
-    function _minteUTXO(address account, uint256 value, bytes32 data) internal {
+    function _mintTransaction(address account, uint256 value, bytes32 data) internal {
         _eUTXO.createTransaction(
             ExtendedUnspentTransactionOutput.TransactionOutput(value, account),
             bytes32(0),
@@ -88,7 +88,7 @@ abstract contract eUTXOToken is ERC20, IUTXOERC20 {
         _mint(account, value);
     }
 
-    function _burneUTXO(
+    function _burnTransaction(
         address account,
         bytes32 tokenId,
         uint256 value

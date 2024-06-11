@@ -61,6 +61,6 @@ contract MockeUtxoCBDC is
     }
 
     function mint(address account, uint256 value, bytes32 extraData) public {
-        _minteUTXO(account, value, extraData);
+        _mintTransaction(account, value, extraData);
     }
 }

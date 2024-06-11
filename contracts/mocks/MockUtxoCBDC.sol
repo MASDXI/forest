@@ -37,6 +37,6 @@ contract MockUtxoCBDC is UTXOToken, FreezeAddress, FreezeBalance, FreezeToken {
     }
 
     function mint(address account, uint256 value) public {
-        _mintUTXO(account, value);
+        _mintTransaction(account, value);
     }
 }
