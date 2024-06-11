@@ -12,7 +12,7 @@ library Forest {
         uint256[] transactions; // store left leaf.
     }
 
-    struct trees {
+    struct Tree {
         mapping(address => uint256) size;
         mapping(address => uint256) nonces;
         mapping(address => mapping(bytes32 => Node)) trees;
@@ -27,7 +27,7 @@ library Forest {
     error NodeExist();
 
     function _nodeExist(
-        trees storage self,
+        Tree storage self,
         address account,
         bytes32 id
     ) private view returns (bool) {
@@ -35,7 +35,7 @@ library Forest {
     }
 
     function node(
-        trees storage self,
+        Tree storage self,
         address account,
         bytes32 id
     ) internal view returns (Node memory) {
@@ -43,7 +43,7 @@ library Forest {
     }
 
     function nodeRoot(
-        trees storage self,
+        Tree storage self,
         address account,
         bytes32 id
     ) internal view returns (bytes32) {
@@ -51,7 +51,7 @@ library Forest {
     }
 
     function nodeValue(
-        trees storage self,
+        Tree storage self,
         address account,
         bytes32 id,
         uint256 index
@@ -60,7 +60,7 @@ library Forest {
     }
 
     // function createTransaction(
-    //     trees storage self,
+    //     Tree storage self,
     //     Node memory node,
     //     address account,
     //     bytes32 id
@@ -72,7 +72,7 @@ library Forest {
     // }
 
     // function spendTransaction(
-    //     trees storage self,
+    //     Tree storage self,
     //     address account,
     //     bytes32 id
     // ) internal {
@@ -83,14 +83,14 @@ library Forest {
     // }
 
     function transactionCount(
-        trees storage self,
+        Tree storage self,
         address account
     ) internal view returns (uint256) {
         return self.nonces[account];
     }
 
     function size(
-        trees storage self,
+        Tree storage self,
         address account
     ) internal view returns (uint256) {
         return self.size[account];
