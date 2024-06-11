@@ -57,6 +57,9 @@ Introduce implementation call `Forest` used the way to modified the state to kee
   possible solution prepare and batching as an array.  
 - For `Forest` use unbalance tree as a data structure.  
 
+# For Further Work
+Currently `Forest` not 100% compatible with existing `ERC20` standard.
+
 ## Glossary of Terms
 
 **AML** Anti-Money Laundering  
