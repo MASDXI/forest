@@ -18,7 +18,7 @@ abstract contract ForestToken is ERC20, IForestERC20 {
     function _transaction(
         address account,
         bytes32 tokenId
-    ) internal view returns (Forest.Node memory) {
+    ) internal view returns (Forest.Transaction memory) {
         return _trees.transaction(account, tokenId);
     }
 

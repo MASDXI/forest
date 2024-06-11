@@ -1,7 +1,6 @@
 // // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0 <0.9.0;
 
-import "../libraries/Forest.sol";
 import "../abstracts/ForestToken.sol";
 import "../abstracts/extensions/FreezeAddress.sol";
 import "../abstracts/extensions/FreezeBalance.sol";
@@ -13,7 +12,6 @@ contract MockTireCBDC is
     FreezeBalance,
     FreezeToken
 {
-
     constructor(
         string memory name_,
         string memory symbol_
@@ -27,8 +25,10 @@ contract MockTireCBDC is
     }
 
     modifier checkFrozenRootOrParent(address account, bytes32 tokenId) {
-        Forest.Node memory node = _transaction(account, tokenId);
-        if (isTokenFrozen(node.root) || isTokenFrozen(node.parent)) {
+        Forest.Transaction memory transaction = _transaction(account, tokenId);
+        if (
+            isTokenFrozen(transaction.root) || isTokenFrozen(transaction.parent)
+        ) {
             revert TokenFrozen();
         }
         _;
@@ -50,6 +50,6 @@ contract MockTireCBDC is
     {
         /// @notice ERC20 Transfer also emit.
         super._transfer(from, to, tokenId, value);
-        // emit Transfer(from, to, _transaction(tokenId).extraData, value);
+        // emit Transfer(from, to, root, parent, value); // @TODO
     }
 }

@@ -5,7 +5,7 @@ pragma solidity >=0.8.0 <0.9.0;
 ///@author Sirawit Techavanitch (sirawit_tec@live4.utcc.ac.th)
 
 library Forest {
-    struct Node {
+    struct Transaction {
         bytes32 root;
         bytes32 parent;
         uint256 value;
@@ -24,8 +24,7 @@ library Forest {
     struct Tree {
         mapping(address => uint256) size;
         mapping(address => uint256) nonces;
-        mapping(bytes32 => address) transactions;
-        mapping(address => mapping(bytes32 => Node)) trees;
+        mapping(address => mapping(bytes32 => Transaction)) trees;
     }
 
     event TransactionCreated(
@@ -65,7 +64,7 @@ library Forest {
         Tree storage self,
         address account,
         bytes32 id
-    ) internal view returns (Node memory) {
+    ) internal view returns (Transaction memory) {
         return self.trees[account][id];
     }
 
@@ -99,8 +98,7 @@ library Forest {
         if (_transactionExist(self, txOutput.account, id)) {
             revert TransactionExist();
         }
-        self.trees[txOutput.account][id] = Node(root, parent, txOutput.value);
-        self.transactions[id] = txOutput.account;
+        self.trees[txOutput.account][id] = Transaction(root, parent, txOutput.value);
         self.nonces[creator]++;
         self.size[txOutput.account]++;
 

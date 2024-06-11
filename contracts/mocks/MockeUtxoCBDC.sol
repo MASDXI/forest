@@ -56,7 +56,7 @@ contract MockeUtxoCBDC is
     {
         /// @notice ERC20 Transfer also emit.
         super._transfer(from, to, tokenId, value, signature);
-
+        
         emit Transfer(from, to, _transaction(tokenId).extraData, value);
     }
 
