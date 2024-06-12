@@ -7,6 +7,7 @@ pragma solidity >=0.8.0 <0.9.0;
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import "@openzeppelin/contracts/utils/cryptography/MessageHashUtils.sol";
 
+/// @TODO support smart contract signature.
 library UnspentTransactionOutput {
     using ECDSA for bytes32;
     using MessageHashUtils for bytes32;
@@ -34,11 +35,7 @@ library UnspentTransactionOutput {
         mapping(bytes32 => Transaction) transactions;
     }
 
-    event TransactionCreated(
-        bytes32 indexed id,
-        address indexed creator,
-        address indexed owner
-    );
+    event TransactionCreated(bytes32 indexed id, address indexed creator, address indexed owner);
     event TransactionConsumed(bytes32 indexed id);
     event TransactionSpent(bytes32 indexed id, address indexed spender);
 
