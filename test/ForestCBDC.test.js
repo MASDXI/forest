@@ -27,7 +27,30 @@ describe("eUTXO CBDC", function () {
 
   describe("Transfers", function () {
     it("Should transfer the funds to the owner", async function () {
-      // TODO
+      const { token, owner } = await loadFixture(deployTokenFixture);
+      const address = await owner.getAddress();
+      await token.mint(address, 1000n);
+      expect(await token.balanceOf(address)).to.equal(1000n);
+    });
+
+    it("Should transfer the funds to the owner", async function () {
+      const { token, owner, otherAccount } = await loadFixture(
+        deployTokenFixture
+      );
+      const address = await owner.getAddress();
+      const otherAddress = await otherAccount.getAddress();
+      let tx = await token.mint(address, 1000n);
+      tx = await tx.wait();
+      const tokenId = tx.logs[0].args[0];
+      console.log("🚀 ~ tokenId:", tokenId)
+      // const hashed = solidityPackedKeccak256(["bytes32"], [tokenId]);
+      // const signature = await owner.signMessage(getBytes(hashed));
+      await token["transfer(address,bytes32,uint256)"](
+        otherAddress,
+        tokenId,
+        1000n
+      );
+      expect(await token.balanceOf(otherAddress)).to.equal(1000n);
     });
   });
 });

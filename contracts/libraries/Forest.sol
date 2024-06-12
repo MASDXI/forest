@@ -49,7 +49,7 @@ library Forest {
         address account,
         bytes32 id
     ) private view returns (bool) {
-        return self.trees[account][id].value > 0;
+        return self.trees[account][id].root != bytes32(0);
     }
 
     function calculateTranscationRootHash() internal view returns (bytes32) {

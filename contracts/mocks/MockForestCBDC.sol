@@ -6,12 +6,21 @@ import "../abstracts/extensions/FreezeAddress.sol";
 import "../abstracts/extensions/FreezeBalance.sol";
 import "../abstracts/extensions/FreezeToken.sol";
 
-contract MockTireCBDC is
+contract MockForestCBDC is
     ForestToken,
     FreezeAddress,
     FreezeBalance,
     FreezeToken
 {
+    /// @custom:event for keep tracking token from root.
+    event Transfer(
+        address from,
+        address to,
+        bytes32 indexed root,
+        bytes32 indexed parent,
+        uint256 value
+    );
+
     constructor(
         string memory name_,
         string memory symbol_
@@ -50,6 +59,12 @@ contract MockTireCBDC is
     {
         /// @notice ERC20 Transfer also emit.
         super._transfer(from, to, tokenId, value);
-        // emit Transfer(from, to, root, parent, value); // @TODO
+        // @TODO Error: Stack too deep.
+        // Forest.Transaction memory txn = _transaction(from, tokenId);
+        // emit Transfer(from, to, txn.root, txn.parent, value);
+    }
+
+    function mint(address account, uint256 value) public {
+        _mintTransaction(account, value);
     }
 }
