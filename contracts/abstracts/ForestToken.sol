@@ -30,7 +30,6 @@ abstract contract ForestToken is ERC20, IForestERC20 {
     ) internal virtual {
         Forest.Transaction memory txn = _trees.transaction(from, tokenId);
         _trees.spendTransaction(Forest.TransactionInput(tokenId, value), from);
-        uint256 change = txn.value - value;
         _trees.createTransaction(
             Forest.TransactionOutput(value, to),
             txn.root,
@@ -41,7 +40,7 @@ abstract contract ForestToken is ERC20, IForestERC20 {
             ),
             from
         );
-        if (change == 0) {
+        if ((txn.value - value) == 0) {
             _trees.consumeTransaction(tokenId, from);
         }
         _update(from, to, value);
