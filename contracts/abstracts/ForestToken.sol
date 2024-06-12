@@ -46,11 +46,12 @@ abstract contract ForestToken is ERC20, IForestERC20 {
         _update(from, to, value);
     }
 
+    /// @notice new transaction not have parent hash
     function _mintTransaction(address account, uint256 value) internal {
         _trees.createTransaction(
             Forest.TransactionOutput(value, account),
             Forest.calculateTranscationRootHash(),
-            bytes32(0), // @TODO parent Forest.calculateTransactionParentHash(); ??
+            bytes32(0),
             Forest.calculateTransactionHash(
                 address(0),
                 _trees.transactionCount(address(0))
