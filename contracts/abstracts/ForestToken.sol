@@ -28,13 +28,13 @@ abstract contract ForestToken is ERC20, IForestERC20 {
         bytes32 tokenId,
         uint256 value
     ) internal virtual {
-        uint256 txvalue = _trees.transactionValue(from, tokenId);
+        Forest.Transaction memory txn = _trees.transaction(from, tokenId);
         _trees.spendTransaction(Forest.TransactionInput(tokenId, value), from);
-        uint256 change = txvalue - value;
+        uint256 change = txn.value - value;
         _trees.createTransaction(
             Forest.TransactionOutput(value, to),
-            tokenId, // @TODO root
-            tokenId, // @TODO parent
+            txn.root,
+            tokenId,
             Forest.calculateTransactionHash(
                 from,
                 _trees.transactionCount(from)
@@ -50,8 +50,8 @@ abstract contract ForestToken is ERC20, IForestERC20 {
     function _mintTransaction(address account, uint256 value) internal {
         _trees.createTransaction(
             Forest.TransactionOutput(value, account),
-            bytes32(0),
-            bytes32(0),
+            Forest.calculateTranscationRootHash(),
+            bytes32(0), // @TODO parent Forest.calculateTransactionParentHash(); ??
             Forest.calculateTransactionHash(
                 address(0),
                 _trees.transactionCount(address(0))
@@ -69,15 +69,8 @@ abstract contract ForestToken is ERC20, IForestERC20 {
         if (value == _trees.transactionValue(account, tokenId)) {
             _trees.consumeTransaction(tokenId, account);
         } else {
-            _trees.consumeTransaction(tokenId, account);
-            _trees.createTransaction(
-                Forest.TransactionOutput(value, address(0)),
-                tokenId, // @TODO root
-                tokenId, // @TODO parent
-                Forest.calculateTransactionHash(
-                    account,
-                    _trees.transactionCount(account)
-                ),
+            _trees.spendTransaction(
+                Forest.TransactionInput(tokenId, value),
                 account
             );
         }

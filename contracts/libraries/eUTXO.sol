@@ -56,8 +56,7 @@ library ExtendedUnspentTransactionOutput {
         address creator,
         uint256 nonce
     ) internal view returns (bytes32) {
-        uint256 chainId = block.chainid;
-        return keccak256(abi.encode(chainId, creator, nonce));
+        return keccak256(abi.encode(block.chainid, creator, nonce));
     }
 
     function createTransaction(

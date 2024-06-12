@@ -39,10 +39,10 @@ library Forest {
         uint256 value
     );
 
-    error TransactionZeroValue();
-    error TransactionNotExist();
     error TransactionExist();
+    error TransactionNotExist();
     error TransactionInsufficient(uint256 value, uint256 spend);
+    error TransactionZeroValue();
 
     function _transactionExist(
         Tree storage self,
@@ -52,12 +52,16 @@ library Forest {
         return self.trees[account][id].value > 0;
     }
 
+    function calculateTranscationRootHash() internal view returns (bytes32) {
+        return
+            keccak256(abi.encode(block.chainid, block.number, block.timestamp));
+    }
+
     function calculateTransactionHash(
         address creator,
         uint256 nonce
     ) internal view returns (bytes32) {
-        uint256 chainId = block.chainid;
-        return keccak256(abi.encode(chainId, creator, nonce));
+        return keccak256(abi.encode(block.chainid, creator, nonce));
     }
 
     function transaction(
@@ -98,7 +102,11 @@ library Forest {
         if (_transactionExist(self, txOutput.account, id)) {
             revert TransactionExist();
         }
-        self.trees[txOutput.account][id] = Transaction(root, parent, txOutput.value);
+        self.trees[txOutput.account][id] = Transaction(
+            root,
+            parent,
+            txOutput.value
+        );
         self.nonces[creator]++;
         self.size[txOutput.account]++;
 
@@ -131,6 +139,7 @@ library Forest {
         if (!_transactionExist(self, account, id)) {
             revert TransactionNotExist();
         }
+        self.trees[account][id].value = 0;
         self.size[account]--;
 
         emit TransactionConsumed(id);

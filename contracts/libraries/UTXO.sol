@@ -34,7 +34,11 @@ library UnspentTransactionOutput {
         mapping(bytes32 => Transaction) transactions;
     }
 
-    event TransactionCreated(bytes32 indexed id, address indexed creator, address indexed owner);
+    event TransactionCreated(
+        bytes32 indexed id,
+        address indexed creator,
+        address indexed owner
+    );
     event TransactionConsumed(bytes32 indexed id);
     event TransactionSpent(bytes32 indexed id, address indexed spender);
 
@@ -55,8 +59,7 @@ library UnspentTransactionOutput {
         address creator,
         uint256 nonce
     ) internal view returns (bytes32) {
-        uint256 chainId = block.chainid;
-        return keccak256(abi.encode(chainId, creator, nonce));
+        return keccak256(abi.encode(block.chainid, creator, nonce));
     }
 
     function createTransaction(
