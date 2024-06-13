@@ -11,7 +11,7 @@ const {
   getBytes,
 } = require("ethers");
 
-describe("eUTXO CBDC", function () {
+describe("Forest CBDC", function () {
   // We define a fixture to reuse the same setup in every test.
   // We use loadFixture to run this setup once, snapshot that state,
   // and reset Hardhat Network to that snapshot in every test.
@@ -42,7 +42,6 @@ describe("eUTXO CBDC", function () {
       let tx = await token.mint(address, 1000n);
       tx = await tx.wait();
       const tokenId = tx.logs[0].args[0];
-      console.log("🚀 ~ tokenId:", tokenId);
       await token["transfer(address,bytes32,uint256)"](
         otherAddress,
         tokenId,
@@ -72,12 +71,59 @@ describe("eUTXO CBDC", function () {
       expect(await token.balanceOf(otherAddress)).to.equal(100n);
       await token.freezeToken(tokenId2);
       await expect(
-        token["transfer(address,bytes32,uint256)"](otherAddress, tokenId2, 10n)
-      ).to.be.reverted;
+        token
+          .connect(otherAccount)
+          ["transfer(address,bytes32,uint256)"](address, tokenId2, 10n)
+      ).to.be.revertedWithCustomError(token, "TokenFrozen");
     });
 
-    it("Should restrict all transfer the funds to the other account by frozen root tokenId", async function () {});
+    it("Should restrict all transfer the funds to the other account by frozen root tokenId", async function () {
+      const { token, owner, otherAccount } = await loadFixture(
+        deployTokenFixture
+      );
+      const address = await owner.getAddress();
+      const otherAddress = await otherAccount.getAddress();
+      let tx = await token.mint(address, 1000n);
+      tx = await tx.wait();
+      let tokenId = tx.logs[0].args[0];
+      let root = tx.logs[0].args[1];
+      tx = await token["transfer(address,bytes32,uint256)"](
+        otherAddress,
+        tokenId,
+        10n
+      );
+      expect(await token.balanceOf(otherAddress)).to.equal(10n);
+      await token.freezeToken(root);
+      await expect(
+        token["transfer(address,bytes32,uint256)"](otherAddress, tokenId, 10n)
+      ).to.be.revertedWithCustomError(token, "TokenFrozen");
+    });
 
-    it("Should restrict all transfer the funds to the other account by frozen parent tokenId", async function () {});
+    it("Should restrict all transfer the funds to the other account by frozen parent tokenId", async function () {
+      const { token, owner, otherAccount } = await loadFixture(
+        deployTokenFixture
+      );
+      // const address = await owner.getAddress();
+      // const otherAddress = await otherAccount.getAddress();
+      // let tx = await token.mint(address, 1000n);
+      // tx = await tx.wait();
+      // const tokenId = tx.logs[0].args[0];
+      // tx = await token["transfer(address,bytes32,uint256)"](
+      //   otherAddress,
+      //   tokenId,
+      //   100n
+      // );
+      // tx = await tx.wait();
+      // const tokenId2 = tx.logs[1].args[0];
+      // expect(await token.balanceOf(otherAddress)).to.equal(100n);
+      // await token.freezeToken(parent);
+      // await expect(
+      //   await token["transfer(address,bytes32,uint256)"](
+      //     otherAddress,
+      //     tokenId2,
+      //     10n
+      //   )
+      // ).to.equal("");
+    });
   });
 });

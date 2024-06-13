@@ -29,8 +29,9 @@ library Forest {
 
     event TransactionCreated(
         bytes32 indexed id,
+        bytes32 indexed root,
         address indexed creator,
-        address indexed owner
+        address owner
     );
     event TransactionConsumed(bytes32 indexed id);
     event TransactionSpent(
@@ -110,7 +111,7 @@ library Forest {
         self.nonces[creator]++;
         self.size[txOutput.account]++;
 
-        emit TransactionCreated(id, creator, txOutput.account);
+        emit TransactionCreated(id, root, creator, txOutput.account);
     }
 
     function spendTransaction(

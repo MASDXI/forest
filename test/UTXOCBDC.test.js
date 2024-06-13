@@ -54,4 +54,36 @@ describe("UTXO CBDC", function () {
       expect(await token.balanceOf(otherAddress)).to.equal(1000n);
     });
   });
+
+  describe("Restrict", function () {
+    it("Should restrict transfer the funds to the other account by frozen tokenId", async function () {
+      const { token, owner, otherAccount } = await loadFixture(
+        deployTokenFixture
+      );
+      const address = await owner.getAddress();
+      const otherAddress = await otherAccount.getAddress();
+      let tx = await token.mint(address, 1000n);
+      tx = await tx.wait();
+      let tokenId = tx.logs[0].args[0];
+      let hashed = solidityPackedKeccak256(["bytes32"], [tokenId]);
+      let signature = await owner.signMessage(getBytes(hashed));
+      tx = await token["transfer(address,bytes32,uint256,bytes)"](
+        otherAddress,
+        tokenId,
+        100n,
+        signature
+      );
+      tx = await tx.wait();
+      tokenId = tx.logs[1].args[0];
+      hashed = solidityPackedKeccak256(["bytes32"], [tokenId]);
+      signature = await otherAccount.signMessage(getBytes(hashed));
+      expect(await token.balanceOf(otherAddress)).to.equal(100n);
+      await token.freezeToken(tokenId);
+      await expect(
+        token
+          .connect(otherAccount)
+          ["transfer(address,bytes32,uint256,bytes)"](address, tokenId, 10n, signature)
+      ).to.be.revertedWithCustomError(token, "TokenFrozen");
+    });
+  });
 });

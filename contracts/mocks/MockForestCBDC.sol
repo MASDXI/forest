@@ -59,9 +59,8 @@ contract MockForestCBDC is
     {
         /// @notice ERC20 Transfer also emit.
         super._transfer(from, to, tokenId, value);
-        // @TODO Error: Stack too deep.
-        // Forest.Transaction memory txn = _transaction(from, tokenId);
-        // emit Transfer(from, to, txn.root, txn.parent, value);
+        Forest.Transaction memory txn = _transaction(from, tokenId);
+        emit Transfer(from, to, txn.root, txn.parent, value);
     }
 
     function mint(address account, uint256 value) public {

@@ -6,6 +6,7 @@ pragma solidity >=0.8.0 <0.9.0;
 abstract contract FreezeBalance {
     mapping(address => uint256) private _frozenBalance;
 
+    error BalanceOverflow();
     error BalanceFrozen(uint256 balance, uint256 frozenBalance);
 
     event FrozenBalance(address indexed account, uint256 value);
@@ -15,6 +16,9 @@ abstract contract FreezeBalance {
         uint256 balance,
         uint256 value
     ) {
+        if (balance < value) {
+            revert BalanceOverflow();
+        }
         uint256 frozenBalance = _frozenBalance[account];
         if (frozenBalance > balance - value) {
             revert BalanceFrozen(balance, frozenBalance);
