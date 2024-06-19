@@ -5,6 +5,7 @@
 *.log
 *.synctex*
 *.pdf
+*.Tex
 
 # Modules
 node_modules
