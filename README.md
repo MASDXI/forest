@@ -81,11 +81,11 @@ Currently `Forest` not 100% compatible with existing `ERC20` standard.
 **B2G** Back to Genesis  
 **CBDC** Central Bank Digital Currency  
 **CFT** Counter Financial Terrorism  
-**C2C** Customer to Customer
+**C2C** Customer to Customer  
 **DLT** Distributed Ledger Technology  
 **eUTXO** Extended Transaction Output  
 **KYC** Know Your Customer  
-**UTXO** Unspent Transaction Output
+**UTXO** Unspent Transaction Output  
 
 ## Reference
 
