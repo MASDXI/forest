@@ -5,6 +5,12 @@ import "../libraries/Forest.sol";
 import "../interfaces/IForestERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
+/**
+ * @title ForestToken
+ * @dev Abstract contract implementing ERC20 functionalities with transaction management using the Forest library.
+ * @notice This contract manages transactions in a forest-like structure using the Forest library.
+ * @author Sirawit Techavanitch (sirawit_tec@live4.utcc.ac.th)
+ */
 abstract contract ForestToken is ERC20, IForestERC20 {
     using Forest for Forest.Tree;
 
@@ -15,6 +21,12 @@ abstract contract ForestToken is ERC20, IForestERC20 {
         string memory symbol_
     ) ERC20(name_, symbol_) {}
 
+    /**
+     * @dev Retrieves the details of a transaction.
+     * @param account The address of the account owning the transaction.
+     * @param tokenId The identifier of the transaction.
+     * @return The transaction details.
+     */
     function _transaction(
         address account,
         bytes32 tokenId
@@ -22,6 +34,13 @@ abstract contract ForestToken is ERC20, IForestERC20 {
         return _trees.transaction(account, tokenId);
     }
 
+    /**
+     * @dev Internal function to transfer tokens and manage transactions within the forest.
+     * @param from The sender address.
+     * @param to The recipient address.
+     * @param tokenId The identifier of the transaction.
+     * @param value The amount of tokens to transfer.
+     */
     function _transfer(
         address from,
         address to,
@@ -46,7 +65,11 @@ abstract contract ForestToken is ERC20, IForestERC20 {
         _update(from, to, value);
     }
 
-    /// @notice new transaction not have parent hash
+    /**
+     * @dev Internal function to mint tokens and create a new transaction within the forest.
+     * @param account The recipient address.
+     * @param value The amount of tokens to mint.
+     */
     function _mintTransaction(address account, uint256 value) internal {
         _trees.createTransaction(
             Forest.TransactionOutput(value, account),
@@ -61,6 +84,12 @@ abstract contract ForestToken is ERC20, IForestERC20 {
         _mint(account, value);
     }
 
+    /**
+     * @dev Internal function to burn tokens and manage transactions within the forest.
+     * @param account The address owning the tokens.
+     * @param tokenId The identifier of the transaction.
+     * @param value The amount of tokens to burn.
+     */
     function _burnTransaction(
         address account,
         bytes32 tokenId,
@@ -77,7 +106,12 @@ abstract contract ForestToken is ERC20, IForestERC20 {
         _burn(account, value);
     }
 
-    // solc-ignore-next-line unused-param
+    /**
+     * @dev Overrides the ERC20 transfer function to revert.
+     * @param to The recipient address.
+     * @param value The amount of tokens to transfer.
+     * @return Always reverts with ERC20TransferNotSupported error.
+     */
     function transfer(
         address to,
         uint256 value
@@ -85,6 +119,9 @@ abstract contract ForestToken is ERC20, IForestERC20 {
         revert ERC20TransferNotSupported();
     }
 
+    /**
+     * @inheritdoc IForestERC20
+     */
     function transfer(
         address to,
         bytes32 tokenId,
@@ -94,6 +131,24 @@ abstract contract ForestToken is ERC20, IForestERC20 {
         return true;
     }
 
+    /**
+     * @dev Overrides the ERC20 transferFrom function to revert.
+     * @param from The sender address.
+     * @param to The recipient address.
+     * @param value The amount of tokens to transfer.
+     * @return Always reverts with ERC20TransferFromNotSupported error.
+     */
+    function transferFrom(
+        address from,
+        address to,
+        uint256 value
+    ) public virtual override returns (bool) {
+        revert ERC20TransferFromNotSupported();
+    }
+
+    /**
+     * @inheritdoc IForestERC20
+     */
     function transferFrom(
         address from,
         address to,
@@ -103,14 +158,5 @@ abstract contract ForestToken is ERC20, IForestERC20 {
         _spendAllowance(from, msg.sender, value);
         _transfer(from, to, tokenId, value);
         return true;
-    }
-
-    // solc-ignore-next-line unused-param
-    function transferFrom(
-        address from,
-        address to,
-        uint256 value
-    ) public virtual override returns (bool) {
-        revert ERC20TransferFromNotSupported();
     }
 }
