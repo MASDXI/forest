@@ -64,13 +64,6 @@ Introduce implementation call `Forest` used the way to modified the state to kee
   The `Forest` model enables tracking of child/subtree structures, providing a hierarchical view of token flows and relationships,
   which is not possible in traditional token standards like `ERC20`, `ERC721`, `ERC1155`, `ERC1400`, and `ERC3643`.
 
-## Test scenario
-
-- Scenario generate 100,000 transaction suspicious `x` account.
-- Scenario generate 100,000 transaction suspicious `x` transaction.
-- Scenario generate 100,000 transaction suspicious `x` uncertain amount of each suspicious `x` account.
-- Bench test with `reth` or `revm` for speed
-
 # For Further Work
 
 Currently `Forest` not 100% compatible with existing `ERC20` standard.
