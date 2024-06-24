@@ -11,7 +11,7 @@ library Forest {
      * @dev Structure representing a transaction within the forest.
      */
     struct Transaction {
-        bytes32 root; // Merkle root hash of the transaction
+        bytes32 root; // Root hash of the transaction
         bytes32 parent; // Parent transaction hash
         uint256 value; // Value associated with the transaction
     }
@@ -44,7 +44,7 @@ library Forest {
     /**
      * @dev Event emitted when a transaction is created within the forest.
      * @param id The identifier of the transaction.
-     * @param root The Merkle root hash of the transaction.
+     * @param root The root hash of the transaction.
      * @param creator The address that created the transaction.
      * @param owner The address that owns the transaction.
      */
@@ -148,11 +148,11 @@ library Forest {
     }
 
     /**
-     * @dev Retrieves the Merkle root hash of a transaction from an account's transaction tree.
+     * @dev Retrieves the root hash of a transaction from an account's transaction tree.
      * @param self The reference to the Tree storage.
      * @param account The address of the account owning the transaction.
      * @param id The identifier of the transaction.
-     * @return The Merkle root hash of the transaction.
+     * @return The root hash of the transaction.
      */
     function transactionRoot(
         Tree storage self,
@@ -181,7 +181,7 @@ library Forest {
      * @dev Creates a new transaction within an account's transaction tree.
      * @param self The reference to the Tree storage.
      * @param txOutput The transaction output containing value and recipient information.
-     * @param root The Merkle root hash associated with the transaction.
+     * @param root The root hash associated with the transaction.
      * @param parent The parent transaction hash.
      * @param id The identifier of the transaction.
      * @param creator The address that created the transaction.
