@@ -1,15 +1,18 @@
 version: '3.9'
 
 x-geth: &geth
-  image: # go-ethereum image
+  image: ethereum/client-go:stable
 
 services:
   geth-validator:
     << : *geth
     hostname: validator
     volumes: # directory to mount
+      - # host:container
     command: # command line
+      - # command
     networks: # network
     ports: # port
+      - # host:container
 networks:  
     # network configuration
