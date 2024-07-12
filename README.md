@@ -67,6 +67,8 @@ Introduce implementation call `Forest` used the way to modified the state to kee
 # For Further Work
 
 Currently `Forest` not 100% compatible with existing `ERC20` standard.
+To complete and fully supported `ERC20` interface `Forest` require to have automatically select and spent the transaction.
+However it's doesn't need to be store in sorted list. It's can be done with FIFO or First-In-First-Out.
 
 ## Glossary of Terms
 
