@@ -13,6 +13,9 @@ library UnspentTransactionOutput {
     using ECDSA for bytes32;
     using MessageHashUtils for bytes32;
 
+    /**
+     * @dev Structure representing a transaction.
+     */
     struct Transaction {
         bytes32 input;
         uint256 value;
@@ -20,16 +23,25 @@ library UnspentTransactionOutput {
         bool spent;
     }
 
+    /**
+     * @dev Structure representing an input for a transaction.
+     */
     struct TransactionInput {
         bytes32 outpoint;
         bytes signature;
     }
 
+    /**
+     * @dev Structure representing an output for a transaction.
+     */
     struct TransactionOutput {
         uint256 value;
         address account;
     }
 
+    /**
+     * @dev Structure representing a Unspent Tranasction Output.
+     */
     struct UTXO {
         mapping(address => uint256) size;
         mapping(address => uint256) nonces;
@@ -42,7 +54,11 @@ library UnspentTransactionOutput {
      * @param creator The creator of the transaction.
      * @param owner The owner of the transaction output.
      */
-    event TransactionCreated(bytes32 indexed id, address indexed creator, address indexed owner);
+    event TransactionCreated(
+        bytes32 indexed id,
+        address indexed creator,
+        address indexed owner
+    );
 
     /**
      * @notice Event emitted when a transaction is consumed.

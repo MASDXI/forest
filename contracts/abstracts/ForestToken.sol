@@ -6,7 +6,7 @@ import "../interfaces/IForestERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 /**
- * @title ForestToken
+ * @title Forest Token
  * @dev Abstract contract implementing ERC20 functionalities with transaction management using the Forest library.
  * @notice This contract manages transactions in a forest-like structure using the Forest library.
  * @author Sirawit Techavanitch (sirawit_tec@live4.utcc.ac.th)
@@ -16,6 +16,11 @@ abstract contract ForestToken is ERC20, IForestERC20 {
 
     Forest.Tree private _trees;
 
+    /**
+     * @dev Constructor to initialize the ERC20 token with a name and symbol.
+     * @param name_ The name of the token.
+     * @param symbol_ The symbol of the token.
+     */
     constructor(
         string memory name_,
         string memory symbol_
