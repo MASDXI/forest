@@ -5,7 +5,7 @@
 - Step to complete suspend certain amount of fund.
 - Step to complete suspend relevant transaction. 
 
-`NOTE Response Time, Recovery Time and Post-Incident Analysis`
+`NOTE: Response Time, Recovery Time and Post-Incident Analysis`
 
 ## Test scenario
 - Scenario generate 100,000 transaction suspicious `x` account.  
@@ -17,30 +17,42 @@
 
 # Hardware Specification
 
-CPU: 2 Intel Xeon E5-2650Lv2 (20cores/40threads) 
-Memory:  768 GB
-Disk: 1.2 TB SAS HDD with RAID 0
+CPU: 2 Intel Xeon E5-2650Lv2 (20cores/40threads)  
+Memory:  768 GB  
+Disk: 1.2 TB SAS HDD with RAID 0  
 
 `NOTE: If you use hardware specification lower that this please edit the conf.toml`
 
 ## Prerequisite
-Installing
 
 - docker
 - docker-compose
 
+Start local network with command.  
 ```
-cmd
+./scripts/start.sh
 ```
+
+Stop local network with command.
+
+```
+./scripts/stop.sh
+```
+
+## Network Configuration
+
+HTTP: `http://localhost:8545`  
+API_WS: `ws://localhost:8546`  
+CHAIN_ID: `8080`  
 
 ## Run simulator
 
 ```
-cmd
+# command
 ```
 
 ## Reading result
 
 ```
-cmd
+# command
 ```
