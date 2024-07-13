@@ -8,6 +8,10 @@
     "clean": "npx hardhat clean",
     "compile": "npx hardhat compile",
     "coverage": "npx hardhat coverage",
+    "geth:start": "cd ./simulator/ && ./scripts/start.sh",
+    "geth:stop": "cd ./simulator/ && ./scripts/stop.sh",
+    "node": "npx hardhat node",
+    "simulator": "echo \"Not implement yet.\"",
     "test": "npx hardhat clean && npx hardhat test"
   },
   "dependencies": {
