@@ -23,6 +23,7 @@ services:
       - "--networkid=8080"
       - "--allow-insecure-unlock"
       - "--mine"
+      - "--miner.gasprice=0"
       - "--miner.etherbase=0xA96361056f0F946702d066068Ef38a01D01910D9"
       - "--unlock=0xA96361056f0F946702d066068Ef38a01D01910D9"
       - "--password=/data/password.txt"
