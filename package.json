@@ -13,9 +13,10 @@
     "coverage": "npx hardhat coverage",
     "geth:start": "cd $(pwd)/test/simulators/geth && $(pwd)/scripts/start.sh",
     "geth:stop": "cd $(pwd)/test/simulators/geth && $(pwd)/scripts/stop.sh",
-    "node": "npx hardhat node",
-    "simulation": "echo \"Not implement yet.\"",
-    "test": "npx hardhat clean && npx hardhat test"
+    "node:start": "npx hardhat node",
+    "simulation": "echo \"Not implemented yet.\"",
+    "test": "npx hardhat clean && npx hardhat test",
+    "install:requirements": "pip install -r requirements.txt"
   },
   "dependencies": {
     "hardhat": "^2.22.4"

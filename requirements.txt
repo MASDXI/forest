@@ -1,0 +1,2 @@
+eth_account==0.13.0
+eth_utils==4.1.1

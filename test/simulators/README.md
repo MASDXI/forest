@@ -28,6 +28,8 @@ Disk: 1.2 TB SAS HDD with RAID 0
 
 - docker
 - docker-compose
+- python3
+- pip
 
 Start local network with command.  
 ``` shell
