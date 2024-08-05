@@ -1,0 +1,14 @@
+data-path="/data/"
+node-private-key-file="/keystore/key"
+genesis-file="/config/genesis.json"
+
+miner-enabled=true
+
+rpc-http-api=["ETH","NET","WEB3","CLIQUE","DEBUG","MINER", "TRACE", "TXPOOL"]
+rpc-http-enabled=true
+rpc-http-host="0.0.0.0"
+
+rpc-ws-api=["ETH","NET","WEB3","CLIQUE","DEBUG","MINER", "TRACE", "TXPOOL"]
+rpc-ws-enabled=true
+rpc-ws-host="0.0.0.0"
+

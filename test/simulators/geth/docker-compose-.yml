@@ -6,8 +6,6 @@ x-geth: &geth
     - "./config/conf.toml:/config/conf.toml:ro"
     - "./config/genesis.json:/config/genesis.json:ro"
     - "./data/:/data/"
-    - "./keystore/password.txt:/data/password.txt:ro"
-    - "./keystore/key.json:/data/key.json:ro"
     - "./scripts/init.sh:/scripts/init.sh"
   networks:
     - geth-network
@@ -17,6 +15,9 @@ services:
     << : *geth
     hostname: validator
     entrypoint: /scripts/init.sh
+    volumes:
+      - "./keystore/password.txt:/data/password.txt:ro"
+      - "./keystore/key.json:/data/key.json:ro"
     command: 
       - "--config=/config/conf.toml"
       - "--datadir=/data/"
