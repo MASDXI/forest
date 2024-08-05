@@ -1,15 +1,18 @@
 {
-  "name": "TrieMoney",
+  "name": "ForestTokenSmartContract",
   "version": "1.0.0",
   "main": "index.js",
-  "repository": "https://github.com/MASDXI/TrieMoney.git",
-  "license": "MIT",
+  "repository": "https://github.com/MASDXI/Forest.git",
+  "license": "Apache-2.0",
   "scripts": {
+    "besu:start": "cd $(pwd)/test/simulators/besu && $(pwd)/scripts/start.sh",
+    "besu:stop": "cd $(pwd)/test/simulators/besu && $(pwd)/scripts/stop.sh",
+    "build": "npx hardhat clean && npx hardhat test && npx hardhat compile",
     "clean": "npx hardhat clean",
     "compile": "npx hardhat compile",
     "coverage": "npx hardhat coverage",
-    "geth:start": "cd ./simulator/ && ./scripts/start.sh",
-    "geth:stop": "cd ./simulator/ && ./scripts/stop.sh",
+    "geth:start": "cd $(pwd)/test/simulators/geth && $(pwd)/scripts/start.sh",
+    "geth:stop": "cd $(pwd)/test/simulators/geth && $(pwd)/scripts/stop.sh",
     "node": "npx hardhat node",
     "simulator": "echo \"Not implement yet.\"",
     "test": "npx hardhat clean && npx hardhat test"

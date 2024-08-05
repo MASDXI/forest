@@ -11,7 +11,6 @@
 - Scenario generate 100,000 transaction suspicious `x` account.  
 - Scenario generate 100,000 transaction suspicious `x` transaction.  
 - Scenario generate 100,000 transaction suspicious `x` uncertain amount of each suspicious `x` account.  
-- Simulate test with local `geth` private network with Proof of Authority (Clique) consensus algorithm.  
 
 `geth v1.13.15 is last version that support Proof of Authority.`
 
