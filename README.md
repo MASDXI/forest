@@ -6,7 +6,7 @@ status: Draft
 ---
 
 <h1 align="center">
-<img src="./docs/assets/Horizontal-Reforestation-through-replanting-in-mixed-forest.png" width="450"/>
+<img src="./docs/assets/banner.png" width="450"/>
 </h1>
 
 # Smart Contract Implementation for Enhanced Traceability in Central Bank Digital Currency Systems

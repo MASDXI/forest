@@ -14,7 +14,7 @@
     "geth:start": "cd $(pwd)/test/simulators/geth && $(pwd)/scripts/start.sh",
     "geth:stop": "cd $(pwd)/test/simulators/geth && $(pwd)/scripts/stop.sh",
     "node": "npx hardhat node",
-    "simulator": "echo \"Not implement yet.\"",
+    "simulation": "echo \"Not implement yet.\"",
     "test": "npx hardhat clean && npx hardhat test"
   },
   "dependencies": {

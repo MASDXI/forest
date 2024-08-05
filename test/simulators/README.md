@@ -14,6 +14,8 @@
 
 `geth v1.13.15 is last version that support Proof of Authority.`
 
+simulator provide 2 clients `geth` and `besu`.
+
 # Hardware Specification
 
 CPU: 2 Intel Xeon E5-2650Lv2 (20cores/40threads)  
@@ -28,14 +30,14 @@ Disk: 1.2 TB SAS HDD with RAID 0
 - docker-compose
 
 Start local network with command.  
-```
-./scripts/start.sh
+``` shell
+./CLIENT/scripts/start.sh
 ```
 
-Stop local network with command.
+Stop local network with command.  
 
-```
-./scripts/stop.sh
+``` shell
+./CLIENT/scripts/stop.sh
 ```
 
 ## Network Configuration
@@ -46,7 +48,13 @@ CHAIN_ID: `8080`
 
 ## Run simulator
 
+with `yarn`
+``` shell
+yarn simulation
 ```
+
+with `x`
+``` shell
 # command
 ```
 
