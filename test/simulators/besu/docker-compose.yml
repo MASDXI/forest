@@ -1,6 +1,5 @@
 x-besu: &besu
-  # image: hyperledger/besu:24.7.1
-  image: loaffinity/stateful:24.8-develop-2128ab2
+  image: hyperledger/besu:24.7.1
   networks:
     - besu-network
 
