@@ -1,12 +1,12 @@
-data-path="/data/"
-node-private-key-file="/keystore/key"
 genesis-file="/config/genesis.json"
 
-miner-enabled=true
+min-gas-price=0
+data-storage-format="FOREST"
 
 rpc-http-api=["ETH","NET","WEB3","CLIQUE","DEBUG","MINER", "TRACE", "TXPOOL"]
 rpc-http-enabled=true
 rpc-http-host="0.0.0.0"
+rpc-http-cors-origins=["*"]
 
 rpc-ws-api=["ETH","NET","WEB3","CLIQUE","DEBUG","MINER", "TRACE", "TXPOOL"]
 rpc-ws-enabled=true
