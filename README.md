@@ -1,15 +1,15 @@
 ---
-title: Smart Contract Implementation for Enhanced Traceability in Central Bank Digital Currency Systems
-description: An implementation of advanced data structure over token smart contract.
-author: Sirawit Techavanitch (sirawit_tec@utcc.ac.th)
-status: Draft
+Title: "Forest: Smart Contract Implementation for Enhanced Traceability in Central Bank Digital Currency Systems"
+Description: "An implementation of advanced data structure over token smart contract."
+Author: "Sirawit Techavanitch (sirawit_tec@utcc.ac.th)"
+Status: "Draft"
 ---
 
 <h1 align="center">
 <img src="./docs/assets/banner.png" width="450"/>
 </h1>
 
-# Smart Contract Implementation for Enhanced Traceability in Central Bank Digital Currency Systems
+# Forest: A Smart Contract Implementation for Enhanced Traceability in Central Bank Digital Currency Systems
 
 ## Abstract
 
@@ -49,19 +49,26 @@ Introduce implementation call `Forest` used the way to modified the state to kee
 | keep tracking child/subtree.                                        | ✗     | ✗    | ✗     | ✓      |
 
 - For `ERC20` provide events and keep tracking each `Transfer`,  
-    but the problem is the `ERC20` model can't separate `clean money` from `dirty money`,  
-    due to the `ERC20` not have `tokenId` to keep tracking each token when it's move.
+  but the problem is the `ERC20` model can't separate `clean money` from `dirty money`,  
+  due to the `ERC20` not have `tokenId` to keep tracking each token when it's move.
 - For `ERC721` its use non-fungible, each token is unique and not intend to keep tracking amount or value.
-- For `ERC1400`, <!-- -// TODO explain -->
-- For `ERC1155`, <!-- -// TODO explain -->
+- For `ERC1400`, includes features like partitioned balances,  
+  allowing tokens to be split into subsets based on conditions or rules (e.g., restrictions, investor categories).  
+  It also supports document management, enabling the attachment of legal documents to tokens, and integrates with compliance mechanisms,  
+  ensuring that transfers comply with rules like KYC/AML checks. However,   
+  `ERC1400` tokens still face challenges in tracking the history or provenance of individual tokens beyond their partitioned states.
+- For `ERC1155` improves upon ERC20 and ERC721 by offering more flexibility and reducing operational overhead,  
+  it does not inherently provide a way to distinguish between `clean` and `dirty` tokens,  
+  as it lacks the ability to track individual token histories like `UTXO` models do.
 - For `UTXO` and `eUTXO` facing challenge to combine multiple `UnspentTransaction` and spent as one,  
   in case, user want to spend value that greater that selected `UnspentTransaction`.  
-  Possible solution: prepare and batching as an array, `UTXO` and `eUTXO` maintain the amount of money or group of money in each individual transaction.  
+  Possible solution: prepare and batching as an array,  
+  `UTXO` and `eUTXO` maintain the amount of money or group of money in each individual transaction.  
   Each `UnspentTransaction` is not underlying any account,
   so to spend the transaction, the caller needs to be the owner of the transaction that needs to be spent.
 - For `Forest` use to modify an existing state rather than create a new output transaction, like in `UTXO` or `eUTXO` do,  
-  it allows spending the transaction multiple times till it's met `0`,
-  The `Forest` model enables tracking of child/subtree structures, providing a hierarchical view of token flows and relationships,
+  it allows spending the transaction multiple times till it's met `0`, The `Forest` model enables tracking of child/subtree structures,  
+  providing a hierarchical view of token flows and relationships,  
   which is not possible in traditional token standards like `ERC20`, `ERC721`, `ERC1155`, `ERC1400`, and `ERC3643`.
 
 ## For Further Work
@@ -74,7 +81,7 @@ However it's doesn't need to be store in sorted list. there is possible solution
 - Second off-load heavy computation from the smart contract to a custom pre-compiled contract.
 - Third create a stateful pre-compiled contract that fully functional same as the smart contract specification.
 
-learn more about [pre-compiled contract](https://www.rareskills.io/post/solidity-precompiles)
+Learn more about [pre-compiled contract](https://www.rareskills.io/post/solidity-precompiles)
 
 ## Glossary of Terms
 
