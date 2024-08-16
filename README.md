@@ -29,9 +29,9 @@ The present-day Central Bank Digital Currency concept aims to utilize the advant
 - [ERC1155](https://eips.ethereum.org/EIPS/eip-1155) metadata problem is the same as `ERC721`, however, `ERC1155` can utilize tokenId as root, it can freeze the balance for each account, but it ends up with you can't to separate the money when it's stored in the total balance.
 - [ERC1400](https://eips.ethereum.org/EIPS/eip-1400) have characteristic base from `ERC20` but extended functionality for freeze account or freeze balance.
 - [ERC3643](https://eips.ethereum.org/EIPS/eip-3643) have characteristic same as `ERC1400` but extended functionality for store the document and other feature.
-- `Merkle Tree` not suitable for the payment due to its need to maintain the root hash and generate proof every time.
-- `UTXO` maintain the amount of money or group of money in each individual transaction. To spend the transaction, the caller needs to be the owner of the transaction that needs to be spent.
-- `eUTXO` extended version of `UTXO`, purpose of `eUTXO` is adding/carrying additional data as extraData or payload in the transaction.
+- [MerkleTree](https://www.geeksforgeeks.org/blockchain-merkle-trees/) not suitable for the payment due to its need to maintain the root hash and generate proof every time.
+- [UTXO](https://www.geeksforgeeks.org/what-is-unspent-transaction-output-utxo/) maintain the amount of money or group of money in each individual transaction. To spend the transaction, the caller needs to be the owner of the transaction that needs to be spent.
+- [eUTXO](https://docs.cardano.org/about-cardano/learn/eutxo-explainer/) extended version of `UTXO`, purpose of `eUTXO` is adding/carrying additional data as extraData or payload in the transaction.
 
 ## Methodology
 
