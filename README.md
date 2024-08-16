@@ -83,6 +83,8 @@ However it's doesn't need to be store in sorted list. there is possible solution
 
 Learn more about [pre-compiled contract](https://www.rareskills.io/post/solidity-precompiles)
 
+In `UTXO`, `eUTXO` and `Forest` still possible to have [dust](https://www.investopedia.com/terms/b/bitcoin-dust.asp) if not create minimum amount for transfer or minting the token.
+
 ## Glossary of Terms
 
 **AML** Anti-Money Laundering  
