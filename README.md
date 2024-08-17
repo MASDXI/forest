@@ -55,7 +55,7 @@ Introduce implementation call `Forest` used the way to modified the state to kee
 - For `ERC1400`, includes features like partitioned balances,  
   allowing tokens to be split into subsets based on conditions or rules (e.g., restrictions, investor categories).  
   It also supports document management, enabling the attachment of legal documents to tokens, and integrates with compliance mechanisms,  
-  ensuring that transfers comply with rules like KYC/AML checks. However,   
+  ensuring that transfers comply with rules like KYC/AML checks. However,  
   `ERC1400` tokens still face challenges in tracking the history or provenance of individual tokens beyond their partitioned states.
 - For `ERC1155` improves upon ERC20 and ERC721 by offering more flexibility and reducing operational overhead,  
   it does not inherently provide a way to distinguish between `clean` and `dirty` tokens,  
@@ -82,8 +82,13 @@ However it's doesn't need to be store in sorted list. there is possible solution
 - Third create a stateful pre-compiled contract that fully functional same as the smart contract specification.
 
 Learn more about [pre-compiled contract](https://www.rareskills.io/post/solidity-precompiles)
-
-In `UTXO`, `eUTXO` and `Forest` still possible to have [dust](https://www.investopedia.com/terms/b/bitcoin-dust.asp) if not create minimum amount for transfer or minting the token.
+ 
+The `Forest` project addresses significant challenge, particularly state bloat and [dust](https://www.investopedia.com/terms/b/bitcoin-dust.asp) transaction.  
+Merging multiple small transactions into a single larger transaction helps reduce the number of entries in the blockchain’s state, thereby minimizing state growth.  
+However, this process can complicate traceability, as it obscures the individual histories of the merged transactions.  
+Additionally, once a transaction's output has been spent, it can be marked as spent or removed from the dataset,  
+which further complicates the ability to trace the flow of funds. While these strategies are effective in managing state size,  
+they can hinder users' ability to follow transaction trails, making it difficult to verify the origins of funds.
 
 ## Glossary of Terms
 
