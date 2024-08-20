@@ -1,4 +1,5 @@
 genesis-file="/config/genesis.json"
+data-path="/data/"
 
 min-gas-price=0
 data-storage-format="FOREST"

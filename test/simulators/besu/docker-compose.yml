@@ -1,5 +1,7 @@
 x-besu: &besu
   image: hyperledger/besu:24.7.1
+  volumes:
+    - "./config/genesis.json:/config/genesis.json:ro"
   networks:
     - besu-network
 
@@ -8,12 +10,12 @@ services:
     << : *besu
     hostname: validator
     volumes:
-      - "./config/conf.toml:/config/conf.toml"
-      - "./config/genesis.json:/config/genesis.json"
-      - "./keystore/key:/keystore/key"
+      - "./config/conf.toml:/config/conf.toml:ro"
+      - "./keystore/key:/config/keystore/key"
+      - "./data/validator:/data"
     command:  
       - "--config-file=/config/conf.toml"
-      - "--node-private-key-file=/keystore/key"
+      - "--node-private-key-file=/config/keystore/key"
       - "--miner-enabled=true"
       - "--miner-coinbase=0xEDFAA84E3E8d6d23Fa0b5A2b66D988f9557362A5"
     ports:
@@ -24,8 +26,8 @@ services:
     << : *besu
     hostname: node-1
     volumes:
-      - "./config/conf.toml:/config/conf.toml"
-      - "./config/genesis.json:/config/genesis.json"
+      - "./config/conf.toml:/config/conf.toml:ro"
+      - "./data/node:/data"
     command: 
       - "--config-file=/config/conf.toml"
       - "--Xdns-enabled=true"

@@ -3,7 +3,6 @@ x-geth: &geth
   volumes:
     - "./config/conf.toml:/config/conf.toml:ro"
     - "./config/genesis.json:/config/genesis.json:ro"
-    - "./data/:/data/"
     - "./scripts/init.sh:/scripts/init.sh"
   networks:
     - geth-network
@@ -16,6 +15,7 @@ services:
     volumes:
       - "./keystore/password.txt:/data/password.txt:ro"
       - "./keystore/key.json:/data/key.json:ro"
+      - "./data/validator:/data/"
     command: 
       - "--config=/config/conf.toml"
       - "--datadir=/data/"
@@ -30,6 +30,16 @@ services:
     ports:
       - "8545:8545"
       - "8546:8546"
+
+  # geth-node1:
+  #   hostname: node
+  #   entrypoint: /scripts/init.sh
+  #   volumes:
+  #     - "./data/node:/data/"
+  #   command:
+  #     - "--datadir=/data/"
+  #     - "--networkid=8080"
+  #     - "-bootnodes=enode://<pubkey>@validator:30303"
 
 networks:
   geth-network:
