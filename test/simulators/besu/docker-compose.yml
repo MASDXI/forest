@@ -1,7 +1,6 @@
 x-besu: &besu
-  image: hyperledger/besu:24.7.1
-  volumes:
-    - "./config/genesis.json:/config/genesis.json:ro"
+  # image: hyperledger/besu:24.7.1
+  image: besu/besu-mod:24.8-develop-9d222d3
   networks:
     - besu-network
 
@@ -10,6 +9,7 @@ services:
     << : *besu
     hostname: validator
     volumes:
+      - "./config/genesis.json:/config/genesis.json:ro"
       - "./config/conf.toml:/config/conf.toml:ro"
       - "./keystore/key:/config/keystore/key"
       - "./data/validator:/data"
@@ -26,6 +26,7 @@ services:
     << : *besu
     hostname: node-1
     volumes:
+      - "./config/genesis.json:/config/genesis.json:ro"
       - "./config/conf.toml:/config/conf.toml:ro"
       - "./data/node:/data"
     command: 
