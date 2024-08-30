@@ -1,0 +1,19 @@
+{
+  "name": "@masdxi/forest",
+  "private": false,
+  "version": "1.0.0-rc1",
+  "license": "Apache-2.0",
+  "main": "index.js",
+  "author": "sirawt",
+  "files": [
+    "**/*.sol",
+    "!/abstracts/extensions/",
+    "!/mocks/**/*"
+  ],
+  "repository": "https://github.com/MASDXI/Forest.git",
+  "scripts": {},
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.0.2"
+  },
+  "devDependencies": {}
+}
