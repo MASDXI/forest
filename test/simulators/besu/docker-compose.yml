@@ -1,6 +1,6 @@
 x-besu: &besu
   # image: hyperledger/besu:24.7.1
-  image: besu/besu-mod:24.8-develop-9d222d3
+  image: loaffinity/loaff-besu:24.8-develop-f2ad236
   networks:
     - besu-network
 
@@ -27,7 +27,7 @@ services:
     hostname: node-1
     volumes:
       - "./config/genesis.json:/config/genesis.json:ro"
-      - "./config/conf.toml:/config/conf.toml:ro"
+      - "./config/confRPC.toml:/config/conf.toml:ro"
       - "./data/node:/data"
     command: 
       - "--config-file=/config/conf.toml"

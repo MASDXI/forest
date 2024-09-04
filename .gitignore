@@ -29,5 +29,5 @@ node_modules
 ignition/deployments/chain-31337
 
 # Simulator
-simulators/geth/data
-simulators/besu/data
+test/simulators/geth/data/
+test/simulators/besu/data/
