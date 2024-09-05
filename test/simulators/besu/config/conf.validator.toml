@@ -1,8 +1,9 @@
 genesis-file="/config/genesis.json"
 data-path="/data/"
 
-# min-gas-price=10000
 data-storage-format="FOREST"
+
+min-gas-price="0"
 
 rpc-http-api=["ETH","NET","WEB3","CLIQUE","DEBUG","MINER", "TRACE", "TXPOOL"]
 rpc-http-enabled=true
@@ -13,9 +14,6 @@ rpc-ws-api=["ETH","NET","WEB3","CLIQUE","DEBUG","MINER", "TRACE", "TXPOOL"]
 rpc-ws-enabled=true
 rpc-ws-host="0.0.0.0"
 
-# Transaction Pool
-tx-pool="sequenced"
-tx-pool-max-size=20000
-# tx-pool-no-local-priority=true
-
+tx-pool="SEQUENCED"
+tx-pool-max-size="20000"
 
