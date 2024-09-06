@@ -4,6 +4,7 @@
   "main": "index.js",
   "repository": "https://github.com/MASDXI/Forest.git",
   "license": "Apache-2.0",
+  "private": "true",
   "scripts": {
     "besu:start": "cd $(pwd)/test/simulators/besu && $(pwd)/scripts/start.sh",
     "besu:stop": "cd $(pwd)/test/simulators/besu && $(pwd)/scripts/stop.sh",
@@ -16,10 +17,8 @@
     "node:start": "npx hardhat node",
     "simulation": "echo \"Not implemented yet.\"",
     "test": "npx hardhat clean && npx hardhat test",
+    "test:parallel": "npx hardhat clean && npx hardhat test --parallel",
     "install:requirements": "pip install -r requirements.txt"
-  },
-  "dependencies": {
-    "hardhat": "^2.22.8"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-chai-matchers": "^2.0.0",
@@ -34,6 +33,7 @@
     "@typechain/hardhat": "^9.0.0",
     "chai": "^4.2.0",
     "ethers": "^6.4.0",
+    "hardhat": "^2.22.8",
     "hardhat-gas-reporter": "^2.2.1",
     "hardhat-ignore-warnings": "^0.2.11",
     "solidity-coverage": "^0.8.0",
