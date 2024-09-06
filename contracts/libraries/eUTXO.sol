@@ -309,7 +309,7 @@ library ExtendedUnspentTransactionOutput {
      * @param account The account address.
      * @return The size of transactions.
      */
-    function size(
+    function transactionSize(
         eUTXO storage self,
         address account
     ) internal view returns (uint256) {

@@ -11,6 +11,8 @@ const {
   getBytes,
   randomBytes,
   hexlify,
+  ZeroHash,
+  decodeBytes32String,
 } = require("ethers");
 
 describe("eUTXO CBDC", function () {
@@ -27,12 +29,47 @@ describe("eUTXO CBDC", function () {
     return { token, owner, otherAccount };
   }
 
+  describe("Transaction info", function () {
+    it("Should return right transaction information from given tokenId", async function () {
+      const { token, owner } = await loadFixture(deployTokenFixture);
+      const address = await owner.getAddress();
+      let tx = await token.mint(address, 1000n, encodeBytes32String("test"));
+      tx = await tx.wait();
+      const tokenId = tx.logs[0].args[0];
+      const txOwner = await token.transactionOwner(tokenId);
+      const txSpent = await token.transactionSpent(tokenId);
+      const txInput = await token.transactionInput(tokenId);
+      const txValue = await token.transactionValue(tokenId);
+      const txExtraData = await token.transactionExtraData(tokenId);
+      expect(txOwner).to.equal(address);
+      expect(txInput).to.equal(ZeroHash);
+      expect(txValue).to.equal(1000n);
+      expect(decodeBytes32String(txExtraData)).to.equal("test");
+      expect(txSpent).to.equal(false);
+    });
+
+    it("Should return right transaction size from given address", async function () {
+      const { token, owner } = await loadFixture(deployTokenFixture);
+      const address = await owner.getAddress();
+      await token.mint(address, 1000n, encodeBytes32String("test"));
+      const txSize = await token.transactionSize(address);
+      expect(txSize).to.equal(1);
+    });
+  });
+
   describe("Transfers", function () {
     it("Should mint the funds to the owner", async function () {
       const { token, owner } = await loadFixture(deployTokenFixture);
       const address = await owner.getAddress();
-      await token.mint(address, 1000n, encodeBytes32String("test"));
+      let tx = await token.mint(address, 1000n, encodeBytes32String("test"));
+      tx = await tx.wait();
+      const tokenId = tx.logs[0].args[0];
+      const { input, value, extraData, spent } = await token.transaction(tokenId);
       expect(await token.balanceOf(address)).to.equal(1000n);
+      expect(input).to.equal(ZeroHash);
+      expect(value).to.equal(1000n);
+      expect(decodeBytes32String(extraData)).to.equal("test");
+      expect(spent).to.equal(false);
     });
 
     it("Should transfer the funds from the account to other account", async function () {

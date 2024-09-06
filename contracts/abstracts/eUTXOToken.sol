@@ -159,6 +159,77 @@ abstract contract eUTXOToken is ERC20, IUTXOERC20 {
     }
 
     /**
+     * @dev Internal function to fetch a transaction details based on the token ID.
+     * @param tokenId The identifier of the token transaction.
+     * @return A `Transaction` structure containing transaction details.
+     */
+    function transaction(
+        bytes32 tokenId
+    )
+        public
+        view
+        returns (ExtendedUnspentTransactionOutput.Transaction memory)
+    {
+        return _transaction(tokenId);
+    }
+
+    /**
+     * @dev Function to fecth the number of UTXOs (Unspent Transaction Outputs) associated with a given account.
+     * @param account The address of the account for which to fetch the UTXO transaction size.
+     * @return The number of UTXOs associated with the account.
+     */
+    function transactionSize(address account) public view returns (uint256) {
+        return _eUTXO.transactionSize(account);
+    }
+
+    /**
+     * @dev Function to the value of a UTXO transaction identified by its token ID.
+     * @param tokenId The identifier of the UTXO transaction.
+     * @return The value of the UTXO associated with the specified token ID.
+     */
+    function transactionValue(bytes32 tokenId) public view returns (uint256) {
+        return _eUTXO.transactionValue(tokenId);
+    }
+
+    /**
+     * @dev Function to fetch the input of a UTXO transaction identified by its token ID.
+     * @param tokenId The identifier of the UTXO transaction.
+     * @return The input associated with the specified UTXO token ID.
+     */
+    function transactionInput(bytes32 tokenId) public view returns (bytes32) {
+        return _eUTXO.transactionInput(tokenId);
+    }
+
+    /**
+     * @dev Function to fetch the owner of a UTXO transaction identified by its token ID.
+     * @param tokenId The identifier of the UTXO transaction.
+     * @return The address of the owner of the UTXO associated with the specified token ID.
+     */
+    function transactionOwner(bytes32 tokenId) public view returns (address) {
+        return _eUTXO.transactionOwner(tokenId);
+    }
+
+    /**
+     * @dev Function to checks whether a UTXO transaction has been spent, identified by its token ID.
+     * @param tokenId The identifier of the UTXO transaction.
+     * @return True if the UTXO associated with the specified token ID has been spent, false otherwise.
+     */
+    function transactionSpent(bytes32 tokenId) public view returns (bool) {
+        return _eUTXO.transactionSpent(tokenId);
+    }
+
+    /**
+     * @dev Function to fetch the extra data associated with a UTXO transaction identified by its token ID.
+     * @param tokenId The identifier of the UTXO transaction.
+     * @return The extra data stored for the UTXO associated with the specified token ID.
+     */
+    function transactionExtraData(
+        bytes32 tokenId
+    ) public view returns (bytes32) {
+        return _eUTXO.transactionExtraData(tokenId);
+    }
+
+    /**
      * @dev Function to transfer tokens (not supported in this contract).
      */
     function transfer(

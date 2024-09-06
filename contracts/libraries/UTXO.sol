@@ -291,7 +291,7 @@ library UnspentTransactionOutput {
      * @param account The account address.
      * @return The size of transactions.
      */
-    function size(
+    function transactionSize(
         UTXO storage self,
         address account
     ) internal view returns (uint256) {

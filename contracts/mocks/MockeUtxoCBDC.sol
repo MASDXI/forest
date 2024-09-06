@@ -56,11 +56,15 @@ contract MockeUtxoCBDC is
     {
         /// @notice ERC20 Transfer also emit.
         super._transfer(from, to, tokenId, value, signature);
-        
+
         emit Transfer(from, to, _transaction(tokenId).extraData, value);
     }
 
     function mint(address account, uint256 value, bytes32 extraData) public {
         _mintTransaction(account, value, extraData);
+    }
+
+    function burn(address account, uint256 value, bytes32 tokenId) public {
+        _burnTransaction(account, tokenId, value);
     }
 }

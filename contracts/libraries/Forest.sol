@@ -274,7 +274,7 @@ library Forest {
      * @param account The address of the account.
      * @return The size (number of transactions) for the account.
      */
-    function size(
+    function transactionSize(
         Tree storage self,
         address account
     ) internal view returns (uint256) {

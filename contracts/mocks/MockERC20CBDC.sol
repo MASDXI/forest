@@ -17,7 +17,7 @@ contract MockERC20CBDC is ERC20, FreezeAddress, FreezeBalance {
         }
         _;
     }
-
+    
     function transfer(
         address to,
         uint256 value
