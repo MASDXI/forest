@@ -1,22 +1,39 @@
-genesis-file="/config/genesis.json"
-data-path="/data/"
+[data]
+genesis-file = "/config/genesis.json"
+data-path = "/data/"
+data-storage-format = "FOREST"
 
-data-storage-format="FOREST"
+[rpc]
+rpc-http-api = [
+    "ETH",
+    "NET",
+    "WEB3",
+    "CLIQUE",
+    "DEBUG",
+    "MINER",
+    "TRACE",
+    "TXPOOL",
+]
+rpc-http-enabled = true
+rpc-http-host = "0.0.0.0"
+rpc-http-cors-origins = ["*"]
+rpc-ws-api = [
+    "ETH",
+    "NET",
+    "WEB3",
+    "CLIQUE",
+    "DEBUG",
+    "MINER",
+    "TRACE",
+    "TXPOOL",
+]
+rpc-ws-enabled = true
+rpc-ws-host = "0.0.0.0"
 
-rpc-http-api=["ETH","NET","WEB3","CLIQUE","DEBUG","MINER", "TRACE", "TXPOOL"]
-rpc-http-enabled=true
-rpc-http-host="0.0.0.0"
-rpc-http-cors-origins=["*"]
+[txpool]
+tx-pool = "SEQUENCED"
+tx-pool-max-size = "20000"
 
-rpc-ws-api=["ETH","NET","WEB3","CLIQUE","DEBUG","MINER", "TRACE", "TXPOOL"]
-rpc-ws-enabled=true
-rpc-ws-host="0.0.0.0"
-
-tx-pool="SEQUENCED"
-tx-pool-max-size="20000"
-
-Xdns-enabled="true"
-Xdns-update-enabled="true"
-
-
-
+[experiment]
+Xdns-enabled = "true"
+Xdns-update-enabled = "true"
