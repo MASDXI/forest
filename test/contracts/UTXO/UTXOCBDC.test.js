@@ -53,6 +53,34 @@ describe("UTXO CBDC", function () {
       );
       expect(await token.balanceOf(otherAddress)).to.equal(1000n);
     });
+
+    it("Should fail on transfer with standard ERC20 interface", async function () {
+      const { token, owner, otherAccount } = await loadFixture(
+        deployTokenFixture
+      );
+      const address = await owner.getAddress();
+      const otherAddress = await otherAccount.getAddress();
+      await token.mint(address, 1000n);
+      await expect(
+        token["transfer(address,uint256)"](otherAddress, 1000n)
+      ).to.be.revertedWithCustomError(token, "ERC20TransferNotSupported");
+    });
+
+    it("Should fail on transferFrom with standard ERC20 interface", async function () {
+      const { token, owner, otherAccount } = await loadFixture(
+        deployTokenFixture
+      );
+      const address = await owner.getAddress();
+      const otherAddress = await otherAccount.getAddress();
+      await token.mint(address, 1000n);
+      await expect(
+        token["transferFrom(address,address,uint256)"](
+          address,
+          otherAddress,
+          1000n
+        )
+      ).to.be.revertedWithCustomError(token, "ERC20TransferFromNotSupported");
+    });
   });
 
   describe("Restrict", function () {
@@ -82,7 +110,12 @@ describe("UTXO CBDC", function () {
       await expect(
         token
           .connect(otherAccount)
-          ["transfer(address,bytes32,uint256,bytes)"](address, tokenId, 10n, signature)
+          ["transfer(address,bytes32,uint256,bytes)"](
+            address,
+            tokenId,
+            10n,
+            signature
+          )
       ).to.be.revertedWithCustomError(token, "TokenFrozen");
     });
   });

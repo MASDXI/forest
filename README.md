@@ -82,7 +82,7 @@ However it's doesn't need to be store in sorted list. there is possible solution
 - Third create a stateful pre-compiled contract that fully functional same as the smart contract specification.
 
 Learn more about [pre-compiled contract](https://www.rareskills.io/post/solidity-precompiles)
- 
+
 The `Forest` project addresses significant challenge, particularly state bloat and [dust](https://www.investopedia.com/terms/b/bitcoin-dust.asp) transaction.  
 Merging multiple small transactions into a single larger transaction helps reduce the number of entries in the blockchain’s state, thereby minimizing state growth.  
 However, this process can complicate traceability, as it obscures the individual histories of the merged transactions.  

@@ -16,8 +16,8 @@ module.exports = {
   },
   networks: {
     hardhat: {
-      minGasPrice: 0,
       gasPrice: 0,
+      initialBaseFeePerGas: 0,
       blockGasLimit: 100_000_000,
       mining: {
         mempool: {
