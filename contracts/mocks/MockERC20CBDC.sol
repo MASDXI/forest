@@ -10,13 +10,6 @@ contract MockERC20CBDC is ERC20, FreezeAddress, FreezeBalance {
         string memory name_,
         string memory symbol_
     ) ERC20(name_, symbol_) {}
-
-    modifier checkFrozenAddress(address from, address to) {
-        if (isFrozen(from) || isFrozen(to)) {
-            revert AddressFrozen();
-        }
-        _;
-    }
     
     function transfer(
         address to,
@@ -38,8 +31,8 @@ contract MockERC20CBDC is ERC20, FreezeAddress, FreezeBalance {
     )
         public
         override
-        checkFrozenBalance(msg.sender, balanceOf(msg.sender), value)
-        checkFrozenAddress(msg.sender, to)
+        checkFrozenBalance(from, balanceOf(from), value)
+        checkFrozenAddress(from, to)
         returns (bool)
     {
         return super.transferFrom(from, to, value);

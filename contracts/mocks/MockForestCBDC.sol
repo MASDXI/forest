@@ -26,13 +26,6 @@ contract MockForestCBDC is
         string memory symbol_
     ) ForestToken(name_, symbol_) {}
 
-    modifier checkFrozenAddress(address from, address to) {
-        if (isFrozen(from) || isFrozen(to)) {
-            revert AddressFrozen();
-        }
-        _;
-    }
-
     modifier checkFrozenRootOrParent(address account, bytes32 tokenId) {
         Forest.Transaction memory transaction = _transaction(account, tokenId);
         if (

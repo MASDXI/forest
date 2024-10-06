@@ -39,5 +39,23 @@ describe("ERC20 CBDC", function () {
       await token.transfer(otherAddress, 1000n);
       expect(await token.balanceOf(otherAddress)).to.equal(1000n);
     });
+
+    it("Should transferFrom the funds from the account to other account", async function () {
+      const { token, owner, otherAccount } = await loadFixture(
+        deployTokenFixture
+      );
+      const address = await owner.getAddress();
+      const otherAddress = await otherAccount.getAddress();
+      console.log("🚀 ~ otherAddress:", otherAddress)
+      await token.mint(address, 1000n);
+      await token.connect(owner).approve(otherAddress, 1000n);
+      expect(await token.allowance(address, otherAddress)).to.equal(1000n);
+      await token.connect(otherAccount).transferFrom(address, otherAddress, 1000n);
+      expect(await token.balanceOf(otherAddress)).to.equal(1000n);
+    });
   });
+
+  // extensions
+  // transfer
+  // transferFrom
 });

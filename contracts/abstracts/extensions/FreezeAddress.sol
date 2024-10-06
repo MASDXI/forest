@@ -26,6 +26,14 @@ abstract contract FreezeAddress {
      */
     event FrozeAddress(address indexed account, bool indexed auth);
 
+
+    modifier checkFrozenAddress(address from, address to) {
+        if (isFrozen(from) || isFrozen(to)) {
+            revert AddressFrozen();
+        }
+        _;
+    }
+
     /**
      * @notice Internal function to update the frozen status of an address.
      * @param account The address to update.

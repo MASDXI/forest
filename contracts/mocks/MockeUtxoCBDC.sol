@@ -25,13 +25,6 @@ contract MockeUtxoCBDC is
         string memory symbol_
     ) eUTXOToken(name_, symbol_) {}
 
-    modifier checkFrozenAddress(address from, address to) {
-        if (isFrozen(from) || isFrozen(to)) {
-            revert AddressFrozen();
-        }
-        _;
-    }
-
     modifier checkFrozenRoot(bytes32 tokenId) {
         if (isTokenFrozen(_transaction(tokenId).extraData)) {
             revert TokenFrozen();

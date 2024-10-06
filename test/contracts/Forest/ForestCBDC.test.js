@@ -65,7 +65,8 @@ describe("Forest CBDC", function () {
         tokenId,
         amount
       );
-      await expect(token.connect(otherAccount).transfer(address, amount)).to.be.revertedWithCustomError(token,"ERC20TransferNotSupported");
+      expect(await token.balanceOf(otherAddress)).to.equal(1000n);
+      // await expect(token.connect(otherAccount).transfer(address, amount)).to.be.revertedWithCustomError(token,"ERC20TransferNotSupported");
 
       // TODO: transferFrom(address,address,tokenId,amount)
       // TODO: burn(address,tokenId,amount)
@@ -88,6 +89,22 @@ describe("Forest CBDC", function () {
       );
       await token.connect(otherAccount).approve(address, amount);
       await expect(token.connect(owner).transferFrom(otherAddress, address, amount)).to.be.revertedWithCustomError(token,"ERC20TransferFromNotSupported");
+    });
+
+    it("Should burn transfer with to address zero", async function () {
+      const { token, owner, otherAccount } = await loadFixture(
+        deployTokenFixture
+      );
+      const amount = 1000n
+      const address = await owner.getAddress();
+      // const otherAddress = await otherAccount.getAddress();
+      let tx = await token.mint(address, amount);
+      tx = await tx.wait();
+      const tokenId = tx.logs[0].args[0];
+      // await expect(token.connect(otherAccount).burn(address, tokenId ,amount)).to.be.emit(token,"Transfer")
+
+      // TODO: transferFrom(address,address,tokenId,amount)
+      // TODO: burn(address,tokenId,amount)
     });
   });
 

@@ -12,13 +12,6 @@ contract MockUtxoCBDC is UTXOToken, FreezeAddress, FreezeBalance, FreezeToken {
         string memory symbol_
     ) UTXOToken(name_, symbol_) {}
 
-    modifier checkFrozenAddress(address from, address to) {
-        if (isFrozen(from) || isFrozen(to)) {
-            revert AddressFrozen();
-        }
-        _;
-    }
-
     function _transfer(
         address from,
         address to,
