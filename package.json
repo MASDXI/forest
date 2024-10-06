@@ -32,10 +32,14 @@
     "@typechain/ethers-v6": "^0.5.0",
     "@typechain/hardhat": "^9.0.0",
     "chai": "^4.2.0",
+    "eslint": "^9.12.0",
     "ethers": "^6.4.0",
     "hardhat": "^2.22.8",
     "hardhat-gas-reporter": "^2.2.1",
     "hardhat-ignore-warnings": "^0.2.11",
+    "lint": "^0.8.19",
+    "prettier": "^3.3.3",
+    "prettier-plugin-solidity": "^1.4.1",
     "solidity-coverage": "^0.8.0",
     "typechain": "^8.3.0"
   }

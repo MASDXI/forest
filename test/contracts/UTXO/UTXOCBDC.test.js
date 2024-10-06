@@ -68,9 +68,8 @@ describe("UTXO CBDC", function () {
     });
 
     it("Should transfer the funds from the account to other account", async function () {
-      const { token, owner, otherAccount } = await loadFixture(
-        deployTokenFixture
-      );
+      const { token, owner, otherAccount } =
+        await loadFixture(deployTokenFixture);
       const address = await owner.getAddress();
       const otherAddress = await otherAccount.getAddress();
       let tx = await token.mint(address, 1000n);
@@ -82,27 +81,25 @@ describe("UTXO CBDC", function () {
         otherAddress,
         tokenId,
         1000n,
-        signature
+        signature,
       );
       expect(await token.balanceOf(otherAddress)).to.equal(1000n);
     });
 
     it("Should fail on transfer with standard ERC20 interface", async function () {
-      const { token, owner, otherAccount } = await loadFixture(
-        deployTokenFixture
-      );
+      const { token, owner, otherAccount } =
+        await loadFixture(deployTokenFixture);
       const address = await owner.getAddress();
       const otherAddress = await otherAccount.getAddress();
       await token.mint(address, 1000n);
       await expect(
-        token["transfer(address,uint256)"](otherAddress, 1000n)
+        token["transfer(address,uint256)"](otherAddress, 1000n),
       ).to.be.revertedWithCustomError(token, "ERC20TransferNotSupported");
     });
 
     it("Should fail on transferFrom with standard ERC20 interface", async function () {
-      const { token, owner, otherAccount } = await loadFixture(
-        deployTokenFixture
-      );
+      const { token, owner, otherAccount } =
+        await loadFixture(deployTokenFixture);
       const address = await owner.getAddress();
       const otherAddress = await otherAccount.getAddress();
       await token.mint(address, 1000n);
@@ -110,17 +107,30 @@ describe("UTXO CBDC", function () {
         token["transferFrom(address,address,uint256)"](
           address,
           otherAddress,
-          1000n
-        )
+          1000n,
+        ),
       ).to.be.revertedWithCustomError(token, "ERC20TransferFromNotSupported");
+    });
+
+    it("Should burn transfer with to address zero", async function () {
+      const { token, owner, otherAccount } =
+        await loadFixture(deployTokenFixture);
+      const amount = 1000n;
+      const address = await owner.getAddress();
+      let tx = await token.mint(address, amount);
+      tx = await tx.wait();
+      const tokenId = tx.logs[0].args[0];
+      await token.burn(address, amount, tokenId);
+      expect(await token.balanceOf(address)).to.equal(0);
+      // TODO: transferFrom(address,address,tokenId,amount)
+      // TODO: burn(address,tokenId,amount)
     });
   });
 
   describe("Restrict", function () {
     it("Should restrict transfer the funds to the other account by frozen tokenId", async function () {
-      const { token, owner, otherAccount } = await loadFixture(
-        deployTokenFixture
-      );
+      const { token, owner, otherAccount } =
+        await loadFixture(deployTokenFixture);
       const address = await owner.getAddress();
       const otherAddress = await otherAccount.getAddress();
       let tx = await token.mint(address, 1000n);
@@ -132,7 +142,7 @@ describe("UTXO CBDC", function () {
         otherAddress,
         tokenId,
         100n,
-        signature
+        signature,
       );
       tx = await tx.wait();
       tokenId = tx.logs[1].args[0];
@@ -143,12 +153,9 @@ describe("UTXO CBDC", function () {
       await expect(
         token
           .connect(otherAccount)
-          ["transfer(address,bytes32,uint256,bytes)"](
-            address,
-            tokenId,
-            10n,
-            signature
-          )
+          [
+            "transfer(address,bytes32,uint256,bytes)"
+          ](address, tokenId, 10n, signature),
       ).to.be.revertedWithCustomError(token, "TokenFrozen");
     });
   });

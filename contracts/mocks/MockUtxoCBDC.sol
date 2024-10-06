@@ -7,10 +7,7 @@ import "../abstracts/extensions/FreezeBalance.sol";
 import "../abstracts/extensions/FreezeToken.sol";
 
 contract MockUtxoCBDC is UTXOToken, FreezeAddress, FreezeBalance, FreezeToken {
-    constructor(
-        string memory name_,
-        string memory symbol_
-    ) UTXOToken(name_, symbol_) {}
+    constructor(string memory name_, string memory symbol_) UTXOToken(name_, symbol_) {}
 
     function _transfer(
         address from,

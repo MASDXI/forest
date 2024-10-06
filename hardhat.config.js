@@ -12,7 +12,7 @@ module.exports = {
         runs: 200,
       },
       viaIR: true,
-    }
+    },
   },
   networks: {
     hardhat: {
@@ -21,10 +21,10 @@ module.exports = {
       blockGasLimit: 100_000_000,
       mining: {
         mempool: {
-          order: "fifo"
-        }
-      }
-    }
+          order: "fifo",
+        },
+      },
+    },
   },
   gasReporter: {
     enabled: true,

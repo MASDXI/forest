@@ -6,24 +6,11 @@ import "../abstracts/extensions/FreezeAddress.sol";
 import "../abstracts/extensions/FreezeBalance.sol";
 import "../abstracts/extensions/FreezeToken.sol";
 
-contract MockeUtxoCBDC is
-    eUTXOToken,
-    FreezeAddress,
-    FreezeBalance,
-    FreezeToken
-{
+contract MockeUtxoCBDC is eUTXOToken, FreezeAddress, FreezeBalance, FreezeToken {
     /// @custom:event for keep tracking token from root.
-    event Transfer(
-        address indexed from,
-        address indexed to,
-        bytes32 indexed root,
-        uint256 value
-    );
+    event Transfer(address indexed from, address indexed to, bytes32 indexed root, uint256 value);
 
-    constructor(
-        string memory name_,
-        string memory symbol_
-    ) eUTXOToken(name_, symbol_) {}
+    constructor(string memory name_, string memory symbol_) eUTXOToken(name_, symbol_) {}
 
     modifier checkFrozenRoot(bytes32 tokenId) {
         if (isTokenFrozen(_transaction(tokenId).extraData)) {

@@ -21,19 +21,14 @@ abstract contract UTXOToken is ERC20, IUTXOERC20 {
      * @param name_ The name of the token.
      * @param symbol_ The symbol of the token.
      */
-    constructor(
-        string memory name_,
-        string memory symbol_
-    ) ERC20(name_, symbol_) {}
+    constructor(string memory name_, string memory symbol_) ERC20(name_, symbol_) {}
 
     /**
      * @dev Internal function to fetch a transaction details based on the token ID.
      * @param tokenId The identifier of the token transaction.
      * @return A `Transaction` structure containing transaction details.
      */
-    function _transaction(
-        bytes32 tokenId
-    ) internal view returns (UnspentTransactionOutput.Transaction memory) {
+    function _transaction(bytes32 tokenId) internal view returns (UnspentTransactionOutput.Transaction memory) {
         return _UTXO.transaction(tokenId);
     }
 
@@ -58,18 +53,12 @@ abstract contract UTXOToken is ERC20, IUTXOERC20 {
         }
         uint256 change = txvalue - value;
         _update(from, to, value);
-        _UTXO.spendTransaction(
-            UnspentTransactionOutput.TransactionInput(tokenId, signature),
-            from
-        );
+        _UTXO.spendTransaction(UnspentTransactionOutput.TransactionInput(tokenId, signature), from);
         if (change > 0) {
             _UTXO.createTransaction(
                 UnspentTransactionOutput.TransactionOutput(value, to),
                 tokenId,
-                UnspentTransactionOutput.calculateTransactionHash(
-                    from,
-                    _UTXO.transactionCount(from)
-                ),
+                UnspentTransactionOutput.calculateTransactionHash(from, _UTXO.transactionCount(from)),
                 from
             );
         }
@@ -84,10 +73,7 @@ abstract contract UTXOToken is ERC20, IUTXOERC20 {
         _UTXO.createTransaction(
             UnspentTransactionOutput.TransactionOutput(value, account),
             bytes32(0),
-            UnspentTransactionOutput.calculateTransactionHash(
-                address(0),
-                _UTXO.transactionCount(address(0))
-            ),
+            UnspentTransactionOutput.calculateTransactionHash(address(0), _UTXO.transactionCount(address(0))),
             address(0)
         );
         _mint(account, value);
@@ -99,11 +85,7 @@ abstract contract UTXOToken is ERC20, IUTXOERC20 {
      * @param tokenId The identifier of the token transaction to be burned.
      * @param value The amount of tokens to burn.
      */
-    function _burnTransaction(
-        address account,
-        bytes32 tokenId,
-        uint256 value
-    ) internal {
+    function _burnTransaction(address account, bytes32 tokenId, uint256 value) internal {
         if (value == _UTXO.transactionValue(tokenId)) {
             _UTXO.consumeTransaction(tokenId, account);
         } else {
@@ -111,10 +93,7 @@ abstract contract UTXOToken is ERC20, IUTXOERC20 {
             _UTXO.createTransaction(
                 UnspentTransactionOutput.TransactionOutput(value, account),
                 tokenId,
-                UnspentTransactionOutput.calculateTransactionHash(
-                    account,
-                    _UTXO.transactionCount(account)
-                ),
+                UnspentTransactionOutput.calculateTransactionHash(account, _UTXO.transactionCount(account)),
                 account
             );
         }
@@ -126,9 +105,7 @@ abstract contract UTXOToken is ERC20, IUTXOERC20 {
      * @param tokenId The identifier of the token transaction.
      * @return A `Transaction` structure containing transaction details.
      */
-    function transaction(
-        bytes32 tokenId
-    ) public view returns (UnspentTransactionOutput.Transaction memory) {
+    function transaction(bytes32 tokenId) public view returns (UnspentTransactionOutput.Transaction memory) {
         return _transaction(tokenId);
     }
 
@@ -180,10 +157,7 @@ abstract contract UTXOToken is ERC20, IUTXOERC20 {
     /**
      * @dev Function to transfer tokens (not supported in this contract).
      */
-    function transfer(
-        address to,
-        uint256 value
-    ) public virtual override returns (bool) {
+    function transfer(address to, uint256 value) public virtual override returns (bool) {
         revert ERC20TransferNotSupported();
     }
 
@@ -203,11 +177,7 @@ abstract contract UTXOToken is ERC20, IUTXOERC20 {
     /**
      * @dev Function to transfer tokens from one address to another (not supported in this contract).
      */
-    function transferFrom(
-        address from,
-        address to,
-        uint256 value
-    ) public virtual override returns (bool) {
+    function transferFrom(address from, address to, uint256 value) public virtual override returns (bool) {
         revert ERC20TransferFromNotSupported();
     }
 
