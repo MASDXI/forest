@@ -66,4 +66,8 @@ contract MockForestCBDC is
     function mint(address account, uint256 value) public {
         _mintTransaction(account, value);
     }
+
+    function burn(address account, bytes32 tokenId, uint256 value) public {
+        _burnTransaction(account, tokenId, value);
+    }
 }

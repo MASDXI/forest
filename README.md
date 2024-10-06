@@ -75,9 +75,10 @@ Introduce implementation call `Forest` used the way to modified the state to kee
 
 Currently `Forest` not 100% compatible with existing `ERC20` standard.
 To complete and fully supported `ERC20` interface `Forest` require to have automatically select and spent the transaction.  
-However it's doesn't need to be store in sorted list. there is possible solution to be done.
+However it's doesn't need to be store each transaction in sorted list.
 
-- First in smart contract, It's can be done with `FIFO` or First-In-First-Out style which is can be done in smart contract but should be avoiding the `gasUsed`.
+- Rewrite the contract not inherit ERC20 from `@openzeppelin/contracts` can reduce unnecessary `gasUsed`.
+- Adopting `FIFO` or First-In-First-Out style which is can be done in smart contract but should be considering the `gasUsed`.
 - Second off-load heavy computation from the smart contract to a custom pre-compiled contract.
 - Third create a stateful pre-compiled contract that fully functional same as the smart contract specification.
 

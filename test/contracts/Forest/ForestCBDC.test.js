@@ -49,8 +49,49 @@ describe("Forest CBDC", function () {
       );
       expect(await token.balanceOf(otherAddress)).to.equal(1000n);
     });
+
+    it("Should not transfer with IERC20 transfer", async function () {
+      const { token, owner, otherAccount } = await loadFixture(
+        deployTokenFixture
+      );
+      const amount = 1000n
+      const address = await owner.getAddress();
+      const otherAddress = await otherAccount.getAddress();
+      let tx = await token.mint(address, amount);
+      tx = await tx.wait();
+      const tokenId = tx.logs[0].args[0];
+      await token["transfer(address,bytes32,uint256)"](
+        otherAddress,
+        tokenId,
+        amount
+      );
+      await expect(token.connect(otherAccount).transfer(address, amount)).to.be.revertedWithCustomError(token,"ERC20TransferNotSupported");
+
+      // TODO: transferFrom(address,address,tokenId,amount)
+      // TODO: burn(address,tokenId,amount)
+    });
+
+    it("Should not transferFrom with IERC20 transferFrom", async function () {
+      const { token, owner, otherAccount } = await loadFixture(
+        deployTokenFixture
+      );
+      const amount = 1000n
+      const address = await owner.getAddress();
+      const otherAddress = await otherAccount.getAddress();
+      let tx = await token.mint(address, amount);
+      tx = await tx.wait();
+      const tokenId = tx.logs[0].args[0];
+      await token["transfer(address,bytes32,uint256)"](
+        otherAddress,
+        tokenId,
+        amount
+      );
+      await token.connect(otherAccount).approve(address, amount);
+      await expect(token.connect(owner).transferFrom(otherAddress, address, amount)).to.be.revertedWithCustomError(token,"ERC20TransferFromNotSupported");
+    });
   });
 
+  // extensions
   describe("Restrict", function () {
     it("Should restrict transfer the funds to the other account by frozen tokenId", async function () {
       const { token, owner, otherAccount } = await loadFixture(

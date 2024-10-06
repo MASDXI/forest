@@ -64,6 +64,10 @@ contract MockeUtxoCBDC is
         _mintTransaction(account, value, extraData);
     }
 
+    function mint(address account, uint256 value) public {
+        _mintTransaction(account, value);
+    }
+
     function burn(address account, uint256 value, bytes32 tokenId) public {
         _burnTransaction(account, tokenId, value);
     }
