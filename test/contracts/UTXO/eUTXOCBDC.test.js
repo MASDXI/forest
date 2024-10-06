@@ -1,9 +1,6 @@
-const {
-  time,
-  loadFixture,
-} = require("@nomicfoundation/hardhat-toolbox/network-helpers");
-const { anyValue } = require("@nomicfoundation/hardhat-chai-matchers/withArgs");
-const { expect } = require("chai");
+const {time, loadFixture} = require("@nomicfoundation/hardhat-toolbox/network-helpers");
+const {anyValue} = require("@nomicfoundation/hardhat-chai-matchers/withArgs");
+const {expect} = require("chai");
 const {
   encodeBytes32String,
   ZeroAddress,
@@ -26,18 +23,14 @@ describe("eUTXO CBDC", function () {
     const contract = await ethers.getContractFactory("MockeUtxoCBDC");
     const token = await contract.deploy("United States dollar", "USD");
 
-    return { token, owner, otherAccount };
+    return {token, owner, otherAccount};
   }
 
   describe("Transaction info", function () {
     it("Should return right transaction information from given tokenId", async function () {
-      const { token, owner } = await loadFixture(deployTokenFixture);
+      const {token, owner} = await loadFixture(deployTokenFixture);
       const address = await owner.getAddress();
-      let tx = await token["mint(address,uint256,bytes32)"](
-        address,
-        1000n,
-        encodeBytes32String("test"),
-      );
+      let tx = await token["mint(address,uint256,bytes32)"](address, 1000n, encodeBytes32String("test"));
       tx = await tx.wait();
       const tokenId = tx.logs[0].args[0];
       const txOwner = await token.transactionOwner(tokenId);
@@ -53,13 +46,9 @@ describe("eUTXO CBDC", function () {
     });
 
     it("Should return right transaction size from given address", async function () {
-      const { token, owner } = await loadFixture(deployTokenFixture);
+      const {token, owner} = await loadFixture(deployTokenFixture);
       const address = await owner.getAddress();
-      await token["mint(address,uint256,bytes32)"](
-        address,
-        1000n,
-        encodeBytes32String("test"),
-      );
+      await token["mint(address,uint256,bytes32)"](address, 1000n, encodeBytes32String("test"));
       const txSize = await token.transactionSize(address);
       expect(txSize).to.equal(1);
     });
@@ -67,17 +56,12 @@ describe("eUTXO CBDC", function () {
 
   describe("Transfers", function () {
     it("Should mint the funds to the owner", async function () {
-      const { token, owner } = await loadFixture(deployTokenFixture);
+      const {token, owner} = await loadFixture(deployTokenFixture);
       const address = await owner.getAddress();
-      let tx = await token["mint(address,uint256,bytes32)"](
-        address,
-        1000n,
-        encodeBytes32String("test"),
-      );
+      let tx = await token["mint(address,uint256,bytes32)"](address, 1000n, encodeBytes32String("test"));
       tx = await tx.wait();
       const tokenId = tx.logs[0].args[0];
-      const { input, value, extraData, spent } =
-        await token.transaction(tokenId);
+      const {input, value, extraData, spent} = await token.transaction(tokenId);
       expect(await token.balanceOf(address)).to.equal(1000n);
       expect(input).to.equal(ZeroHash);
       expect(value).to.equal(1000n);
@@ -86,65 +70,41 @@ describe("eUTXO CBDC", function () {
     });
 
     it("Should transfer the funds from the account to other account", async function () {
-      const { token, owner, otherAccount } =
-        await loadFixture(deployTokenFixture);
+      const {token, owner, otherAccount} = await loadFixture(deployTokenFixture);
       const address = await owner.getAddress();
       const otherAddress = await otherAccount.getAddress();
-      let tx = await token["mint(address,uint256,bytes32)"](
-        address,
-        1000n,
-        encodeBytes32String("test"),
-      );
+      let tx = await token["mint(address,uint256,bytes32)"](address, 1000n, encodeBytes32String("test"));
       tx = await tx.wait();
       const tokenId = tx.logs[0].args[0];
       const hashed = solidityPackedKeccak256(["bytes32"], [tokenId]);
       const signature = await owner.signMessage(getBytes(hashed));
-      await token["transfer(address,bytes32,uint256,bytes)"](
-        otherAddress,
-        tokenId,
-        1000n,
-        signature,
-      );
+      await token["transfer(address,bytes32,uint256,bytes)"](otherAddress, tokenId, 1000n, signature);
       expect(await token.balanceOf(otherAddress)).to.equal(1000n);
     });
 
     it("Should fail on transfer with standard ERC20 interface", async function () {
-      const { token, owner, otherAccount } =
-        await loadFixture(deployTokenFixture);
+      const {token, owner, otherAccount} = await loadFixture(deployTokenFixture);
       const address = await owner.getAddress();
       const otherAddress = await otherAccount.getAddress();
-      await token["mint(address,uint256,bytes32)"](
-        address,
-        1000n,
-        encodeBytes32String("test"),
+      await token["mint(address,uint256,bytes32)"](address, 1000n, encodeBytes32String("test"));
+      await expect(token["transfer(address,uint256)"](otherAddress, 1000n)).to.be.revertedWithCustomError(
+        token,
+        "ERC20TransferNotSupported",
       );
-      await expect(
-        token["transfer(address,uint256)"](otherAddress, 1000n),
-      ).to.be.revertedWithCustomError(token, "ERC20TransferNotSupported");
     });
 
     it("Should fail on transferFrom with standard ERC20 interface", async function () {
-      const { token, owner, otherAccount } =
-        await loadFixture(deployTokenFixture);
+      const {token, owner, otherAccount} = await loadFixture(deployTokenFixture);
       const address = await owner.getAddress();
       const otherAddress = await otherAccount.getAddress();
-      await token["mint(address,uint256,bytes32)"](
-        address,
-        1000n,
-        encodeBytes32String("test"),
-      );
+      await token["mint(address,uint256,bytes32)"](address, 1000n, encodeBytes32String("test"));
       await expect(
-        token["transferFrom(address,address,uint256)"](
-          address,
-          otherAddress,
-          1000n,
-        ),
+        token["transferFrom(address,address,uint256)"](address, otherAddress, 1000n),
       ).to.be.revertedWithCustomError(token, "ERC20TransferFromNotSupported");
     });
 
     it("Should burn transfer with to address zero", async function () {
-      const { token, owner, otherAccount } =
-        await loadFixture(deployTokenFixture);
+      const {token, owner, otherAccount} = await loadFixture(deployTokenFixture);
       const amount = 1000n;
       const address = await owner.getAddress();
       let tx = await token.mint(address, amount);
@@ -159,25 +119,15 @@ describe("eUTXO CBDC", function () {
 
   describe("Restrict", function () {
     it("Should restrict transfer the funds to the other account by frozen tokenId", async function () {
-      const { token, owner, otherAccount } =
-        await loadFixture(deployTokenFixture);
+      const {token, owner, otherAccount} = await loadFixture(deployTokenFixture);
       const address = await owner.getAddress();
       const otherAddress = await otherAccount.getAddress();
-      let tx = await token["mint(address,uint256,bytes32)"](
-        address,
-        1000n,
-        encodeBytes32String("test"),
-      );
+      let tx = await token["mint(address,uint256,bytes32)"](address, 1000n, encodeBytes32String("test"));
       tx = await tx.wait();
       let tokenId = tx.logs[0].args[0];
       let hashed = solidityPackedKeccak256(["bytes32"], [tokenId]);
       let signature = await owner.signMessage(getBytes(hashed));
-      tx = await token["transfer(address,bytes32,uint256,bytes)"](
-        otherAddress,
-        tokenId,
-        100n,
-        signature,
-      );
+      tx = await token["transfer(address,bytes32,uint256,bytes)"](otherAddress, tokenId, 100n, signature);
       tx = await tx.wait();
       tokenId = tx.logs[1].args[0];
       hashed = solidityPackedKeccak256(["bytes32"], [tokenId]);
@@ -185,17 +135,12 @@ describe("eUTXO CBDC", function () {
       expect(await token.balanceOf(otherAddress)).to.equal(100n);
       await token.freezeToken(tokenId);
       await expect(
-        token
-          .connect(otherAccount)
-          [
-            "transfer(address,bytes32,uint256,bytes)"
-          ](address, tokenId, 10n, signature),
+        token.connect(otherAccount)["transfer(address,bytes32,uint256,bytes)"](address, tokenId, 10n, signature),
       ).to.be.revertedWithCustomError(token, "TokenFrozen");
     });
 
     it("Should restrict all transfer the funds to the other account by frozen root tokenId", async function () {
-      const { token, owner, otherAccount } =
-        await loadFixture(deployTokenFixture);
+      const {token, owner, otherAccount} = await loadFixture(deployTokenFixture);
       // const address = await owner.getAddress();
       // const otherAddress = await otherAccount.getAddress();
       // let tx = await token["mint(address,uint256,bytes32)"](address, 1000n);
@@ -215,8 +160,7 @@ describe("eUTXO CBDC", function () {
     });
 
     it("Should restrict all transfer the funds to the other account by frozen parent tokenId", async function () {
-      const { token, owner, otherAccount } =
-        await loadFixture(deployTokenFixture);
+      const {token, owner, otherAccount} = await loadFixture(deployTokenFixture);
       // const address = await owner.getAddress();
       // const otherAddress = await otherAccount.getAddress();
       // let tx = await token["mint(address,uint256,bytes32)"](address, 1000n);

@@ -48,7 +48,7 @@ contract MockeUtxoCBDC is eUTXOToken, FreezeAddress, FreezeBalance, FreezeToken 
         _mintTransaction(account, value);
     }
 
-    function burn(address account, uint256 value, bytes32 tokenId) public {
+    function burn(address account, bytes32 tokenId, uint256 value) public {
         _burnTransaction(account, tokenId, value);
     }
 }
