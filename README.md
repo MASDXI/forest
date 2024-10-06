@@ -105,11 +105,11 @@ they can hinder users' ability to follow transaction trails, making it difficult
 ## Reference
 
 <div align="center">
-<img src="./docs/assets/BOT-rCBDC-Fraud-Handling01.png" width="450"/>
+<img src="./docs/assets/reports/BOT-rCBDC-Fraud-Handling01.png" width="450"/>
 <p style="text-align: center;"><em>Conceptual Feasibility Fraud Handling from rCBDC BOT report page 33.</em></p>
 </div>
 
 <div align="center">
-<img src="./docs/assets/BOT-rCBDC-Fraud-Handling02.png" width="450"/>
+<img src="./docs/assets/reports/BOT-rCBDC-Fraud-Handling02.png" width="450"/>
 <p style="text-align: center;"><em>Comparison of As is and To be (Conceptual) from rCBDC BOT report page 33.</em></p>
 </div>
