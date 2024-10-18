@@ -3,7 +3,9 @@ Title: "Forest: Smart Contract Implementation for Enhanced Traceability in Centr
 Description: "An implementation of advanced data structure over token smart contract."
 Author: "Sirawit Techavanitch (sirawit_tec@utcc.ac.th)"
 Status: "Draft"
+Purpose: "Dissertation"
 ---
+
 
 <h1 align="center">
 <img src="./docs/assets/banner.png" width="450"/>
