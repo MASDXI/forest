@@ -1,6 +1,6 @@
 ---
-Title: "Forest: Smart Contract Implementation for Enhanced Traceability in Central Bank Digital Currency Systems"
-Description: "An implementation of advanced data structure over token smart contract."
+Title: "Forest: Unlocking Control & Traceability in Digital Currency System "
+Description: "An implementation of hybrid account-based and token-based token over smart contract."
 Author: "Sirawit Techavanitch (sirawit_tec@utcc.ac.th)"
 Status: "Draft"
 Purpose: "Dissertation"
@@ -11,12 +11,13 @@ Purpose: "Dissertation"
 <img src="./docs/assets/banner.png" width="450"/>
 </h1>
 
-# Forest: A Smart Contract Implementation for Enhanced Traceability in Central Bank Digital Currency Systems
+# Forest: Unlocking Control & Traceability in Digital Currency System 
 
 ## Abstract
 
-// TODO  
-**Keyword: Anti-Money Laundering, Blockchain, Counter Financial Terrorism, Central Bank Digital Currencies, Smart Contract**
+> TODO  
+
+**Keyword: Anti-Money Laundering (AML), Central Bank Digital Currencies (CBDC), Counter Financial Terrorism (CFT), Distributed Ledger Technology (DLT), Smart Contract**
 
 ## Introduction
 
@@ -24,7 +25,7 @@ The present-day Central Bank Digital Currency concept aims to utilize the advant
 
 ## Related Works
 
-// Opinion: AI and Deep learning recognize and analyze the pattern, but it'd be nice if the data structure also provided a more efficient and fast response to the incident.
+> Opinion: AI and Deep learning recognize and analyze the pattern, but it'd be nice if the data structure also provided a more efficient and fast response to the incident.
 
 - [ERC20](https://eips.ethereum.org/EIPS/eip-20) fungible token intended to be currency-like, but the data structure is account-based, making it hard to separate money when it's mixed with the total balance.
 - [ERC721](https://eips.ethereum.org/EIPS/eip-721) not suitable due to metadata not being stored on-chain, it can be modified to support, but it's not intended to be exchangeable.
@@ -32,8 +33,8 @@ The present-day Central Bank Digital Currency concept aims to utilize the advant
 - [ERC1400](https://eips.ethereum.org/EIPS/eip-1400) have characteristic base from `ERC20` but extended functionality for freeze account or freeze balance.
 - [ERC3643](https://eips.ethereum.org/EIPS/eip-3643) have characteristic same as `ERC1400` but extended functionality for store the document and other feature.
 - [MerkleTree](https://www.geeksforgeeks.org/blockchain-merkle-trees/) not suitable for the payment due to its need to maintain the root hash and generate proof every time.
-- [UTXO](https://www.geeksforgeeks.org/what-is-unspent-transaction-output-utxo/) maintain the amount of money or group of money in each individual transaction. To spend the transaction, the caller needs to be the owner of the transaction that needs to be spent.
-- [eUTXO](https://docs.cardano.org/about-cardano/learn/eutxo-explainer/) extended version of `UTXO`, purpose of `eUTXO` is adding/carrying additional data as extraData or payload in the transaction.
+- [UTXO](https://www.geeksforgeeks.org/what-is-unspent-transaction-output-utxo/) maintain the amount of money or group of money in each individual `transaction`. To spend the `transaction`, the caller needs to be the `owner` of the `transaction` that needs to be spent.
+- [eUTXO](https://docs.cardano.org/about-cardano/learn/eutxo-explainer/) extended version of `UTXO`, purpose of `eUTXO` is adding/carrying additional data as `extraData` or `payload` in the transaction.
 
 ## Methodology
 
@@ -75,11 +76,11 @@ Introduce implementation call `Forest` used the way to modified the state to kee
 
 ## For Further Work
 
-Currently `Forest` not 100% compatible with existing `ERC20` standard.
+Currently, `Forest` not 100% compatible with existing `ERC20` standard.
 To complete and fully supported `ERC20` interface `Forest` require to have automatically select and spent the transaction.  
-However it's doesn't need to be store in sorted list. there is possible solution to be done.
+However, it doesn't need to be store in sorted list. There is possible solution to be done.
 
-- First in smart contract, It's can be done with `FIFO` or First-In-First-Out style which is can be done in smart contract but should be avoiding the `gasUsed`.
+- First in smart contract, It can be done with `FIFO` or First-In-First-Out style which is can be done in smart contract but should be avoiding the `gasUsed`.
 - Second off-load heavy computation from the smart contract to a custom pre-compiled contract.
 - Third create a stateful pre-compiled contract that fully functional same as the smart contract specification.
 
