@@ -12,7 +12,8 @@ library Forest {
      */
     struct Transaction {
         bytes32 root; // Root hash of the transaction
-        bytes32 parent; // Parent transaction hash
+        bytes32 parent; // Parent transaction hash (previous tx)
+        // @TODO adding ownership address parent (previous tx ownership)
         uint256 value; // Value associated with the transaction
     }
 
@@ -68,7 +69,6 @@ library Forest {
      * @dev Structure representing a forest contains multiple unbalance-tree of transactions for a specific account.
      */
     struct Forest {
-        mapping(address => uint256) size; // Number of transactions for each account
         mapping(address => uint256) nonces; // Nonce (transaction count) for each account
         mapping(address => mapping(bytes32 => Transaction)) trees; // Mapping of account to transaction trees
         mapping(bytes32 => uint256) hierarchy;
@@ -230,7 +230,7 @@ library Forest {
             txOutput.value
         );
         self.nonces[creator]++;
-        self.size[txOutput.account]++;
+        // self.size[txOutput.account]++;
 
         emit TransactionCreated(id, root, creator, txOutput.account);
     }
@@ -274,7 +274,7 @@ library Forest {
             revert TransactionNotExist();
         }
         self.trees[account][id].value = 0;
-        self.size[account]--;
+        // self.size[account]--;
 
         emit TransactionConsumed(id);
     }
@@ -298,10 +298,10 @@ library Forest {
      * @param account The address of the account.
      * @return The size (number of transactions) for the account.
      */
-    function size(
-        Forest storage self,
-        address account
-    ) internal view returns (uint256) {
-        return self.size[account];
-    }
+    // function size(
+    //     Forest storage self,
+    //     address account
+    // ) internal view returns (uint256) {
+    //     return self.size[account];
+    // }
 }

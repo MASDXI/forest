@@ -14,7 +14,7 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 abstract contract ForestToken is ERC20, IForestERC20 {
     using Forest for Forest.Forest;
 
-    Forest.Forest private _trees;
+    Forest.Forest private _ledger;
 
     /**
      * @dev Constructor to initialize the ERC20 token with a name and symbol.
@@ -30,7 +30,7 @@ abstract contract ForestToken is ERC20, IForestERC20 {
      * @return The transaction details.
      */
     function _transaction(address account, bytes32 tokenId) internal view returns (Forest.Transaction memory) {
-        return _trees.transaction(account, tokenId);
+        return _ledger.transaction(account, tokenId);
     }
 
     /**
@@ -41,17 +41,17 @@ abstract contract ForestToken is ERC20, IForestERC20 {
      * @param value The amount of tokens to transfer.
      */
     function _transfer(address from, address to, bytes32 tokenId, uint256 value) internal virtual {
-        Forest.Transaction memory txn = _trees.transaction(from, tokenId);
-        _trees.spendTransaction(Forest.TransactionInput(tokenId, value), from);
-        _trees.createTransaction(
+        Forest.Transaction memory txn = _ledger.transaction(from, tokenId);
+        _ledger.spendTransaction(Forest.TransactionInput(tokenId, value), from);
+        _ledger.createTransaction(
             Forest.TransactionOutput(value, to),
             txn.root,
             tokenId,
-            Forest.calculateTransactionHash(from, _trees.transactionCount(from)),
+            Forest.calculateTransactionHash(from, _ledger.transactionCount(from)),
             from
         );
         if ((txn.value - value) == 0) {
-            _trees.consumeTransaction(tokenId, from);
+            _ledger.consumeTransaction(tokenId, from);
         }
         _update(from, to, value);
     }
@@ -62,11 +62,11 @@ abstract contract ForestToken is ERC20, IForestERC20 {
      * @param value The amount of tokens to mint.
      */
     function _mintTransaction(address account, uint256 value) internal {
-        _trees.createTransaction(
+        _ledger.createTransaction(
             Forest.TransactionOutput(value, account),
             Forest.calculateTransactionRootHash(),
             bytes32(0),
-            Forest.calculateTransactionHash(address(0), _trees.transactionCount(address(0))),
+            Forest.calculateTransactionHash(address(0), _ledger.transactionCount(address(0))),
             address(0)
         );
         _mint(account, value);
@@ -79,10 +79,10 @@ abstract contract ForestToken is ERC20, IForestERC20 {
      * @param value The amount of tokens to burn.
      */
     function _burnTransaction(address account, bytes32 tokenId, uint256 value) internal {
-        if (value == _trees.transactionValue(account, tokenId)) {
-            _trees.consumeTransaction(tokenId, account);
+        if (value == _ledger.transactionValue(account, tokenId)) {
+            _ledger.consumeTransaction(tokenId, account);
         } else {
-            _trees.spendTransaction(Forest.TransactionInput(tokenId, value), account);
+            _ledger.spendTransaction(Forest.TransactionInput(tokenId, value), account);
         }
         _burn(account, value);
     }
