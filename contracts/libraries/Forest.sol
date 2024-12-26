@@ -221,9 +221,8 @@ library Forest {
         if (_transactionExist(self, txOutput.account, id)) {
             revert TransactionExist();
         }
-        uint256 hierarchy;
         if (root != bytes32(0x00)) {
-            hierarchy = self.hierarchy[root] + 1;
+            self.hierarchy[root]++;
         }
         self.trees[txOutput.account][id] = Transaction(
             root,
