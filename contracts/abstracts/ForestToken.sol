@@ -12,9 +12,9 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
  * @author Sirawit Techavanitch (sirawit_tec@live4.utcc.ac.th)
  */
 abstract contract ForestToken is ERC20, IForestERC20 {
-    using Forest for Forest.Tree;
+    using Forest for Forest.Forest;
 
-    Forest.Tree private _trees;
+    Forest.Forest private _trees;
 
     /**
      * @dev Constructor to initialize the ERC20 token with a name and symbol.
@@ -78,7 +78,7 @@ abstract contract ForestToken is ERC20, IForestERC20 {
     function _mintTransaction(address account, uint256 value) internal {
         _trees.createTransaction(
             Forest.TransactionOutput(value, account),
-            Forest.calculateTranscationRootHash(),
+            Forest.calculateTransactionRootHash(),
             bytes32(0),
             Forest.calculateTransactionHash(
                 address(0),
