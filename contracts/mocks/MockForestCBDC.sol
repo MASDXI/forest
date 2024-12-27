@@ -13,7 +13,7 @@ contract MockForestCBDC is ForestToken, FreezeAddress, FreezeBalance, FreezeToke
     constructor(string memory name_, string memory symbol_) ForestToken(name_, symbol_) {}
 
     modifier checkFrozenRootOrParent(address account, bytes32 tokenId) {
-        Forest.Transaction memory transaction = _transaction(account, tokenId);
+        Forest.Tx memory transaction = _transaction(tokenId);
         if (isTokenFrozen(transaction.root) || isTokenFrozen(transaction.parent)) {
             revert TokenFrozen();
         }
@@ -36,7 +36,7 @@ contract MockForestCBDC is ForestToken, FreezeAddress, FreezeBalance, FreezeToke
     {
         /// @notice ERC20 Transfer also emit.
         super._transfer(from, to, tokenId, value);
-        Forest.Transaction memory txn = _transaction(from, tokenId);
+        Forest.Tx memory txn = _transaction(tokenId);
         emit Transfer(from, to, txn.root, txn.parent, value);
     }
 
