@@ -20,7 +20,24 @@ The present-day Central Bank Digital Currency concept aims to utilize the advant
 
 ## Specification
 
+The keywords “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in RFC 2119.
+
 > TODO
+
+### Behavior
+
+### Create Transaction
+- The `value` of the transaction **MUST NOT** be zero. If `value` is 0, the function **MUST** revert.  
+- The transaction **MUST** be assigned a unique `id`. The `id` **SHOULD** be derived using the deterministic hashing function.  
+- The new transaction **MUST** include the correct parent field:
+If the transaction is derived (e.g., created by spender), the `parent` field **MUST** reference the `id` of the original transaction.
+If the transaction is a `root` transaction, the parent field **MAY** be set to `0x0`.
+
+### Spend Transaction
+- The spending action **MUST** verify that the transaction with the given `id` exists. If not function **SHOULD** return `false` or revert.
+- The `value` to be spent **MUST NOT** exceed the `value` of the transaction. If it does, the function **MUST** revert.
+- The `hierarchy` of the transaction's `root` **MUST** be incremented if the new transaction's level exceeds the current `hierarchy`.
+
 
 ## Rationale
 
@@ -34,7 +51,7 @@ The present-day Central Bank Digital Currency concept aims to utilize the advant
 | Freeze all `tokenId` or `TxId` before or after specifics hierarchy level. | ✗      | ✗    | ✗     | ✓      |
 
 <h1 align="center">
-<img src="./docs/assets/diagrams/Forest.png" width="800"/>
+<img src="./docs/assets/diagrams/Forest.svg" width="800"/>
 </h1>
 
 - `ERC-20` provide events and keep tracking each `Transfer`,  

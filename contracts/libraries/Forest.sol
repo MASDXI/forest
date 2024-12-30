@@ -20,7 +20,7 @@ library Forest {
         mapping(bytes32 => Tx) txs;
     }
 
-    event TransactionCreated(bytes32 indexed root, bytes32 id, address indexed from, address indexed to);
+    event TransactionCreated(bytes32 indexed root, bytes32 id, address indexed from);
     event TransactionSpent(bytes32 indexed id, uint256 value);
 
     error TransactionNotExist();
@@ -63,29 +63,30 @@ library Forest {
         return self.hierarchy[id];
     }
 
-    function createTx(Ledger storage self, Tx memory newTx, address from, address to) internal {
+    function createTx(Ledger storage self, Tx memory newTx, address spender) internal {
         if (newTx.value == 0) revert TransactionZeroValue();
-        bytes32 newId = calcTxHash(from, self.nonces[from]);
+        bytes32 newId = calcTxHash(spender, self.nonces[spender]);
         self.txs[newId] = newTx;
         unchecked {
-            self.nonces[from]++;
+            self.nonces[spender]++;
         }
 
-        emit TransactionCreated(newId, newTx.root, from, to);
+        emit TransactionCreated(newId, newTx.root, spender);
     }
 
-    function spendTx(Ledger storage self, bytes32 id, address from, address to, uint256 value) internal {
-        Tx storage ptr = self.txs[id];
-        uint256 val = ptr.value;
-        if (val == 0) revert TransactionNotExist();
-        if (value > val) revert TransactionInsufficient(val, value);
-        ptr.value = val - value;
-        bytes32 root = ptr.root;
+    function spendTx(Ledger storage self, bytes32 id, address spender, uint256 value) internal {
+        Tx storage  ptr = self.txs[id];
+        uint256 currentValue = ptr.value;
+        if (currentValue == 0) revert TransactionNotExist();
+        if (value > currentValue) revert TransactionInsufficient(currentValue, value);
         unchecked {
-            uint256 level = (ptr.level + 1);
-            createTx(self, Tx(root, id, value, level), from, to);
-            if (level > self.hierarchy[id]) {
-                self.hierarchy[root]++;
+            ptr.value = currentValue - value;
+            bytes32 currentRoot = ptr.root;
+            uint256 currentHierarchy = self.hierarchy[currentRoot];
+            uint256 newLevel  = (ptr.level + 1);
+            createTx(self, Tx(currentRoot, id, value, newLevel ), spender);
+            if (newLevel > currentHierarchy) {
+                self.hierarchy[currentRoot] = newLevel ;
             }
         }
 
