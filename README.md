@@ -1,6 +1,6 @@
 ---
-Title: "Forest: Unlocking Control & Traceability in Digital Currency System "
-Description: "An implementation of hybrid account-based and token-based token over smart contract."
+Title: "Forest: Unlocking Control & Traceability in Digital Currency System"
+Description: "Forest is a token-based model leveraging DAG-inspired structures to enhance traceability, security, and AML/CFT compliance"
 Author: "Sirawit Techavanitch (sirawit_tec@utcc.ac.th)"
 Status: "Draft"
 Purpose: "Dissertation"
