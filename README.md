@@ -1,7 +1,7 @@
 ---
 Title: "Forest: Unlocking Control & Traceability in Digital Currency System"
 Description: "Forest is a token-based model leveraging DAG-inspired structures to enhance traceability, security, and AML/CFT compliance"
-Author: "Sirawit Techavanitch (sirawit_tec@utcc.ac.th)"
+Author: "Sirawit Techavanitch <sirawit_tec@utcc.ac.th>"
 Status: "Draft"
 Purpose: "Dissertation"
 ---
@@ -58,16 +58,16 @@ interface IForest {
 
 ```
 
-### Behavior
+### Function Behavior
 
-### Create Transaction
+#### Create Transaction
 - The `value` of the transaction **MUST NOT** be zero. If `value` is 0, the function **MUST** revert.  
 - The transaction **MUST** be assigned a unique `id`. The `id` **SHOULD** be derived using the deterministic hashing function.  
 - The new transaction **MUST** include the correct parent field:
 If the transaction is derived (e.g., created by spender), the `parent` field **MUST** reference the `id` of the original transaction.
 If the transaction is a `root` transaction, the parent field **MAY** be set to `0x0`.
 
-### Spend Transaction
+#### Spend Transaction
 - The spending action **MUST** verify that the transaction with the given `id` exists. If not function **SHOULD** return `false` or revert.
 - The `value` to be spent **MUST NOT** exceed the `value` of the transaction. If it does, the function **MUST** revert.
 - The `hierarchy` of the transaction's `root` **MUST** be incremented if the new transaction's level exceeds the current `hierarchy`.
