@@ -12,6 +12,7 @@ library Forest {
         bytes32 parent;
         uint256 value;
         uint256 level;
+        // address owner;
     }
 
     struct Ledger {
@@ -79,6 +80,7 @@ library Forest {
         uint256 currentValue = ptr.value;
         if (currentValue == 0) revert TransactionNotExist();
         if (value > currentValue) revert TransactionInsufficient(currentValue, value);
+        // if (msg.sender != ptr.owner) revert TransactionUnauthorized();
         unchecked {
             ptr.value = currentValue - value;
             bytes32 currentRoot = ptr.root;

@@ -22,7 +22,41 @@ The present-day Central Bank Digital Currency concept aims to utilize the advant
 
 The keywords “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in RFC 2119.
 
-> TODO
+``` Solidity
+// SPDX-License-Identifier: Apache-2.0
+pragma solidity >=0.8.0 <0.9.0;
+
+/**
+ * @title Interface for Forest
+ */
+
+interface IForest {
+
+    // events
+
+    // errors
+
+    // functions
+    function hierarchyOfGraph(bytes32 tokenId) external view returns (uint256);
+
+    function levelOfToken(bytes32 tokenId) external view returns (uint256);
+
+    function ownerOfToken(bytes32 tokenId) external view returns (address);
+
+    function parentOfToken(bytes32 tokenId) external view returns (bytes32);
+
+    function rootOfToken(bytes32 tokenId) external view returns (bytes32);
+
+    function tokenExists(bytes32 tokenId) external view returns (bool);
+
+    function valueOfToken(bytes32 tokenId) external view returns (uint256);
+
+    function transfer(address to, bytes32 tokenId, uint256 value) external returns (bool);
+
+    function transferFrom(address from, address to, bytes32 tokenId, uint256 value) external returns (bool);
+}
+
+```
 
 ### Behavior
 
