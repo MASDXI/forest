@@ -125,6 +125,17 @@ Run out of gas problem due to the operation consuming higher gas if transferring
 ### Gas Limit Vulnerabilities
 Exceeds block gas limit if the blockchain has a block gas limit lower than the gas used in the transaction.
 
+### Granular Data
+
+The `Forest` model tracks all assets within the system, which can be represented mathematically as
+
+```math
+assets = totalSupply \times decimals
+```
+While this ensures precision, the high granularity can increase storage needs. 
+Traditional finance often uses simpler `decimals` like `2`, `4` or `6`, avoiding excessive detail. 
+Adopting similar strategies could help balance granularity with efficiency.
+
 ### High Complexity
 `Forest` may introduce potential vulnerabilities or misbehave when applied with other smart contract.
 
