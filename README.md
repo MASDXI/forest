@@ -72,6 +72,24 @@ If the transaction is a `root` transaction, the parent field **MAY** be set to `
 - The `value` to be spent **MUST NOT** exceed the `value` of the transaction. If it does, the function **MUST** revert.
 - The `hierarchy` of the transaction's `root` **MUST** be incremented if the new transaction's level exceeds the current `hierarchy`.
 
+### Diagrams
+
+<div align="center">
+  <img src="./docs/assets/diagrams/Forest.svg" width="800"/>
+
+  <i>figure 1: transaction graph</i>
+</div>
+
+<!-- TODO explain -->
+
+<div align="center">
+  <img src="./docs/assets/diagrams/Forest_Sort.svg" width="400"/>
+
+  <i>figure 2: Reverse Topological Sort </i> 
+</div>
+
+
+<!-- TODO explain -->
 
 ## Rationale
 
@@ -84,9 +102,6 @@ If the transaction is a `root` transaction, the parent field **MAY** be set to `
 | Freeze the specifics `tokenId` or `TxId` that relevant to the root.       | ✗      | ✗    | ✓     | ✓      |
 | Freeze all `tokenId` or `TxId` before or after specifics hierarchy level. | ✗      | ✗    | ✗     | ✓      |
 
-<h1 align="center">
-<img src="./docs/assets/diagrams/Forest.svg" width="800"/>
-</h1>
 
 - `ERC-20` provide events and keep tracking each `Transfer`,  
   but the problem is the `ERC-20` model can't separate `clean money` from `dirty money`,  
