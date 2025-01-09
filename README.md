@@ -125,7 +125,7 @@ Run out of gas problem due to the operation consuming higher gas if transferring
 ### Gas Limit Vulnerabilities
 Exceeds block gas limit if the blockchain has a block gas limit lower than the gas used in the transaction.
 
-### Granular Data
+### Data Fragmentation
 
 The `Forest` model tracks all assets within the system, which can be represented mathematically as
 
