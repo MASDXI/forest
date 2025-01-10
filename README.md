@@ -20,7 +20,7 @@ The present-day Central Bank Digital Currency concept aims to utilize the advant
 
 ## Specification
 
-The keywords “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in RFC 2119.
+The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “NOT RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in RFC 2119 and RFC 8174.
 
 ``` Solidity
 // SPDX-License-Identifier: Apache-2.0
@@ -31,31 +31,26 @@ pragma solidity >=0.8.0 <0.9.0;
  */
 
 interface IForest {
-
     // events
+    event TransactionCreated(bytes32 indexed root, bytes32 id, address indexed from);
+    event TransactionSpent(bytes32 indexed id, uint256 value);
 
     // errors
+    error TransactionNotExist();
+    error TransactionInsufficient(uint256 value, uint256 spend);
+    error TransactionZeroValue();
 
     // functions
     function hierarchyOfGraph(bytes32 tokenId) external view returns (uint256);
-
     function levelOfToken(bytes32 tokenId) external view returns (uint256);
-
     function ownerOfToken(bytes32 tokenId) external view returns (address);
-
     function parentOfToken(bytes32 tokenId) external view returns (bytes32);
-
     function rootOfToken(bytes32 tokenId) external view returns (bytes32);
-
     function tokenExists(bytes32 tokenId) external view returns (bool);
-
     function valueOfToken(bytes32 tokenId) external view returns (uint256);
-
     function transfer(address to, bytes32 tokenId, uint256 value) external returns (bool);
-
     function transferFrom(address from, address to, bytes32 tokenId, uint256 value) external returns (bool);
 }
-
 ```
 
 ### Function Behavior
@@ -66,28 +61,27 @@ interface IForest {
 - The new transaction **MUST** include the correct parent field:
 If the transaction is derived (e.g., created by spender), the `parent` field **MUST** reference the `id` of the original transaction.
 If the transaction is a `root` transaction, the parent field **MAY** be set to `0x0`.
+- The events `TransactionCreated` **MUST** emit when created new transaction.
 
 #### Spend Transaction
 - The spending action **MUST** verify that the transaction with the given `id` exists. If not function **SHOULD** return `false` or revert.
 - The `value` to be spent **MUST NOT** exceed the `value` of the transaction. If it does, the function **MUST** revert.
 - The `hierarchy` of the transaction's `root` **MUST** be incremented if the new transaction's level exceeds the current `hierarchy`.
+- The events `TransactionSpent` **MUST** emit when spending transaction.
 
 ### Diagrams
 
 <div align="center">
   <img src="./docs/assets/diagrams/Forest.svg" width="800"/>
-
-  <i>figure 1: transaction graph</i>
+  <i>Figure 1: Transaction Graph</i>
 </div>
 
 <!-- TODO explain -->
 
 <div align="center">
   <img src="./docs/assets/diagrams/Forest_Sort.svg" width="400"/>
-
-  <i>figure 2: Reverse Topological Sort </i> 
+  <i>Figure 2: Reverse Topological Sort </i> 
 </div>
-
 
 <!-- TODO explain -->
 
@@ -101,7 +95,6 @@ If the transaction is a `root` transaction, the parent field **MAY** be set to `
 | Freeze the specifics `tokenId` or `txId`.                                 | ✗      | ✓    | ✓     | ✓      |
 | Freeze the specifics `tokenId` or `TxId` that relevant to the root.       | ✗      | ✗    | ✓     | ✓      |
 | Freeze all `tokenId` or `TxId` before or after specifics hierarchy level. | ✗      | ✗    | ✗     | ✓      |
-
 
 - `ERC-20` provide events and keep tracking each `Transfer`,  
   but the problem is the `ERC-20` model can't separate `clean money` from `dirty money`,  
