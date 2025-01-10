@@ -73,14 +73,12 @@ If the transaction is a `root` transaction, the parent field **MAY** be set to `
 
 <div align="center">
   <img src="./docs/assets/diagrams/Forest.svg" width="800"/>
-  <i>Figure 1: Transaction Graph</i>
 </div>
 
 <!-- TODO explain -->
 
 <div align="center">
   <img src="./docs/assets/diagrams/Forest_Sort.svg" width="400"/>
-  <i>Figure 2: Reverse Topological Sort </i> 
 </div>
 
 <!-- TODO explain -->
