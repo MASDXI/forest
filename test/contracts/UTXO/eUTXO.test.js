@@ -1,13 +1,7 @@
 const {loadFixture} = require("@nomicfoundation/hardhat-toolbox/network-helpers");
 const {anyValue} = require("@nomicfoundation/hardhat-chai-matchers/withArgs");
 const {expect} = require("chai");
-const {
-  encodeBytes32String,
-  solidityPackedKeccak256,
-  getBytes,
-  ZeroHash,
-  decodeBytes32String,
-} = require("ethers");
+const {encodeBytes32String, solidityPackedKeccak256, getBytes, ZeroHash, decodeBytes32String} = require("ethers");
 
 describe("eUTXO", function () {
   // We define a fixture to reuse the same setup in every test.

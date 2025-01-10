@@ -77,7 +77,7 @@ library Forest {
     }
 
     function spendTx(Ledger storage self, bytes32 id, address spender, address to, uint256 value) internal {
-        Tx storage  ptr = self.txs[id];
+        Tx storage ptr = self.txs[id];
         if (msg.sender != ptr.owner) revert TransactionUnauthorized();
         uint256 currentValue = ptr.value;
         if (currentValue == 0) revert TransactionNotExist();
@@ -86,10 +86,10 @@ library Forest {
             ptr.value = currentValue - value;
             bytes32 currentRoot = ptr.root;
             uint256 currentHierarchy = self.hierarchy[currentRoot];
-            uint256 newLevel  = (ptr.level + 1);
+            uint256 newLevel = (ptr.level + 1);
             createTx(self, Tx(currentRoot, id, value, newLevel, to), spender);
             if (newLevel > currentHierarchy) {
-                self.hierarchy[currentRoot] = newLevel ;
+                self.hierarchy[currentRoot] = newLevel;
             }
         }
 

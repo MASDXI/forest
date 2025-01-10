@@ -4,6 +4,8 @@ const {expect} = require("chai");
 const {encodeBytes32String, ZeroAddress, solidityPackedKeccak256, getBytes} = require("ethers");
 
 describe("Forest", function () {
+  const transferMethod = "transfer(address,bytes32,uint256)";
+
   // We define a fixture to reuse the same setup in every test.
   // We use loadFixture to run this setup once, snapshot that state,
   // and reset Hardhat Network to that snapshot in every test.
@@ -32,7 +34,7 @@ describe("Forest", function () {
       let tx = await token.mint(address, 1000n);
       tx = await tx.wait();
       const tokenId = tx.logs[0].args[0];
-      await token["transfer(address,bytes32,uint256)"](otherAddress, tokenId, 1000n);
+      await token[transferMethod](otherAddress, tokenId, 1000n);
       expect(await token.balanceOf(otherAddress)).to.equal(1000n);
     });
 
@@ -44,7 +46,7 @@ describe("Forest", function () {
       let tx = await token.mint(address, amount);
       tx = await tx.wait();
       const tokenId = tx.logs[0].args[0];
-      await token["transfer(address,bytes32,uint256)"](otherAddress, tokenId, amount);
+      await token[transferMethod](otherAddress, tokenId, amount);
       expect(await token.balanceOf(otherAddress)).to.equal(1000n);
       // await expect(token.connect(otherAccount).transfer(address, amount)).to.be.revertedWithCustomError(token,"ERC20TransferNotSupported");
 
@@ -60,7 +62,7 @@ describe("Forest", function () {
       let tx = await token.mint(address, amount);
       tx = await tx.wait();
       const tokenId = tx.logs[0].args[0];
-      await token["transfer(address,bytes32,uint256)"](otherAddress, tokenId, amount);
+      await token[transferMethod](otherAddress, tokenId, amount);
       await token.connect(otherAccount).approve(address, amount);
       await expect(token.connect(owner).transferFrom(otherAddress, address, amount)).to.be.revertedWithCustomError(
         token,
@@ -93,14 +95,15 @@ describe("Forest", function () {
       let tx = await token.mint(address, 1000n);
       tx = await tx.wait();
       const tokenId = tx.logs[0].args[0];
-      tx = await token["transfer(address,bytes32,uint256)"](otherAddress, tokenId, 100n);
+      tx = await token[transferMethod](otherAddress, tokenId, 100n);
       tx = await tx.wait();
       const tokenId2 = tx.logs[1].args[0];
       expect(await token.balanceOf(otherAddress)).to.equal(100n);
       await token.freezeToken(tokenId2);
-      await expect(
-        token.connect(otherAccount)["transfer(address,bytes32,uint256)"](address, tokenId2, 10n),
-      ).to.be.revertedWithCustomError(token, "TokenFrozen");
+      await expect(token.connect(otherAccount)[transferMethod](address, tokenId2, 10n)).to.be.revertedWithCustomError(
+        token,
+        "TokenFrozen",
+      );
     });
 
     it("Should restrict all transfer the funds to the other account by frozen root tokenId", async function () {
@@ -111,12 +114,13 @@ describe("Forest", function () {
       tx = await tx.wait();
       let tokenId = tx.logs[0].args[0];
       let root = tx.logs[0].args[1];
-      tx = await token["transfer(address,bytes32,uint256)"](otherAddress, tokenId, 10n);
+      tx = await token[transferMethod](otherAddress, tokenId, 10n);
       expect(await token.balanceOf(otherAddress)).to.equal(10n);
       await token.freezeToken(root);
-      await expect(
-        token["transfer(address,bytes32,uint256)"](otherAddress, tokenId, 10n),
-      ).to.be.revertedWithCustomError(token, "TokenFrozen");
+      await expect(token[transferMethod](otherAddress, tokenId, 10n)).to.be.revertedWithCustomError(
+        token,
+        "TokenFrozen",
+      );
     });
 
     it("Should restrict all transfer the funds to the other account by frozen parent tokenId", async function () {
@@ -126,7 +130,7 @@ describe("Forest", function () {
       // let tx = await token.mint(address, 1000n);
       // tx = await tx.wait();
       // const tokenId = tx.logs[0].args[0];
-      // tx = await token["transfer(address,bytes32,uint256)"](
+      // tx = await token[transferMethod](
       //   otherAddress,
       //   tokenId,
       //   100n
@@ -136,7 +140,7 @@ describe("Forest", function () {
       // expect(await token.balanceOf(otherAddress)).to.equal(100n);
       // await token.freezeToken(parent);
       // await expect(
-      //   await token["transfer(address,bytes32,uint256)"](
+      //   await token[transferMethod](
       //     otherAddress,
       //     tokenId2,
       //     10n

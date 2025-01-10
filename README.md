@@ -22,7 +22,7 @@ The present-day Central Bank Digital Currency concept aims to utilize the advant
 
 The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “NOT RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in RFC 2119 and RFC 8174.
 
-``` Solidity
+```Solidity
 // SPDX-License-Identifier: Apache-2.0
 pragma solidity >=0.8.0 <0.9.0;
 
@@ -56,14 +56,16 @@ interface IForest {
 ### Function Behavior
 
 #### Create Transaction
-- The `value` of the transaction **MUST NOT** be zero. If `value` is 0, the function **MUST** revert.  
-- The transaction **MUST** be assigned a unique `id`. The `id` **SHOULD** be derived using the deterministic hashing function.  
+
+- The `value` of the transaction **MUST NOT** be zero. If `value` is 0, the function **MUST** revert.
+- The transaction **MUST** be assigned a unique `id`. The `id` **SHOULD** be derived using the deterministic hashing function.
 - The new transaction **MUST** include the correct parent field:
-If the transaction is derived (e.g., created by spender), the `parent` field **MUST** reference the `id` of the original transaction.
-If the transaction is a `root` transaction, the parent field **MAY** be set to `0x0`.
+  If the transaction is derived (e.g., created by spender), the `parent` field **MUST** reference the `id` of the original transaction.
+  If the transaction is a `root` transaction, the parent field **MAY** be set to `0x0`.
 - The events `TransactionCreated` **MUST** emit when created new transaction.
 
 #### Spend Transaction
+
 - The spending action **MUST** verify that the transaction with the given `id` exists. If not function **SHOULD** return `false` or revert.
 - The `value` to be spent **MUST NOT** exceed the `value` of the transaction. If it does, the function **MUST** revert.
 - The `hierarchy` of the transaction's `root` **MUST** be incremented if the new transaction's level exceeds the current `hierarchy`.
@@ -111,9 +113,11 @@ If the transaction is a `root` transaction, the parent field **MAY** be set to `
 ## Security Considerations
 
 ### Denial Of Service
+
 Run out of gas problem due to the operation consuming higher gas if transferring multiple groups of small tokens or loop transfer.
 
 ### Gas Limit Vulnerabilities
+
 Exceeds block gas limit if the blockchain has a block gas limit lower than the gas used in the transaction.
 
 ### Data Fragmentation
@@ -123,11 +127,13 @@ The `Forest` model tracks all assets within the system, which can be represented
 ```math
 assets = totalSupply \times decimals
 ```
-While this ensures precision, the high granularity can increase storage needs. 
-Traditional finance often uses simpler `decimals` like `2`, `4` or `6`, avoiding excessive detail. 
+
+While this ensures precision, the high granularity can increase storage needs.
+Traditional finance often uses simpler `decimals` like `2`, `4` or `6`, avoiding excessive detail.
 Adopting similar strategies could help balance granularity with efficiency.
 
 ### High Complexity
+
 `Forest` may introduce potential vulnerabilities or misbehave when applied with other smart contract.
 
 ## Copyright
