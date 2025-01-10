@@ -40,7 +40,7 @@ abstract contract ForestToken is ERC20, IForestERC20 {
      * @param value The amount of tokens to transfer.
      */
     function _transfer(address from, address to, bytes32 tokenId, uint256 value) internal virtual {
-        _ledger.spendTx(tokenId, from, value);
+        _ledger.spendTx(tokenId, from, to, value);
         _update(from, to, value);
     }
 
@@ -50,7 +50,7 @@ abstract contract ForestToken is ERC20, IForestERC20 {
      * @param value The amount of tokens to mint.
      */
     function _mintTransaction(address account, uint256 value) internal {
-        _ledger.createTx(Forest.Tx(bytes32(0), bytes32(0), value, 0), address(0));
+        _ledger.createTx(Forest.Tx(bytes32(0), bytes32(0), value, 0, account), address(0));
         _mint(account, value);
     }
 
@@ -61,7 +61,7 @@ abstract contract ForestToken is ERC20, IForestERC20 {
      * @param value The amount of tokens to burn.
      */
     function _burnTransaction(address account, bytes32 tokenId, uint256 value) internal {
-        _ledger.spendTx(tokenId, account, value);
+        _ledger.spendTx(tokenId, account, address(0), value);
         _burn(account, value);
     }
 

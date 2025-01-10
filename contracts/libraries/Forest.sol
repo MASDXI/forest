@@ -12,7 +12,7 @@ library Forest {
         bytes32 parent;
         uint256 value;
         uint256 level;
-        // address owner;
+        address owner;
     }
 
     struct Ledger {
@@ -25,6 +25,7 @@ library Forest {
     event TransactionSpent(bytes32 indexed id, uint256 value);
 
     error TransactionNotExist();
+    error TransactionUnauthorized();
     error TransactionInsufficient(uint256 value, uint256 spend);
     error TransactionZeroValue();
 
@@ -75,18 +76,18 @@ library Forest {
         emit TransactionCreated(newId, newTx.root, spender);
     }
 
-    function spendTx(Ledger storage self, bytes32 id, address spender, uint256 value) internal {
+    function spendTx(Ledger storage self, bytes32 id, address spender, address to, uint256 value) internal {
         Tx storage  ptr = self.txs[id];
+        if (msg.sender != ptr.owner) revert TransactionUnauthorized();
         uint256 currentValue = ptr.value;
         if (currentValue == 0) revert TransactionNotExist();
         if (value > currentValue) revert TransactionInsufficient(currentValue, value);
-        // if (msg.sender != ptr.owner) revert TransactionUnauthorized();
         unchecked {
             ptr.value = currentValue - value;
             bytes32 currentRoot = ptr.root;
             uint256 currentHierarchy = self.hierarchy[currentRoot];
             uint256 newLevel  = (ptr.level + 1);
-            createTx(self, Tx(currentRoot, id, value, newLevel ), spender);
+            createTx(self, Tx(currentRoot, id, value, newLevel, to), spender);
             if (newLevel > currentHierarchy) {
                 self.hierarchy[currentRoot] = newLevel ;
             }
