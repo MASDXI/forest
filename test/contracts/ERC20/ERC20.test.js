@@ -3,7 +3,7 @@ const {anyValue} = require("@nomicfoundation/hardhat-chai-matchers/withArgs");
 const {expect} = require("chai");
 const {ZeroAddress} = require("ethers");
 
-describe("ERC20 CBDC", function () {
+describe("ERC20", function () {
   // We define a fixture to reuse the same setup in every test.
   // We use loadFixture to run this setup once, snapshot that state,
   // and reset Hardhat Network to that snapshot in every test.
@@ -11,7 +11,7 @@ describe("ERC20 CBDC", function () {
     // Contracts are deployed using the first signer/account by default
     const [owner, otherAccount] = await ethers.getSigners();
 
-    const contract = await ethers.getContractFactory("MockERC20CBDC");
+    const contract = await ethers.getContractFactory("MockERC20");
     const token = await contract.deploy("United States dollar", "USD");
 
     return {token, owner, otherAccount};

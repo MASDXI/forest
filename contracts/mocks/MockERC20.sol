@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "../abstracts/extensions/FreezeAddress.sol";
 import "../abstracts/extensions/FreezeBalance.sol";
 
-contract MockERC20CBDC is ERC20, FreezeAddress, FreezeBalance {
+contract MockERC20 is ERC20, FreezeAddress, FreezeBalance {
     constructor(string memory name_, string memory symbol_) ERC20(name_, symbol_) {}
 
     function transfer(
