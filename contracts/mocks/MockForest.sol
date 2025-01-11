@@ -29,7 +29,7 @@ contract MockForest is ForestToken, FreezeAddress, FreezeBalance, FreezeToken {
         internal
         virtual
         override
-        checkFrozenBalance(msg.sender, balanceOf(msg.sender), value)
+        checkFrozenBalance(msg.sender, balanceOf(msg.sender))
         checkFrozenAddress(msg.sender, to)
         checkFrozenRootOrParent(msg.sender, tokenId)
         checkFrozenToken(tokenId)

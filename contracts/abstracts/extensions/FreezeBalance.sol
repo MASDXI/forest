@@ -32,9 +32,8 @@ abstract contract FreezeBalance {
      * @notice Modifier to check if an account's balance can be spent, considering the frozen balance.
      * @param account The address of the account.
      * @param balance The total balance of the account.
-     * @param value The amount of balance to be spent.
      */
-    modifier checkFrozenBalance(address account, uint256 balance, uint256 value) {
+    modifier checkFrozenBalance(address account, uint256 balance) {
         uint256 frozenBalance = _frozenBalance[account];
         if (frozenBalance >= balance) {
             revert BalanceFrozen(balance, frozenBalance);

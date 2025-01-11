@@ -14,7 +14,7 @@ contract MockERC20 is ERC20, FreezeAddress, FreezeBalance {
     )
         public
         override
-        checkFrozenBalance(msg.sender, balanceOf(msg.sender), value)
+        checkFrozenBalance(msg.sender, balanceOf(msg.sender))
         checkFrozenAddress(msg.sender, to)
         returns (bool)
     {
@@ -25,7 +25,7 @@ contract MockERC20 is ERC20, FreezeAddress, FreezeBalance {
         address from,
         address to,
         uint256 value
-    ) public override checkFrozenBalance(from, balanceOf(from), value) checkFrozenAddress(from, to) returns (bool) {
+    ) public override checkFrozenBalance(from, balanceOf(from)) checkFrozenAddress(from, to) returns (bool) {
         return super.transferFrom(from, to, value);
     }
 

@@ -1,5 +1,6 @@
 const {time, loadFixture} = require("@nomicfoundation/hardhat-toolbox/network-helpers");
 const {anyValue} = require("@nomicfoundation/hardhat-chai-matchers/withArgs");
+const {network} = require("hardhat");
 const {expect} = require("chai");
 const {encodeBytes32String, ZeroAddress, solidityPackedKeccak256, getBytes} = require("ethers");
 
@@ -13,7 +14,7 @@ describe("Forest", function () {
     return {token, owner, otherAccount};
   }
 
-  describe("Transfers", function () {
+  describe("Scenarios", function () {
     it("Freeze Alice Account and transfer", async function () {
       //  TODO
     });

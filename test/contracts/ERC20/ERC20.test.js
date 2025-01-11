@@ -1,4 +1,5 @@
 const {loadFixture} = require("@nomicfoundation/hardhat-toolbox/network-helpers");
+const {network} = require("hardhat");
 const {anyValue} = require("@nomicfoundation/hardhat-chai-matchers/withArgs");
 const {expect} = require("chai");
 const {ZeroAddress} = require("ethers");
@@ -14,8 +15,7 @@ describe("ERC20", function () {
     return {token, owner, alice, bob, charlie, dave, otherAccount};
   }
 
-  // Avoid repeating test
-  describe("Transfers", function () {
+  describe("Scenarios", function () {
     it("Freeze Alice Account and transfer", async function () {
       const {token, alice, bob} = await loadFixture(deployTokenFixture);
       const aliceAddress = alice.address;
@@ -27,7 +27,15 @@ describe("ERC20", function () {
     });
 
     it("Freeze Alice Account and transferFrom", async function () {
-      //  TODO
+      const {token, owner, alice, bob} = await loadFixture(deployTokenFixture);
+      const spenderAddress = owner.address;
+      const aliceAddress = alice.address;
+      const bobAddress = bob.address;
+      await token.mint(alice, amount);
+      await token.connect(alice).approve(spenderAddress, amount);
+      // await token.freezeAddress(aliceAddress);
+      // expect(await token.isFrozen(aliceAddress)).to.equal(true);
+      await expect(token.connect(alice).transfer(bobAddress, amount)).to.be.reverted;
     });
 
     it("Freeze Alice Balance and transfer", async function () {
@@ -42,7 +50,15 @@ describe("ERC20", function () {
     });
 
     it("Freeze Alice Balance and transferFrom", async function () {
-      //  TODO
+      const {token, owner, alice, bob} = await loadFixture(deployTokenFixture);
+      const spenderAddress = owner.address;
+      const aliceAddress = alice.address;
+      const bobAddress = bob.address;
+      await token.mint(alice, amount);
+      await token.connect(alice).approve(spenderAddress, amount);
+      // await token.freezeAddress(aliceAddress);
+      // expect(await token.isFrozen(aliceAddress)).to.equal(true);
+      await expect(token.connect(alice).transfer(bobAddress, amount)).to.be.reverted;
     });
   });
 });

@@ -19,8 +19,8 @@ contract MockUtxo is UTXOToken, FreezeAddress, FreezeBalance, FreezeToken {
         internal
         virtual
         override
-        checkFrozenBalance(msg.sender, balanceOf(msg.sender), value)
-        checkFrozenAddress(msg.sender, to)
+        checkFrozenBalance(from, balanceOf(from))
+        checkFrozenAddress(from, to)
         checkFrozenToken(tokenId)
     {
         super._transfer(from, to, tokenId, value, signature);

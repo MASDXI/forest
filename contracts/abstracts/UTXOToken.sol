@@ -51,10 +51,9 @@ abstract contract UTXOToken is ERC20, IUTXOERC20 {
         if (txvalue < value) {
             revert UTXOERC20TransferOverTransactionValue(txvalue, value);
         }
-        uint256 change = txvalue - value;
-        _update(from, to, value);
         _UTXO.spendTransaction(UnspentTransactionOutput.TransactionInput(tokenId, signature), from);
-        if (change > 0) {
+        uint256 change = txvalue - value;
+        if (change != 0) {
             _UTXO.createTransaction(
                 UnspentTransactionOutput.TransactionOutput(value, to),
                 tokenId,
@@ -62,6 +61,7 @@ abstract contract UTXOToken is ERC20, IUTXOERC20 {
                 from
             );
         }
+        _update(from, to, value);
     }
 
     /**
