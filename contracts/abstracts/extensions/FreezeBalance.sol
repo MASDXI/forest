@@ -35,11 +35,8 @@ abstract contract FreezeBalance {
      * @param value The amount of balance to be spent.
      */
     modifier checkFrozenBalance(address account, uint256 balance, uint256 value) {
-        if (balance < value) {
-            revert BalanceOverflow();
-        }
         uint256 frozenBalance = _frozenBalance[account];
-        if (frozenBalance > balance - value) {
+        if (frozenBalance >= balance) {
             revert BalanceFrozen(balance, frozenBalance);
         }
         _;

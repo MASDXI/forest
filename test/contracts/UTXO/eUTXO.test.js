@@ -4,16 +4,10 @@ const {expect} = require("chai");
 const {encodeBytes32String, solidityPackedKeccak256, getBytes, ZeroHash, decodeBytes32String} = require("ethers");
 
 describe("eUTXO", function () {
-  // We define a fixture to reuse the same setup in every test.
-  // We use loadFixture to run this setup once, snapshot that state,
-  // and reset Hardhat Network to that snapshot in every test.
   async function deployTokenFixture() {
-    // Contracts are deployed using the first signer/account by default
     const [owner, otherAccount] = await ethers.getSigners();
-
     const contract = await ethers.getContractFactory("MockeUtxo");
     const token = await contract.deploy("United States dollar", "USD");
-
     return {token, owner, otherAccount};
   }
 

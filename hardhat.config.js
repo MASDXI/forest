@@ -1,5 +1,6 @@
 require("hardhat-gas-reporter");
 require("hardhat-ignore-warnings");
+require("@nomicfoundation/hardhat-chai-matchers");
 require("@nomicfoundation/hardhat-toolbox");
 
 /** @type import('hardhat/config').HardhatUserConfig */

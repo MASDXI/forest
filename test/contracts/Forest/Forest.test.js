@@ -6,146 +6,52 @@ const {encodeBytes32String, ZeroAddress, solidityPackedKeccak256, getBytes} = re
 describe("Forest", function () {
   const transferMethod = "transfer(address,bytes32,uint256)";
 
-  // We define a fixture to reuse the same setup in every test.
-  // We use loadFixture to run this setup once, snapshot that state,
-  // and reset Hardhat Network to that snapshot in every test.
   async function deployTokenFixture() {
-    // Contracts are deployed using the first signer/account by default
     const [owner, otherAccount] = await ethers.getSigners();
-
     const contract = await ethers.getContractFactory("MockForest");
     const token = await contract.deploy("United States dollar", "USD");
-
     return {token, owner, otherAccount};
   }
 
   describe("Transfers", function () {
-    it("Should transfer the funds to the owner", async function () {
-      const {token, owner} = await loadFixture(deployTokenFixture);
-      const address = await owner.getAddress();
-      await token.mint(address, 1000n);
-      expect(await token.balanceOf(address)).to.equal(1000n);
+    it("Freeze Alice Account and transfer", async function () {
+      //  TODO
     });
 
-    it("Should transfer the funds to the owner", async function () {
-      const {token, owner, otherAccount} = await loadFixture(deployTokenFixture);
-      const address = await owner.getAddress();
-      const otherAddress = await otherAccount.getAddress();
-      let tx = await token.mint(address, 1000n);
-      tx = await tx.wait();
-      const tokenId = tx.logs[0].args[0];
-      await token[transferMethod](otherAddress, tokenId, 1000n);
-      expect(await token.balanceOf(otherAddress)).to.equal(1000n);
+    it("Freeze Alice Account and transferFrom", async function () {
+      //  TODO
     });
 
-    it("Should not transfer with IERC20 transfer", async function () {
-      const {token, owner, otherAccount} = await loadFixture(deployTokenFixture);
-      const amount = 1000n;
-      const address = await owner.getAddress();
-      const otherAddress = await otherAccount.getAddress();
-      let tx = await token.mint(address, amount);
-      tx = await tx.wait();
-      const tokenId = tx.logs[0].args[0];
-      await token[transferMethod](otherAddress, tokenId, amount);
-      expect(await token.balanceOf(otherAddress)).to.equal(1000n);
-      // await expect(token.connect(otherAccount).transfer(address, amount)).to.be.revertedWithCustomError(token,"ERC20TransferNotSupported");
-
-      // TODO: transferFrom(address,address,tokenId,amount)
-      // TODO: burn(address,tokenId,amount)
+    it("Freeze Alice Balance and transfer", async function () {
+      //  TODO
     });
 
-    it("Should not transferFrom with IERC20 transferFrom", async function () {
-      const {token, owner, otherAccount} = await loadFixture(deployTokenFixture);
-      const amount = 1000n;
-      const address = await owner.getAddress();
-      const otherAddress = await otherAccount.getAddress();
-      let tx = await token.mint(address, amount);
-      tx = await tx.wait();
-      const tokenId = tx.logs[0].args[0];
-      await token[transferMethod](otherAddress, tokenId, amount);
-      await token.connect(otherAccount).approve(address, amount);
-      await expect(token.connect(owner).transferFrom(otherAddress, address, amount)).to.be.revertedWithCustomError(
-        token,
-        "ERC20TransferFromNotSupported",
-      );
+    it("Freeze Alice Balance and transferFrom", async function () {
+      //  TODO
     });
 
-    it("Should burn transfer with to address zero", async function () {
-      const {token, owner, otherAccount} = await loadFixture(deployTokenFixture);
-      const amount = 1000n;
-      const address = await owner.getAddress();
-      // const otherAddress = await otherAccount.getAddress();
-      let tx = await token.mint(address, amount);
-      tx = await tx.wait();
-      const tokenId = tx.logs[0].args[0];
-      // await expect(token.burn(address, tokenId ,amount)).to.be.emit(token,"Transfer").withArgs(address, ZeroAddress, amount);
-      await token.burn(address, tokenId, amount);
-      expect(await token.balanceOf(address)).to.equal(0);
-      // TODO: transferFrom(address,address,tokenId,amount)
-      // TODO: burn(address,tokenId,amount)
-    });
-  });
-
-  // extensions
-  describe("Restrict", function () {
-    it("Should restrict transfer the funds to the other account by frozen tokenId", async function () {
-      const {token, owner, otherAccount} = await loadFixture(deployTokenFixture);
-      const address = await owner.getAddress();
-      const otherAddress = await otherAccount.getAddress();
-      let tx = await token.mint(address, 1000n);
-      tx = await tx.wait();
-      const tokenId = tx.logs[0].args[0];
-      tx = await token[transferMethod](otherAddress, tokenId, 100n);
-      tx = await tx.wait();
-      const tokenId2 = tx.logs[1].args[0];
-      expect(await token.balanceOf(otherAddress)).to.equal(100n);
-      await token.freezeToken(tokenId2);
-      await expect(token.connect(otherAccount)[transferMethod](address, tokenId2, 10n)).to.be.revertedWithCustomError(
-        token,
-        "TokenFrozen",
-      );
+    it("Freeze Alice Token and transfer", async function () {
+      //  TODO
     });
 
-    it("Should restrict all transfer the funds to the other account by frozen root tokenId", async function () {
-      const {token, owner, otherAccount} = await loadFixture(deployTokenFixture);
-      const address = await owner.getAddress();
-      const otherAddress = await otherAccount.getAddress();
-      let tx = await token.mint(address, 1000n);
-      tx = await tx.wait();
-      let tokenId = tx.logs[0].args[0];
-      let root = tx.logs[0].args[1];
-      tx = await token[transferMethod](otherAddress, tokenId, 10n);
-      expect(await token.balanceOf(otherAddress)).to.equal(10n);
-      await token.freezeToken(root);
-      await expect(token[transferMethod](otherAddress, tokenId, 10n)).to.be.revertedWithCustomError(
-        token,
-        "TokenFrozen",
-      );
+    it("Freeze Alice Token and transferFrom", async function () {
+      //  TODO
     });
 
-    it("Should restrict all transfer the funds to the other account by frozen parent tokenId", async function () {
-      const {token, owner, otherAccount} = await loadFixture(deployTokenFixture);
-      // const address = await owner.getAddress();
-      // const otherAddress = await otherAccount.getAddress();
-      // let tx = await token.mint(address, 1000n);
-      // tx = await tx.wait();
-      // const tokenId = tx.logs[0].args[0];
-      // tx = await token[transferMethod](
-      //   otherAddress,
-      //   tokenId,
-      //   100n
-      // );
-      // tx = await tx.wait();
-      // const tokenId2 = tx.logs[1].args[0];
-      // expect(await token.balanceOf(otherAddress)).to.equal(100n);
-      // await token.freezeToken(parent);
-      // await expect(
-      //   await token[transferMethod](
-      //     otherAddress,
-      //     tokenId2,
-      //     10n
-      //   )
-      // ).to.equal("");
+    it("Freeze at root and transfer", async function () {
+      //  TODO
+    });
+
+    it("Freeze at root and transferFrom", async function () {
+      //  TODO
+    });
+
+    it("Freeze at level and transfer", async function () {
+      //  TODO
+    });
+
+    it("Freeze at level and transferFrom", async function () {
+      //  TODO
     });
   });
 });

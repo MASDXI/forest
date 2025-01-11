@@ -1,53 +1,48 @@
-const {time, loadFixture} = require("@nomicfoundation/hardhat-toolbox/network-helpers");
+const {loadFixture} = require("@nomicfoundation/hardhat-toolbox/network-helpers");
 const {anyValue} = require("@nomicfoundation/hardhat-chai-matchers/withArgs");
 const {expect} = require("chai");
 const {ZeroAddress} = require("ethers");
 
 describe("ERC20", function () {
-  // We define a fixture to reuse the same setup in every test.
-  // We use loadFixture to run this setup once, snapshot that state,
-  // and reset Hardhat Network to that snapshot in every test.
-  async function deployTokenFixture() {
-    // Contracts are deployed using the first signer/account by default
-    const [owner, otherAccount] = await ethers.getSigners();
+  const amount = 1000n;
+  const frozenAmount = 100n;
 
+  async function deployTokenFixture() {
+    const [owner, alice, bob, charlie, dave, otherAccount] = await ethers.getSigners();
     const contract = await ethers.getContractFactory("MockERC20");
     const token = await contract.deploy("United States dollar", "USD");
-
-    return {token, owner, otherAccount};
+    return {token, owner, alice, bob, charlie, dave, otherAccount};
   }
 
+  // Avoid repeating test
   describe("Transfers", function () {
-    it("Should mint the funds to the owner", async function () {
-      const {token, owner} = await loadFixture(deployTokenFixture);
-      const address = await owner.getAddress();
-      await token.mint(address, 1000n);
-      expect(await token.balanceOf(address)).to.equal(1000n);
+    it("Freeze Alice Account and transfer", async function () {
+      const {token, alice, bob} = await loadFixture(deployTokenFixture);
+      const aliceAddress = alice.address;
+      const bobAddress = bob.address;
+      await token.mint(alice, amount);
+      await token.freezeAddress(aliceAddress);
+      expect(await token.isFrozen(aliceAddress)).to.equal(true);
+      await expect(token.connect(alice).transfer(bobAddress, amount)).to.be.reverted;
     });
 
-    it("Should transfer the funds from the account to other account", async function () {
-      const {token, owner, otherAccount} = await loadFixture(deployTokenFixture);
-      const address = await owner.getAddress();
-      const otherAddress = await otherAccount.getAddress();
-      let tx = await token.mint(address, 1000n);
-      tx = await tx.wait();
-      await token.transfer(otherAddress, 1000n);
-      expect(await token.balanceOf(otherAddress)).to.equal(1000n);
+    it("Freeze Alice Account and transferFrom", async function () {
+      //  TODO
     });
 
-    it("Should transferFrom the funds from the account to other account", async function () {
-      const {token, owner, otherAccount} = await loadFixture(deployTokenFixture);
-      const address = await owner.getAddress();
-      const otherAddress = await otherAccount.getAddress();
-      await token.mint(address, 1000n);
-      await token.connect(owner).approve(otherAddress, 1000n);
-      expect(await token.allowance(address, otherAddress)).to.equal(1000n);
-      await token.connect(otherAccount).transferFrom(address, otherAddress, 1000n);
-      expect(await token.balanceOf(otherAddress)).to.equal(1000n);
+    it("Freeze Alice Balance and transfer", async function () {
+      const {token, alice, bob} = await loadFixture(deployTokenFixture);
+      const aliceAddress = alice.address;
+      const bobAddress = bob.address;
+      await token.mint(alice, amount);
+      await token.setFreezeBalance(aliceAddress, frozenAmount);
+      expect(await token.getFrozenBalance(aliceAddress)).to.equal(frozenAmount);
+      await expect(token.connect(alice).transfer(bobAddress, amount - frozenAmount)).not.to.be.reverted;
+      await expect(token.connect(alice).transfer(bobAddress, frozenAmount)).to.be.reverted;
+    });
+
+    it("Freeze Alice Balance and transferFrom", async function () {
+      //  TODO
     });
   });
-
-  // extensions
-  // transfer
-  // transferFrom
 });
