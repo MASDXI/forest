@@ -12,13 +12,37 @@ contract MockForest is ForestToken, FreezeAddress, FreezeBalance, FreezeToken {
 
     constructor(string memory name_, string memory symbol_) ForestToken(name_, symbol_) {}
 
-    modifier checkFrozenRootOrParent(address account, bytes32 tokenId) {
+    modifier checkFrozenRootOrParent(bytes32 tokenId) {
         Forest.Tx memory transaction = _transaction(tokenId);
         if (isTokenFrozen(transaction.root) || isTokenFrozen(transaction.parent)) {
             revert TokenFrozen();
         }
         _;
     }
+
+    // TODO
+    // modifier checkFrozenLevel(bytes32 tokenId) {
+        // check equal
+        // _;
+    // }
+
+    // TODO
+    // modifier checkFrozenBeforeLevel(bytes32 tokenId)  
+        // check less than
+        // _;
+    // }
+
+    // TODO
+    // modifier checkFrozenAfterLevel(bytes32 tokenId)  
+        // check greater than
+        // _;
+    // }
+    
+    // TODO
+    // modifier checkFrozenInBetweenLevel(bytes32 tokenId)
+        // check greater than 'x' and less than 'y'
+        // _;
+    // }
 
     function _transfer(
         address from,
@@ -29,9 +53,9 @@ contract MockForest is ForestToken, FreezeAddress, FreezeBalance, FreezeToken {
         internal
         virtual
         override
-        checkFrozenBalance(msg.sender, balanceOf(msg.sender))
-        checkFrozenAddress(msg.sender, to)
-        checkFrozenRootOrParent(msg.sender, tokenId)
+        checkFrozenBalance(from, balanceOf(from))
+        checkFrozenAddress(to, to)
+        checkFrozenRootOrParent(tokenId)
         checkFrozenToken(tokenId)
     {
         /// @notice ERC20 Transfer also emit.

@@ -33,9 +33,9 @@ describe("ERC20", function () {
       const bobAddress = bob.address;
       await token.mint(alice, amount);
       await token.connect(alice).approve(spenderAddress, amount);
-      // await token.freezeAddress(aliceAddress);
-      // expect(await token.isFrozen(aliceAddress)).to.equal(true);
-      await expect(token.connect(alice).transfer(bobAddress, amount)).to.be.reverted;
+      await token.freezeAddress(aliceAddress);
+      expect(await token.isFrozen(aliceAddress)).to.equal(true);
+      await expect(token.connect(owner).transferFrom(aliceAddress, bobAddress, amount)).to.be.reverted;
     });
 
     it("Freeze Alice Balance and transfer", async function () {
@@ -56,9 +56,10 @@ describe("ERC20", function () {
       const bobAddress = bob.address;
       await token.mint(alice, amount);
       await token.connect(alice).approve(spenderAddress, amount);
-      // await token.freezeAddress(aliceAddress);
-      // expect(await token.isFrozen(aliceAddress)).to.equal(true);
-      await expect(token.connect(alice).transfer(bobAddress, amount)).to.be.reverted;
+      await token.setFreezeBalance(aliceAddress, frozenAmount);
+      expect(await token.getFrozenBalance(aliceAddress)).to.equal(frozenAmount);
+      await expect(token.connect(owner).transferFrom(aliceAddress, bobAddress, amount - frozenAmount)).not.to.be.reverted;
+      await expect(token.connect(owner).transferFrom(aliceAddress, bobAddress, frozenAmount)).to.be.reverted;
     });
   });
 });
