@@ -1,5 +1,5 @@
 ---
-Title: "Forest: Unlocking Control & Traceability in Digital Currency System"
+Title: "Forest: A Data Structure to Unlocking Control & Traceability in Digital Currency System"
 Description: "Forest is a token-based model leveraging DAG-inspired structures to enhance traceability, security, and AML/CFT compliance"
 Author: "Sirawit Techavanitch <sirawit_tec@utcc.ac.th>"
 Status: "Draft"
@@ -71,20 +71,6 @@ interface IForest {
 - The `hierarchy` of the transaction's `root` **MUST** be incremented if the new transaction's level exceeds the current `hierarchy`.
 - The events `TransactionSpent` **MUST** emit when spending transaction.
 
-### Diagrams
-
-<div align="center">
-  <img src="./docs/assets/diagrams/Forest.svg" width="800"/>
-</div>
-
-<!-- TODO explain -->
-
-<div align="center">
-  <img src="./docs/assets/diagrams/Forest_Sort.svg" width="400"/>
-</div>
-
-<!-- TODO explain -->
-
 ## Rationale
 
 | Features                                                                  | ERC-20 | UTXO | eUTXO | Forest |
@@ -109,6 +95,31 @@ interface IForest {
   it allows spending the transaction multiple times till it's met `0`, The `Forest` model enables tracking of child/subtree structures,  
   providing a hierarchical view of token flows and relationships,  
   which is not possible in traditional token standards like `ERC-20`, `ERC-1400`, and `ERC-3643`.
+
+### Adaptive Enforcement
+
+### Transaction Specific Restrict
+Restrict transaction with specific transaction identified. 
+
+### Transaction Level Restrict
+Restrict transaction with specific transaction level.
+
+### Root Transaction Restrict
+Restrict transaction with specific root transaction.
+
+### Transaction Network Diagrams
+
+<div align="center">
+  <img src="./docs/assets/diagrams/Forest.svg" width="800"/>
+</div>
+
+`Forest` provides adaptive enforcement.
+
+<div align="center">
+  <img src="./docs/assets/diagrams/Forest_Sort.svg" width="400"/>
+</div>
+
+`Forest` provide reverse topological sorting natively cause each `Transaction` store the `parent` transaction, so it's can iterable `parent` back to the `root` of the DAG.
 
 ## Security Considerations
 
