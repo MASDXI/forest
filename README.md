@@ -149,4 +149,4 @@ Adopting similar strategies could help balance granularity with efficiency.
 
 ## Copyright
 
-Copyright 2024 Sirawit Techavanitch. Licensed under the [Apache-2.0](./LICENSE)
+Copyright 2024-2025 Sirawit Techavanitch. Licensed under the [Apache-2.0](./LICENSE)
